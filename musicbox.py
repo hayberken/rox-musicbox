@@ -3,6 +3,7 @@ from rox import g, filer, Menu, app_options, i18n
 from rox.options import Option
 import os, sys, re, string, threading, time
 from threading import *
+from random import Random
 import pympg123
 import pyplaylist
 
@@ -28,7 +29,6 @@ COL_GENRE = 4
 COL_LENGTH = 5
 
 #Bitmaps that are changed after initialization.
-#TODO: If I can figure out the ToggleButton these will probably go away
 BMP_PAUSE = APP_PATH+'/pixmaps/media-pause.png'
 BMP_PLAY = APP_PATH+'/pixmaps/media-play.png'
 		
@@ -40,17 +40,28 @@ LIBRARY = Option('library', os.path.expanduser("~")+'/Music')
 #the name of your mp3 player (include full path if necessary)
 MP3_PLAYER = Option('mp3_player', 'mpg321')
 
+SHUFFLE = Option('shuffle', 0)
+REPEAT = Option('repeat', 0)
+
 rox.app_options.notify()
 
 
 class MusicBox(rox.Window):
 	def __init__(self):
 		rox.Window.__init__(self)
+				
 		self.set_title(APP_NAME)
 		self.set_border_width(1)
 		self.set_default_size(VIEW_DEFAULT_SIZE[0], VIEW_DEFAULT_SIZE[1])
 		self.set_position(g.WIN_POS_CENTER)
 
+		#update things when options change
+		rox.app_options.add_notify(self.get_options)
+
+		#capture wm delete event
+		self.connect("delete_event", self.delete_event)
+
+		#start in normal view mode (so you can see the songs!)
 		self.view_state = VIEW_LARGE
 		
 		#create boxes
@@ -88,8 +99,10 @@ class MusicBox(rox.Window):
 		self.toolbar = g.Toolbar()
 		self.toolbar.set_style(g.TOOLBAR_ICONS)
 
-		self.toolbar.insert_stock(g.STOCK_PREFERENCES, _('Options'), None, self.show_options, None, 0)
-		self.toolbar.insert_stock(g.STOCK_REFRESH, _('Refresh'), None, self.update, None, 0)
+		self.toolbar.insert_stock(g.STOCK_PREFERENCES, _('Options'), 
+					None, self.show_options, None, 0)
+		self.toolbar.insert_stock(g.STOCK_REFRESH, _('Refresh'), 
+					None, self.update, None, 0)
 
 		self.toolbar.insert_space(0)
 
@@ -105,43 +118,45 @@ class MusicBox(rox.Window):
 
 		image_shuffle = g.Image()
 		image_shuffle.set_from_file(APP_PATH+"/pixmaps/media-shuffle.png")
-#TODO: understand how ToggleButtons are supposed to work!!???
-#		button_shuffle = g.ToggleButton()
-#		self.toolbar.append_element(g.TOOLBAR_CHILD_TOGGLEBUTTON, button_shuffle, _('Shuffle'), _('Shuffle'), None, image_shuffle, None, None)
-		self.toolbar.insert_item(_('Shuffle'), _('Shuffle'), None, image_shuffle, None, None, 0)
+		self.shuffle = self.toolbar.insert_element(g.TOOLBAR_CHILD_TOGGLEBUTTON,
+					None, _('Shuffle'), _('Shuffle'),'hiya', 
+					image_shuffle, None, None, 0)
+		self.shuffle.set_active(SHUFFLE.int_value)
 
 		image_repeat = g.Image()
 		image_repeat.set_from_file(APP_PATH+"/pixmaps/media-repeat.png")
-		self.toolbar.insert_item(_('Repeat'), _('Repeat'), None, image_repeat, None, None, 0)
+		self.repeat = self.toolbar.insert_element(g.TOOLBAR_CHILD_TOGGLEBUTTON, 
+					None, _('Repeat'), _('Repeat'), None, 
+					image_repeat, None, None, 0)
+		self.repeat.set_active(REPEAT.int_value)
 
 		self.toolbar.insert_space(0)
 
 		image_next = g.Image()
 		image_next.set_from_file(APP_PATH+"/pixmaps/media-next.png")
-		self.toolbar.insert_item(_('Next'), _('Next'), None, image_next, self.next, None, 0)
+		self.toolbar.insert_item(_('Next'), _('Next'), 
+					None, image_next, self.next, None, 0)
 
 		image_stop = g.Image()
 		image_stop.set_from_file(APP_PATH+"/pixmaps/media-stop.png")
-		self.toolbar.insert_item(_('Stop'), _('Stop'), None, image_stop, self.stop, None, 0, )
-
-#TODO: remove this when ToggleButton is fixed
-#		image_pause = g.Image()
-#		image_pause.set_from_file(BMP_PAUSE)
-#		self.toolbar.insert_item(_('Pause'), _('Pause'), None, image_pause, self.pause, None, 0)
+		self.toolbar.insert_item(_('Stop'), _('Stop'), 
+					None, image_stop, self.stop, None, 0, )
 
 		image_play = g.Image()
 		self.image_play = image_play
 		image_play.set_from_file(BMP_PLAY)
-		self.toolbar.insert_item(_('Play/Pause'), _('Play/Pause'), None, image_play, self.play_selected, None, 0)
+		self.toolbar.insert_item(_('Play/Pause'), _('Play/Pause'), 
+					None, image_play, self.play_selected, None, 0)
 
 		image_prev = g.Image()
 		image_prev.set_from_file(APP_PATH+"/pixmaps/media-prev.png")
-		self.toolbar.insert_item(_('Prev'), _('Prev'), None, image_prev, self.prev, None, 0)
+		self.toolbar.insert_item(_('Prev'), _('Prev'), 
+					None, image_prev, self.prev, None, 0)
 
 		self.toolbar.insert_space(0)
-		self.toolbar.insert_stock(g.STOCK_CLOSE, _('Close'), None, self.close, None, 0)
+		self.toolbar.insert_stock(g.STOCK_CLOSE, _('Close'), 
+					None, self.close, None, 0)
 
-	
 
 		####################################################################
 		# Song Playlist
@@ -202,13 +217,9 @@ class MusicBox(rox.Window):
 
 		view.connect('row-activated', self.activate)
 
-		#enable playlist change updates
-		def changed(selection):
-			model, iter = selection.get_selected()
-			
 		self.selection = view.get_selection()
-		self.selection.connect('changed', changed)
-		changed(self.selection)
+		
+		self.rndm = Random(17) # for shuffle
 
 
 		####################################################################
@@ -222,12 +233,6 @@ class MusicBox(rox.Window):
 		# Finish
 		####################################################################
 		self.vbox.show_all()
-
-		#TODO: see comment in get_options as to why this is commented out.
-		#rox.app_options.add_notify(self.get_options)
-
-		#capture wm delete event
-		self.connect("delete_event", self.delete_event)
 
 		#init the player instance and start the monitoring thread
 #TODO: add Ogg support
@@ -265,7 +270,7 @@ class MusicBox(rox.Window):
 						 COL_LENGTH, foo.length)
 
 		#select the first song in the list as a starting point
-		self.selection.select_iter(self.song_list.get_iter_root())
+		self.view.set_cursor((0,))
 		self.set_title(APP_NAME)
 
 	
@@ -298,11 +303,11 @@ class MusicBox(rox.Window):
 	####################################################################
 	# skip to previous song and play it
 	####################################################################
-#TODO: How to go backwards?
 	def prev(self, button=None):
-		model, iter = self.selection.get_selected()
-		prevsong = model.iter_prev(iter) #doesn't work!
-		self.selection.select_iter(prevsong)
+		path, column = self.view.get_cursor()
+		nth = path[0]-1
+		path = (nth,)
+		self.view.set_cursor(path)
 		self.play()
 		self.status_bar.output("Prev...",6000)	
 		
@@ -310,9 +315,18 @@ class MusicBox(rox.Window):
 	# skip to next song and play it
 	####################################################################
 	def next(self, button=None):
-		model, iter = self.selection.get_selected()
-		nextsong = model.iter_next(iter)
-		self.selection.select_iter(nextsong)
+		if self.shuffle.get_active():
+			nth = self.rndm.randrange(0, len(self.song_list))
+		else:
+			path, column = self.view.get_cursor()
+			nth = path[0]
+			if nth >= len(self.song_list)-1:
+				if self.repeat.get_active():
+					nth = 0
+			else:
+				nth = nth+1
+		path = (nth,)
+		self.view.set_cursor(path)
 		self.play()
 		self.status_bar.output("Next...",6000)	
 		
@@ -391,8 +405,21 @@ class MusicBox(rox.Window):
 	# used as the notify callback when options change
 	####################################################################
 	def get_options(self):
-		#TODO: how to update only when OK is pressed?
-		self.update()
+		if SHUFFLE.has_changed:
+			self.shuffle.set_active(SHUFFLE.int_value)
+			
+		if REPEAT.has_changed:
+			self.repeat.set_active(REPEAT.int_value)
+			
+		if MP3_PLAYER.has_changed:
+			#TODO: how to update only when OK is pressed?
+			#rox.info("This only takes effect when you restart MusicBox")
+			print "MP3 Player has changed"
+			
+		if LIBRARY.has_changed:
+			#TODO: how to update only when OK is pressed?
+			#self.update()
+			print "Library has changed"
 
 	####################################################################
 	# options edit dialog
@@ -432,7 +459,8 @@ class MusicBox(rox.Window):
 			self.set_size_request(VIEW_LARGE_SIZE[0], VIEW_LARGE_SIZE[1])
 			self.resize(self.old_width, self.old_height)
 			self.view_state = VIEW_LARGE
-			self.set_resizable(True)	
+			self.set_resizable(True)
+			
 
 ####################################################################
 # utlity class(es)

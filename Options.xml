@@ -1,15 +1,21 @@
 <?xml version="1.0"?>
 <options>
-  <section title="Display">
-    <frame label="Library">
-	    <entry name='library' label=''>
-	    The location of your MP3 files.
-	    </entry>
-    </frame>
-    <frame label="MP3 Player">
-	    <entry name='mp3_player' label=''>
-	    Choose between mpg123 or mpg321.
-	    </entry>
-    </frame>
-  </section>
+	<section title="File Locations">
+		<entry name='library' label='Library'>
+		The location of your MP3 files.
+		</entry>
+		<entry name='mp3_player' label='MP3 Player'>
+		Choose between mpg123 or mpg321.
+		</entry>
+	</section>
+
+	<section title="Play settings">
+		<toggle name='shuffle' label='Shuffle'>
+		Randomize play order.
+		</toggle>
+		<toggle name='repeat' label='Repeat'>
+		Choose between mpg123 or mpg321.
+		</toggle>
+	</section>
+	
 </options>
