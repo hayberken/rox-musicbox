@@ -1,28 +1,36 @@
 MusicBox - an MP3/OGG Player for the ROX Desktop
 by Ken Hayber
 
+1-Sept-2003
+0.0.8
+
+- Fixes for hangs that several people were reporting (need pygtk 1.99.17 or higher)
+- Fix to prevent crash when using Seek bar with no song playing.
+- Fixes for missing ogg, mad, ao handling.  Requires at least one of ogg/mad and requires
+	ao to run.
+- Added Shuffle cache to prevent replaying of songs too frequently in shuffle mode.
+- Re-layout Options dialog.
+- Load initial playlist based on directory structure (Artist/Album/Song), then load
+	tag information in the background.  Should speed up initial loading for large
+	playlists.  (Works well for me with ~400 songs via 802.11b wireless connection)
+
+
 29-Aug-2003
 0.0.7 (Version 0.0.6 wasn't very good)
 
 - Rewrite player code to use pymad, pyogg, pyao directly.  No more MPG123/321.  This
 	gives better control over the player and it now works correctly when using
 	esd (you can hear your sound effects and notifications; e.g. 'you've got mail!')
-
 - OGG!
-
 - Playlist support (.pls and .m3u)
-
 - Drag and Drop support - you can drag and drop folders, mp3, ogg, pls or m3u files
 	onto MusicBox.  If you hold the Shift key these files will be added to the
 	current list, otherwise the list will be replaced.  The result will be saved
 	as the default.
-
 - Moved remaining time and current song to the Title bar so that this information shows
 	while iconized.
-
 - Italian and Portugese (Brazil) translations (thanks to Yuri and Leandro) - but they
 	need a couple of small updates.
-
 - Decided that volume control was not going to happen, so I changed it to a Seek bar
 	so that you can skip to any point in the song.  It also keeps moving while the
 	song plays.

@@ -9,9 +9,6 @@ TODO items for MusicBox
 
 * Support for large libraries (takes too long to load)
 
-* Test (and fix I'm sure) graceful fallback for missing dependencies (e.g. no pyogg
-	don't support ogg, but everything else should work.
-
 * Mutiple selection support
 
 * Delete songs from list

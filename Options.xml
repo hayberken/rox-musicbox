@@ -1,21 +1,37 @@
 <?xml version="1.0"?>
 <options>
-	<section title="File Locations">
-		<entry name='library' label='Library'>
-		The location of your MP3 files.
-		</entry>
-		<entry name='driver_id' label='Sound driver ID'>
-		Select the sound system you want to use from: oss, esd, alsa, alsa09.
-		</entry>
-	</section>
+	<section title="Settings">
+		<frame label='Library'>
+			<entry name='library' label=''>
+			The location of your MP3 files.
+			</entry>
+		</frame>
+		<frame label='Driver'>
+			<hbox>
+			<radio-group name='driver_id' columns='2'>
+				<radio label='esd' value='esd'>Gnome esound server</radio>
+				<radio label='oss' value='oss'>Open Sound System driver</radio>
+				<radio label='alsa09' value='alsa09'>New Alsa driver</radio>
+				<radio label='alsa' value='alsa'>Old Alsa driver</radio>
+			</radio-group>
+			</hbox>
+		</frame>
 
-	<section title="Play settings">
-		<toggle name='shuffle' label='Shuffle'>
-		Randomize play order.
-		</toggle>
-		<toggle name='repeat' label='Repeat'>
-		Keep playing forever.
-		</toggle>
+		<frame label='Play Settings' columns='2'>
+		<hbox>
+			<toggle name='shuffle' label='Shuffle'>
+			Randomize play order.
+			</toggle>
+			<spacer/>
+			<spacer/>
+			<toggle name='repeat' label='Repeat'>
+			Keep playing forever.
+			</toggle>
+		</hbox>
+			<numentry name='shuffle_cache' label='Shuffle cache size' min='0' max='100'>
+			How many songs to remember in shuffle mode so we don't replay too often.
+			</numentry>
+		</frame>
 	</section>
 
 </options>

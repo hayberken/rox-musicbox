@@ -9,13 +9,24 @@ import os, time, string, sys
 
 try:
 	import ogg.vorbis
+	HAVE_OGG = True
 except:
+	HAVE_OGG = False
 	print 'No OGG support!'
 
 try:
 	import mad
+	HAVE_MAD = True
 except:
+	HAVE_MAD = False
 	print 'No MP3 support!'
+
+try:
+	import ao
+	HAVE_AO = True
+except:
+	HAVE_AO=False
+	print 'No AO support!!'
 
 
 class Player:
@@ -100,6 +111,8 @@ class Player:
 
 	def stop(self):
 		self.state = 'stop'
+		self.dev = None
+		time.sleep(0.2) # just to be sure that the device has time to shutdown
 
 	def pause(self):
 		if self.state == 'play':
@@ -153,7 +166,6 @@ class Player:
 class AOPlayer(Player):
 	'''A player which uses the ao module.'''
 	def __init__(self, name, callback, id=None):
-		import ao
 		if id is None:
 			id = ao.driver_id('esd') #also can be 'oss', 'alsa', 'alsa09', etc.
 		self.dev = ao.AudioDevice(id)
@@ -162,6 +174,7 @@ class AOPlayer(Player):
 
 	def write(self, buff, bytes):
 		self.dev.play(buff, bytes)
+
 
 class LADPlayer(Player):
 	'''A player which uses the linuxaudiodev module.'''

@@ -11,109 +11,126 @@ msgstr ""
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: musicbox.py:35
+#: musicbox.py:52
 msgid "Album"
 msgstr "Álbum"
 
-#: musicbox.py:436 musicbox.py:479
+#: musicbox.py:522 musicbox.py:565
 #, fuzzy
 msgid "Pause"
 msgstr "Em pausa... "
 
-#: musicbox.py:93
+#: musicbox.py:118
 msgid "/Next"
 msgstr "/Próximo"
 
-#: musicbox.py:34
+#: musicbox.py:51
 #, fuzzy
 msgid "Title"
 msgstr "Tempo"
 
-#: musicbox.py:95
+#: musicbox.py:120
 msgid "/Toggle View"
 msgstr "/Alterar modo de exibição"
 
-#: musicbox.py:113
+#: gtkexcepthook.py:15
+msgid "Bug Detected"
+msgstr ""
+
+#: musicbox.py:138
 msgid "Refresh"
 msgstr "Atualizar"
 
-#: musicbox.py:147 musicbox.py:417
+#: musicbox.py:172 musicbox.py:503
 msgid "Next"
 msgstr "Próxima"
 
-#: musicbox.py:96
+#: gtkexcepthook.py:19
+msgid "Show Details"
+msgstr ""
+
+#: musicbox.py:121
 msgid "/Options"
 msgstr "/Opções"
 
-#: musicbox.py:466
+#: musicbox.py:552
 msgid " by "
 msgstr " por "
 
-#: musicbox.py:90
+#: musicbox.py:115
 msgid "/Stop"
 msgstr "/Parar"
 
-#: musicbox.py:163 musicbox.py:398
+#: musicbox.py:188 musicbox.py:475
 msgid "Prev"
 msgstr "Anterior"
 
-#: musicbox.py:111
+#: musicbox.py:136
 msgid "Options"
 msgstr "Opções"
 
-#: musicbox.py:139
+#: musicbox.py:164
 msgid "Repeat"
 msgstr "Repetir"
 
-#: musicbox.py:132
+#: musicbox.py:157
 msgid "Shuffle"
 msgstr "Embaralhar"
 
-#: musicbox.py:97
+#: musicbox.py:122
 msgid "/Refresh"
 msgstr "/Atualizar"
 
-#: musicbox.py:33
+#: musicbox.py:50
 msgid "Artist"
 msgstr "Artista"
 
-#: musicbox.py:152 musicbox.py:428 musicbox.py:481
+#: musicbox.py:177 musicbox.py:514 musicbox.py:567
 msgid "Stop"
 msgstr "Parar"
 
-#: musicbox.py:320
+#: musicbox.py:397
 msgid "unknown"
 msgstr ""
 
-#: musicbox.py:99
+#: musicbox.py:124
 msgid "/Quit"
 msgstr "/Sair"
 
-#: musicbox.py:239
+#: musicbox.py:344
 msgid " - Scanning, please wait..."
 msgstr " - Procurando, favor aguardar..."
 
-#: musicbox.py:89
+#: musicbox.py:114
 msgid "/Play\\/Pause"
 msgstr "/Reproduzir\\/Pausar"
 
-#: musicbox.py:158
+#: musicbox.py:183
 msgid "Play/Pause"
 msgstr "Reproduzir/Pausar"
 
-#: musicbox.py:36
+#: musicbox.py:53
 msgid "Genre"
 msgstr "Gênero"
 
-#: musicbox.py:167
+#: musicbox.py:192
 msgid "Close"
 msgstr "Fechar"
 
-#: musicbox.py:92
+#: gtkexcepthook.py:12
+msgid ""
+"<big><b>A programming error has been detected during the execution of this "
+"program.</b></big>\n"
+"\n"
+"It probably isn't fatal, but should be reported to the developers "
+"nonetheless."
+msgstr ""
+
+#: musicbox.py:117
 msgid "/Back"
 msgstr "/Voltar"
 
-#: musicbox.py:125
+#: musicbox.py:150
 msgid "Seek"
 msgstr ""
 

@@ -4,11 +4,8 @@ an MP3/OGG Player for the ROX Desktop
 
 Brief
 ~~~~~
-MusicBox plays your mp3 and ogg files (yea!).  It supports ogg via pyogg/libvorbis and
+MusicBox plays your mp3 and ogg files.  It supports ogg via pyogg/libvorbis and
 mp3 via pymad/libmad.
-
-MusicBox supports mp3, ogg files, directories, .pls and .m3u files to build the playlist.
-Any and all of these can be used together.
 
 The latest version of MusicBox is at:
 
@@ -39,6 +36,21 @@ Current versions as of this writing are:
 
 Hopefully your distro will provide packages for these, otherwise you will have to
 download and build them from sources.
+
+NOTE: I have discovered that pygtk before version 1.99.17 doesn't support threads all
+that well, so you must have 1.99.17 or higher.  Sorry.
+
+
+Features:
+~~~~~~~~~
+MP3 and OGG support.
+Esd, Alsa, OSS support.
+Drag and Drop adding of Songs, Directories of songs, and Playlists (m3u and pls)
+Shuffle play (with cache so you don't replay songs too frequently).
+Seek control bar to zip to specific parts of any song.
+Toggle between Normal and Mini views.
+Background Tag reading to speed up initial load times.
+Nifty UI!
 
 
 Conditions
