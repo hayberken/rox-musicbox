@@ -191,7 +191,7 @@ class Playlist(saving.Saveable, gobject.GObject):
 
 	def get_index(self):
 		if self.curr_index == -1:
-			raise 'No index set'
+			self.curr_index = 0
 		return self.curr_index
 
 	def first(self):

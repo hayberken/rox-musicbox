@@ -544,7 +544,10 @@ class MusicBox(rox.Window, loading.XDSLoader):
 			self.set_sensitive(False)
 
 		if self.replace_library and len(self.playlist):
-			self.next()
+			if self.shuffle:
+				self.next()
+			else:
+				self.play()
 
 
 	def save(self):

@@ -1,6 +1,9 @@
 ﻿MusicBox - an MP3/OGG Player for the ROX Desktop
 by Ken Hayber
 
+23-Feb-2005
+- Fix bug when adding songs via DnD or command line, does not play.  Index is set wrong.  (reported by Cyrille Mars)
+
 19-Feb-2005
 022
 - Add Album Cover Art display (supports .DirIcon and
