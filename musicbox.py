@@ -357,10 +357,10 @@ class MusicBox(rox.Window, loading.XDSLoader):
 		self.album_img = gtk.Image()
 		self.album_img.set_alignment(0.0, 0.0)
 
-		hbox = gtk.HBox()
+		hbox = gtk.HBox(False, 5)
 		vbox = gtk.VBox()
 		hbox.pack_start(self.album_img, False, False, 0)
-		hbox.pack_end(vbox, True, True, 5) #padding is 5, see resize too.
+		hbox.pack_end(vbox, True, True, 0)
 		self.display.put(hbox, 0, 0)
 		self.display_box = vbox
 
@@ -464,13 +464,12 @@ class MusicBox(rox.Window, loading.XDSLoader):
 		"""Called when the window resizes."""
 		width = rectangle[2]
 		height = rectangle[3]
-		# the -5 below is just arbitrary padding
 		try:
-			awidth = width -5
+			awidth = width
 			self.album_img.get_image() #raises an exception if not valid
 		except:
 			if ALBUM_ART.int_value:
-				awidth = width - ALBUM_COVER_SIZE -5
+				awidth = width - ALBUM_COVER_SIZE
 
 		width = max(width, -1)
 		awidth = max(awidth, -1)
