@@ -104,6 +104,7 @@ class PlaylistUI(rox.Window, loading.XDSLoader):
 		self.view = view
 		swin.add(view)
 		view.set_rules_hint(True)
+		self.view.set_reorderable(True)
 
 		self.view.add_events(g.gdk.BUTTON_PRESS_MASK)
 		self.view.connect('button-press-event', self.button_press)
@@ -151,7 +152,7 @@ class PlaylistUI(rox.Window, loading.XDSLoader):
 			if self.replace_library:
 				client.load_songs(self.library)
 			else:
-				client.add_args(self.library)
+				client.add_songs(self.library)
 		except:
 			rox.report_exception()
 
