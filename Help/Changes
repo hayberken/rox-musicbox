@@ -1,6 +1,12 @@
 MusicBox - an MP3/OGG Player for the ROX Desktop
 by Ken Hayber
 
+30-Nov-2003
+0.0.10
+- Bugfixes for python 2.3 support and misc. (thanks Ulrich)
+- Added Track number and Comment tag display to the browser
+- Added <track> regex tag for guess() function
+
 10-Sept-2003
 0.0.9
 - Split out the playlist code to allow easier addition of stuff like filtering.

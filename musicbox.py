@@ -1,7 +1,7 @@
 from __future__ import generators
 
 import rox
-from rox import g, Menu, app_options, i18n, loading, mime
+from rox import g, Menu, app_options, loading, mime
 from rox.options import Option
 
 import os, sys, re, string, threading, time, stat
@@ -9,8 +9,6 @@ from threading import *
 from random import Random
 
 import player, playlist
-
-_ = rox.i18n.translation(os.path.join(rox.app_dir, 'Messages'))
 
 
 #Who am I and how did I get here?
@@ -29,16 +27,20 @@ VIEW_LARGE_SIZE = (500, 200)
 COL_FILE = 0
 COL_ARTIST = 1
 COL_TITLE = 2
-COL_ALBUM = 3
-COL_GENRE = 4
-COL_LENGTH = 5
+COL_TRACK = 3
+COL_ALBUM = 4
+COL_GENRE = 5
+COL_LENGTH = 6
+COL_INFO = 7
 
 COLUMNS = [
 	(_('Artist'), COL_ARTIST),
 	(_('Title'), COL_TITLE),
+	(_('Track'), COL_TRACK),
 	(_('Album'), COL_ALBUM),
 	(_('Genre'), COL_GENRE),
 #	(_('Length'), COL_LENGTH),
+	(_('Comment'), COL_INFO),
 ]
 
 
@@ -76,6 +78,7 @@ DND_TYPES = ['audio/x-mp3' 'application/ogg' 'inode/directory']
 
 
 class MusicBox(rox.Window, loading.XDSLoader):
+	"A Music Player for mp3 and ogg - main class"
 	def __init__(self):
 		rox.Window.__init__(self)
 		loading.XDSLoader.__init__(self, DND_TYPES)
@@ -96,9 +99,8 @@ class MusicBox(rox.Window, loading.XDSLoader):
 		self.shuffle_cache = []
 
 
-		####################################################################
 		# Menu
-		####################################################################
+		#######################################
 		self.add_events(g.gdk.BUTTON_PRESS_MASK)
 		self.connect('button-press-event', self.button_press)
 
@@ -126,10 +128,8 @@ class MusicBox(rox.Window, loading.XDSLoader):
 		self.menu.attach(self,self)
 
 
-		####################################################################
 		# Toolbar
-		####################################################################
-
+		#######################################
 		self.toolbar = g.Toolbar()
 		self.toolbar.set_style(g.TOOLBAR_ICONS)
 
@@ -191,11 +191,8 @@ class MusicBox(rox.Window, loading.XDSLoader):
 		self.toolbar.insert_stock(g.STOCK_CLOSE, _('Close'),
 					None, self.close, None, 0)
 
-
-		####################################################################
-		# Song Playlist
-		####################################################################
-
+		# Playlist
+		#######################################
 		swin = g.ScrolledWindow()
 		self.scroll_window = swin
 
@@ -203,7 +200,7 @@ class MusicBox(rox.Window, loading.XDSLoader):
 		swin.set_policy(g.POLICY_AUTOMATIC, g.POLICY_AUTOMATIC)
 		swin.set_shadow_type(g.SHADOW_IN)
 
-		self.song_list = g.ListStore(str, str, str, str, str, str)
+		self.song_list = g.ListStore(str, str, str, str, str, str, str, str)
 		view = g.TreeView(self.song_list)
 		self.view = view
 		swin.add(view)
@@ -213,19 +210,19 @@ class MusicBox(rox.Window, loading.XDSLoader):
 		self.view.connect('button-press-event', self.button_press)
 
 
-#TODO: Drag and Drop from MusicBox...
-#		view.drag_source_set(g.gdk.BUTTON1_MASK,
-#			[('XdndDirectSave0', 0, 0),
-#			('application/octet-stream', 0, 1)],
-#			g.gdk.ACTION_COPY)
-#		view.connect('drag_data_get', self.on_drag_data_get)
+		#TODO: Drag and Drop from MusicBox...
+		#view.drag_source_set(g.gdk.BUTTON1_MASK,
+		#	[('XdndDirectSave0', 0, 0),
+		#	('application/octet-stream', 0, 1)],
+		#	g.gdk.ACTION_COPY)
+		#view.connect('drag_data_get', self.on_drag_data_get)
 
-#TODO: A little icon showing the current song playing...
-#		cell = g.CellRendererPixbuf()
-#		column = g.TreeViewColumn('', cell)
-#		view.append_column(column)
-#		column.set_resizable(False)
-#		column.set_reorderable(False)
+		#TODO: A little icon showing the current song playing...
+		#cell = g.CellRendererPixbuf()
+		#column = g.TreeViewColumn('', cell)
+		#view.append_column(column)
+		#column.set_resizable(False)
+		#column.set_reorderable(False)
 
 		for n in range(len(COLUMNS)):
 			cell = g.CellRendererText()
@@ -240,18 +237,17 @@ class MusicBox(rox.Window, loading.XDSLoader):
 		self.selection = view.get_selection()
 		self.view.set_search_column(COL_ARTIST)
 
-#TODO: Multiple Selections
-#		self.selection.set_mode(g.SELECTION_MULTIPLE)
+		#TODO: Multiple Selections
+		#self.selection.set_mode(g.SELECTION_MULTIPLE)
 
-		####################################################################
+
 		# Statusbar
-		####################################################################
+		#######################################
 		self.status_bar = timedStatusbar()
 
 
-		####################################################################
 		# Create layout, pack and show widgets
-		####################################################################
+		#######################################
 		self.vbox = g.VBox()
 		self.add(self.vbox)
 		self.vbox.pack_start(self.toolbar, False, True, 0)
@@ -274,27 +270,29 @@ class MusicBox(rox.Window, loading.XDSLoader):
 		self.rndm = Random(time.time()) # for shuffle
 
 
-#TODO: Drag and Drop from MusicBox...
 	####################################################################
-	# Tell the drop target what the filename(s) is(are)
-	####################################################################
-	def on_drag_data_get(self, treeview, context, selection, info, time):
-		#print treeview, context, selection, info
+	def load_args(self, args):
+		"Accept files and folders from the command line (or dropped on our icon)"
+		path = ''
+		#concatenate them all together with ':', like a PATH.
+		for s in args:
+			if path == '':
+				path = s
+			else:
+				path = path+':'+s
 
-		model, iter = self.selection.get_selected()
-		self.current_file = model.get_value(iter, COL_FILE)
-		payload = model.get_value(iter, COL_FILE)
+		#Shift key is down or not?  Add vs Replace
+		if self.replace_library:
+			LIBRARY.value = path
+		else:
+			LIBRARY.value += ':'+path
 
-		print 'Source: %s' % payload
-
-		selection.set(selection.target, 8, payload)
-		model.remove(iter)
+		rox.app_options.save()
 
 
-	####################################################################
-	# run a background thread to update the tag info after loading
 	####################################################################
 	def update_thd(self, button=None):
+		"Thread to load songs from source dirs"
 		thd_update = Thread(name='update', target=self.update)
 		thd_update.setDaemon(True)
 		thd_update.start()
@@ -305,11 +303,13 @@ class MusicBox(rox.Window, loading.XDSLoader):
 		"Copy the song info (tags) into the TreeModel iter"
 		if song.filename: self.song_list.set(iter, COL_FILE, song.filename)
 		if song.title: self.song_list.set(iter, COL_TITLE, song.title)
+		if song.track: self.song_list.set(iter, COL_TRACK, song.track)
 		if song.album: self.song_list.set(iter, COL_ALBUM,  song.album)
 		if song.artist: self.song_list.set(iter, COL_ARTIST, song.artist)
 		if song.genre: self.song_list.set(iter, COL_GENRE,  song.genre)
-#		if song.length: self.song_list.set(iter, COL_LENGTH, song.length)
-#		if song.type: self.song_list.set(iter, COL_TYPE,  song.type)
+		if song.comment: self.song_list.set(iter, COL_INFO, song.comment)
+		#if song.length: self.song_list.set(iter, COL_LENGTH, song.length)
+		#if song.type: self.song_list.set(iter, COL_TYPE,  song.type)
 
 
 	####################################################################
@@ -330,8 +330,9 @@ class MusicBox(rox.Window, loading.XDSLoader):
 			c = (0,)
 		self.song_list.clear()
 		for song in self.playlist:
-			iter = self.song_list.append(None)
-			self.set_song_info(iter, song)
+			if song != None:
+				iter = self.song_list.append(None)
+				self.set_song_info(iter, song)
 		self.view.set_cursor(c)
 
 
@@ -359,30 +360,8 @@ class MusicBox(rox.Window, loading.XDSLoader):
 
 
 	####################################################################
-	def activate(self, view, path, column):
-		"double-click handler, plays the song"
-		self.play()
-
-	####################################################################
-	# set the selected column as the search <Ctrl-S> column
-	####################################################################
-	def col_activate(self, column):
-		self.view.set_search_column(column.get_sort_column_id())
-
-	####################################################################
-	# Play button handler (toggle between play and pause)
-	####################################################################
-	def play_selected(self, button=None):
-		if (self.player) and ((self.player.state == 'play') or
-			(self.player.state == 'pause')):
-			self.pause()
-		else:
-			self.play()
-
-	####################################################################
-	# play the current song
-	####################################################################
 	def play(self):
+		"Play the current song"
 		model, iter = self.selection.get_selected()
 		self.current_file = model.get_value(iter, COL_FILE)
 		self.current_artist = model.get_value(iter, COL_ARTIST)
@@ -403,13 +382,31 @@ class MusicBox(rox.Window, loading.XDSLoader):
 			self.foo = Thread(name='player', target=self.player.play)
 			self.foo.setDaemon(True)
 			self.foo.start()
+		except TypeError, detail:
+			rox.info(str(detail))
 		except:
 			rox.info(_('Failed to start playing %s') % self.current_file)
 
+
 	####################################################################
-	# skip to previous song and play it
+	def activate(self, view, path, column):
+		"Double-click handler, plays the song"
+		self.play()
+
+
+	####################################################################
+	def play_selected(self, button=None):
+		"Play button handler (toggle between play and pause)"
+		if (self.player) and ((self.player.state == 'play') or
+			(self.player.state == 'pause')):
+			self.pause()
+		else:
+			self.play()
+
+
 	####################################################################
 	def prev(self, button=None):
+		"Skip to previous song and play it"
 		path, column = self.view.get_cursor()
 		n = max(0, path[0]-1)
 		path = (n,)
@@ -417,10 +414,10 @@ class MusicBox(rox.Window, loading.XDSLoader):
 		self.play()
 		self.status_bar.output(_('Prev'),6000)
 
-	####################################################################
-	# skip to next song and play it
+
 	####################################################################
 	def next(self, button=None):
+		"Skip to next song and play it (with shuffle and repeat)"
 		num_songs = len(self.song_list)
 		if self.shuffle.get_active():
 			while True:
@@ -445,10 +442,10 @@ class MusicBox(rox.Window, loading.XDSLoader):
 		self.play()
 		self.status_bar.output(_('Next'),6000)
 
-	####################################################################
-	# stop the current song (but don't kill the player)
+
 	####################################################################
 	def stop(self, button=None):
+		"Stop playing"
 		if (self.player) and (self.player.state != 'stop'):
 			self.player.stop()
 			self.player = None
@@ -456,18 +453,18 @@ class MusicBox(rox.Window, loading.XDSLoader):
 		self.image_play.set_from_file(BMP_PLAY)
 		self.status_bar.output(_('Stop'),6000)
 
-	####################################################################
-	# pause playing (toggle)
+
 	####################################################################
 	def pause(self, button=None):
+		"Pause playing (toggle)"
 		self.player.pause()
 		self.image_play.set_from_file(BMP_PLAY)
 		self.status_bar.output(_('Pause'),6000)
 
-	####################################################################
-	# status update
+
 	####################################################################
 	def status_update(self, state, remain, progress):
+		"Status update (elapsed time, end of song, etc."
 		g.threads_enter()
 
 		if state == 'play':
@@ -508,23 +505,22 @@ class MusicBox(rox.Window, loading.XDSLoader):
 
 
 	####################################################################
-	# same as close, but called from the window manager
-	####################################################################
 	def delete_event(self, ev, e1):
+		"Same as close, but called from the window manager"
 		self.close()
 
-	####################################################################
-	# stop playing, kill the player and exit
+
 	####################################################################
 	def close(self, button = None):
+		"Stop playing, kill the player and exit"
 		if self.player:
 			self.stop()
 		self.destroy()
 
-	####################################################################
-	# used as the notify callback when options change
+
 	####################################################################
 	def get_options(self):
+		"Used as the notify callback when options change"
 		if SHUFFLE.has_changed:
 			self.shuffle.set_active(SHUFFLE.int_value)
 
@@ -533,24 +529,23 @@ class MusicBox(rox.Window, loading.XDSLoader):
 
 
 	####################################################################
-	# options edit dialog
-	####################################################################
 	def show_options(self, button=None):
+		"Options edit dialog"
 		rox.edit_options()
 
-	####################################################################
-	# popup menu handler
+
 	####################################################################
 	def button_press(self, text, event):
+		"Popup menu handler"
 		if event.button != 3:
 			return 0
 		self.menu.popup(self, event)
 		return 1
 
-	####################################################################
-	# set the playback position (seek)
+
 	####################################################################
 	def adjust_seek_bar(self, vol):
+		"Set the playback position (seek)"
 		if self.we_did_it:
 			#ignore updates caused by playback progress
 			self.we_did_it = False
@@ -559,10 +554,16 @@ class MusicBox(rox.Window, loading.XDSLoader):
 			if self.player:
 				self.player.seek(vol.get_value())
 
+
 	####################################################################
-	# toggle between normal size and only toolbar+statusbar
+	def col_activate(self, column):
+		"Set the selected column as the search <Ctrl-S> column"
+		self.view.set_search_column(column.get_sort_column_id())
+
+
 	####################################################################
 	def toggle_view(self):
+		"Toggle between normal size and only toolbar+statusbar"
 		if self.view_state == VIEW_LARGE:
 			self.scroll_window.hide()
 			self.set_size_request(VIEW_MINI_SIZE[0], VIEW_MINI_SIZE[1])
@@ -577,10 +578,10 @@ class MusicBox(rox.Window, loading.XDSLoader):
 			self.view_state = VIEW_LARGE
 			self.set_resizable(True)
 
-	####################################################################
-	# Check if the Shift key is pressed or not when Dropping files
+
 	####################################################################
 	def xds_drag_drop(self, widget, context, data, info, time):
+		"Check if the Shift key is pressed or not when Dropping files"
 		if context.actions & g.gdk.ACTION_MOVE:
 			pass
 		if context.actions & g.gdk.ACTION_COPY:
@@ -589,10 +590,10 @@ class MusicBox(rox.Window, loading.XDSLoader):
 			self.replace_library = False
 		return loading.XDSLoader.xds_drag_drop(self, widget, context, data, info, time)
 
-	####################################################################
-	# Accept files and folders dropped on us as new Library
+
 	####################################################################
 	def xds_load_uris(self, uris):
+		"Accept files and folders dropped on us as new Library"
 		path = ''
 		#strip off the 'file://' part and concatenate them all
 		#together with ':', like a PATH.
@@ -613,34 +614,33 @@ class MusicBox(rox.Window, loading.XDSLoader):
 		rox.app_options.save()
 		self.update_thd()
 
+
+	#TODO: Drag and Drop from MusicBox...
 	####################################################################
-	# Accept files and folders from the command line (or dropped on our
-	# icon)
+	def on_drag_data_get(self, treeview, context, selection, info, time):
+		"Tell the drop target what the filename(s) is(are)"
+		#print treeview, context, selection, info
+
+		model, iter = self.selection.get_selected()
+		self.current_file = model.get_value(iter, COL_FILE)
+		payload = model.get_value(iter, COL_FILE)
+
+		print 'Source: %s' % payload
+
+		selection.set(selection.target, 8, payload)
+		model.remove(iter)
+
+
 	####################################################################
-	def load_args(self, args):
-		path = ''
-		#concatenate them all together with ':', like a PATH.
-		for s in args:
-			if path == '':
-				path = s
-			else:
-				path = path+':'+s
-
-		#Shift key is down or not?  Add vs Replace
-		if self.replace_library:
-			LIBRARY.value = path
-		else:
-			LIBRARY.value += ':'+path
-
-		rox.app_options.save()
-
-
-
 	def filter_none(self):
+		"Clear any filter and show all songs"
 		self.playlist.the_filter = {}
 		self.refresh()
 
+
+	####################################################################
 	def filter_album(self):
+		"Filter by the currently selected album"
 		model, iter = self.selection.get_selected()
 		if not model or not iter:
 			rox.info(_('Please make a selection first.'))
@@ -649,7 +649,10 @@ class MusicBox(rox.Window, loading.XDSLoader):
 			self.playlist.the_filter = {'album':[album]}
 			self.refresh()
 
+
+	####################################################################
 	def filter_artist(self):
+		"Filter by the currently selected artist"
 		model, iter = self.selection.get_selected()
 		if not model or not iter:
 			rox.info(_('Please make a selection first.'))
@@ -658,7 +661,10 @@ class MusicBox(rox.Window, loading.XDSLoader):
 			self.playlist.the_filter = {'artist':[artist]}
 			self.refresh()
 
+
+	####################################################################
 	def filter_genre(self):
+		"Filter by the currently selected genre"
 		model, iter = self.selection.get_selected()
 		if not model or not iter:
 			rox.info(_('Please make a selection first.'))
@@ -667,7 +673,11 @@ class MusicBox(rox.Window, loading.XDSLoader):
 			self.playlist.the_filter = {'genre':[genre]}
 			self.refresh()
 
+
+	####################################################################
 	def filter_new(self):
+		"Create a new filter via a dialog"
+		rox.info("Not implemented yet")
 		pass
 
 

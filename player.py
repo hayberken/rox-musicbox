@@ -30,6 +30,11 @@ except:
 	import linuxaudiodev
 
 
+TYPE_OGG = 'application/ogg'
+TYPE_MP3 = 'audio/x-mp3'
+TYPE_LIST = [TYPE_OGG, TYPE_MP3]
+
+
 class Player:
 	state = 'stop'
 	seek_val = 0
@@ -45,6 +50,13 @@ class Player:
 		self.m_type = m_type
 		self.callback = callback
 		self.buffersize = buffersize
+
+		if (self.m_type == TYPE_OGG and not HAVE_OGG):
+			raise TypeError, _('You must have OGG support to play ogg files (%s).') % self.name
+
+		if (self.m_type == TYPE_MP3 and not HAVE_MAD):
+			raise TypeError, _('You must have MAD support to play mp3 files (%s).') % self.name
+
 
 	# Open and configure the audio device driver
 	def open(self, rate=44100, channels=2):
@@ -68,20 +80,20 @@ class Player:
 	# Figure out what type the file is and start playing it.
 	def play(self):
 		if os.path.isfile(self.name):
-			if (self.m_type == 'application/ogg' and HAVE_OGG):
+			if (self.m_type == TYPE_OGG and HAVE_OGG):
 				vf = ogg.vorbis.VorbisFile(self.name)
 				#self.info_ogg(vf)
 				self.start_ogg(vf)
 
-			elif (self.m_type == 'audio/x-mp3' and HAVE_MAD):
+			elif (self.m_type == TYPE_MP3 and HAVE_MAD):
 				mf = mad.MadFile(self.name, self.buffersize)
 				#self.info_mad(mf)
 				self.start_mad(mf)
 
 			else:
-				raise ValueError, _('Unsupported file (%s).') % self.name
+				raise ValueError, 'Unsupported file (%s).' % self.name
 		else:
-			raise ValueError, _('Play takes a filename.')
+			raise SyntaxError, 'Play takes a filename.'
 
 	def stop(self):
 		self.state = 'stop'

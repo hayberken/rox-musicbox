@@ -24,9 +24,16 @@ case the display will update automatically.  If you have a lot of files it will
 take considerable time to read them all - I'm working on this.  However, don't
 let that stop you from hitting the play button!  We got threads man.
 
+
+Tag Info and Filenames
+~~~~~~~~~~~~~~~~~~~~~~
 MusicBox will try to read tag info from your files, but this can take a long time
-and many files do not contain this information.  Therefore, MusicBox will attempt
+and many files do not contain this information.  Therefore, MusicBox will first attempt
 to 'guess' the artist, album and title from the filename and path of each song.
+After loading all filenames by guessing it will look for tag info in the files as a
+background task.  You can start playing songs or even quit MusicBox while this is
+happening.
+
 The default assumption is artist/album/title.ext, but you can change this if you
 need to.  In the Options dialog there is a Pattern field that provides a place to
 edit the default pattern to be used. (Note: this is easy to get wrong and if you
@@ -36,7 +43,12 @@ MusicBox only supports artist, album and title.
 The default pattern looks like this:
 	^.*/(?P<artist>.*)/(?P<album>.*)/(?P<title>.*)
 This pattern throws away any leading path, and separates the rest as artist/album/title.
+The <track> option is also available if you have track numbers as part of your file
+naming scheme.
 
+
+Dependencies
+~~~~~~~~~~~~
 MusicBox depends on pyao/libao for sound output, pymad/libmad for mp3 processing
 and pyogg/libvorbis and friends for ogg support.
 

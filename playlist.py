@@ -28,15 +28,17 @@ TYPE_LIST = [TYPE_OGG, TYPE_MP3]
 
 
 class PlaylistEntry:
-	def __init__(self, filename=None, title=None, album=None, artist=None,
-						genre=None, length=None, type=None):
+	def __init__(self, filename=None, title=None, track=None, album=None, artist=None,
+						genre=None, length=None, type=None, comment=None):
 		self.filename = filename
 		self.title = title
+		self.track = track
 		self.album = album
 		self.artist = artist
 		self.genre = genre
 		self.length = length
 		self.type = type
+		self.comment = comment
 
 
 class Playlist:
@@ -47,10 +49,13 @@ class Playlist:
 		self.the_filter = {}	#artist|album|genre: [list, of, filter, info]
 
 
+	####################################################################
 	def __iter__(self):
 		self.iter_next = 0
 		return self
 
+
+	####################################################################
 	def next(self):
 		while 1:
 			try:
@@ -78,38 +83,60 @@ class Playlist:
 	####################################################################
 	def get_tag_info(self, song):
 		"Get the tag info from specified filename"
-		found = False
 		song.type = str(rox.mime.get_type(song.filename))
-		print song.type
 
 		if song.type == TYPE_MP3 and HAVE_MAD:
 			try:
 				tag_info = ID3(song.filename)
+			except: pass
+			try:
 				if tag_info.has_key('TITLE'): song.title = tag_info['TITLE']
+			except: pass
+			try:
+				if tag_info.has_key('TRACKNUMBER'): song.track = tag_info['TRACKNUMBER']
+			except: pass
+			try:
 				if tag_info.has_key('ALBUM'): song.album = tag_info['ALBUM']
+			except: pass
+			try:
 				if tag_info.has_key('ARTIST'): song.artist = tag_info['ARTIST']
+			except: pass
+			try:
 				if tag_info.has_key('GENRE'): song.genre = tag_info['GENRE']
-				song.length = None
-				found = True
-			except:
-				pass
+			except: pass
+			try:
+				if tag_info.has_key('COMMENT'): song.comment = tag_info['COMMENT']
+			except: pass
+			song.length = None
 
 		elif song.type == TYPE_OGG and HAVE_OGG:
 			try:
 				tag_info = ogg.vorbis.VorbisFile(song.filename).comment().as_dict()
+			except: pass
+			try:
 				if tag_info.has_key('TITLE'): song.title = tag_info['TITLE'][0]
+			except: pass
+			try:
+				if tag_info.has_key('TRACKNUMBER'): song.track = tag_info['TRACKNUMBER'][0]
+			except: pass
+			try:
 				if tag_info.has_key('ALBUM'): song.album = tag_info['ALBUM'][0]
+			except: pass
+			try:
 				if tag_info.has_key('ARTIST'): song.artist = tag_info['ARTIST'][0]
+			except: pass
+			try:
 				if tag_info.has_key('GENRE'): song.genre = tag_info['GENRE'][0]
-				song.length = None
-				found = True
-			except:
-				pass
+			except: pass
+			try:
+				if tag_info.has_key('COMMENT'): song.comment = tag_info['COMMENT'][0]
+			except: pass
+			song.length = None
+
 		else:
 			print song.filename
 
-		if found:
-			return song
+		return song
 
 
 	####################################################################
@@ -150,10 +177,11 @@ class Playlist:
 		type = str(rox.mime.get_type(filename))
 		if type in TYPE_LIST and os.access(filename, os.R_OK):
 			song = self.guess(filename, type)
-			self.song_list[filename] = song
-			self.album_list[song.album] = True
-			self.artist_list[song.artist] = True
-			self.genre_list[song.genre] = True
+			if song != None:
+				self.song_list[filename] = song
+				self.album_list[song.album] = True
+				self.artist_list[song.artist] = True
+				self.genre_list[song.genre] = True
 
 
 	####################################################################
@@ -167,18 +195,31 @@ class Playlist:
 
 		try:
 			title = m.group('title')
-			album = m.group('album')
-			artist = m.group('artist')
 		except:
 			title = filename
+		try:
+			album = m.group('album')
+		except:
 			album = 'unknown'
+		try:
+			artist = m.group('artist')
+		except:
 			artist = 'unknown'
+		try:
+			track = m.group('track')
+		except:
+			track = ''
 
 		(title, ext) = os.path.splitext(title)
 		genre = 'unknown'
 		length = None
+		comment = ''
 
-		return PlaylistEntry(filename, title, album, artist, genre, length, type)
+		#Ignore hidden files
+		if title[0] == '.':
+			return None
+
+		return PlaylistEntry(filename, title, track, album, artist, genre, length, type, comment)
 
 
 	####################################################################

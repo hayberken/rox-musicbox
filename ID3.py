@@ -238,11 +238,13 @@ class ID3:
 
 				self.genre = ord(self.file.read(1))
 
-				self.title = strip_padding(self.title)
-				self.artist = strip_padding(self.artist)
-				self.album = strip_padding(self.album)
-				self.year = strip_padding(self.year)
-				self.comment = strip_padding(self.comment)
+				#Strip spaces and convert from latin-1 to utf8
+				#(there is no standard for the id3 tag encoding, so we guess latin-1)
+				self.title = unicode(strip_padding(self.title),'latin-1').encode('utf8')
+				self.artist = unicode(strip_padding(self.artist),'latin-1').encode('utf8')
+				self.album = unicode(strip_padding(self.album),'latin-1').encode('utf8')
+				self.year = unicode(strip_padding(self.year),'latin-1').encode('utf8')
+				self.comment = unicode(strip_padding(self.comment),'latin-1').encode('utf8')
 
 				self.setup_dict()
 
@@ -263,7 +265,7 @@ class ID3:
 			self.d["GENRE"] = self.tupleize(self.genres[self.genre])
 		else:
 			self.d["GENRE"] = self.tupleize("Unknown Genre")
-		if self.track: self.d["TRACKNUMBER"] = self.tupleize(str(self.track))
+		if self.track: self.d["TRACKNUMBER"] = self.tupleize("%02d" % (self.track)) #str(self.track))
 
 	def delete(self):
 		self.zero()
@@ -428,7 +430,7 @@ class ID3:
 				genre = 'Unknown'
 
 			if self.track != None:
-				track = str(self.track)
+				track = "%02d" % self.track #str(self.track)
 			else:
 				track = 'Unknown'
 

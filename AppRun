@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 import findrox
+import sys, os
 import rox
+
+__builtins__._ = rox.i18n.translation(os.path.join(rox.app_dir, 'Messages'))
+
 from rox import g
 import gtkexcepthook
 import musicbox
