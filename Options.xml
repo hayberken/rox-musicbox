@@ -64,6 +64,7 @@
 				<toggle name='toolbar' label='Toolbar'>Show/Hide the Toolbar</toggle>
 				<toggle name='volume' label='Volume'>Show/Hide the Volume control</toggle>
 				<toggle name='seekbar' label='Seek'>Show/Hide the Seek control</toggle>
+				<toggle name='album_art' label='Album Art'>Show/Hide Album Cover display</toggle>
 			</hbox>
 			<toggle name='word_wrap' label='Word Wrap'>Word wrap display strings</toggle>
 			<toggle name='mini_toolbar' label='Mini Toolbar'>Use miniature size toolbar buttons</toggle>

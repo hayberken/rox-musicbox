@@ -1,6 +1,14 @@
 ﻿MusicBox - an MP3/OGG Player for the ROX Desktop
 by Ken Hayber
 
+19-Feb-2005
+022
+- Add Album Cover Art display (supports .DirIcon and
+		[.folder|folder|Folder|.album|album|Album|.cover|cover|Cover].[png|jpg]
+- Fixed sorting in playlist
+- Fixed the save box
+- Changed from old Choices system to new basedir system (using hayber.us domain)
+
 14-Jan-2005
 021
 - Add Wav and Flac support (Flac support is not complete - no tag info is supported,

@@ -114,6 +114,9 @@ SH_SEEKBAR = Option('seekbar', True)
 WORDWRAP = Option('word_wrap', False)
 MINITOOLS = Option('mini_toolbar', False)
 TIMEDISPLAY = Option('time_display', 0)
+ALBUM_ART = Option('album_art', 0)
+
+
 
 def build_tool_options(box, node, label, option):
 	"""Custom Option widget to allow show/hide each toolbar button"""
@@ -219,6 +222,7 @@ class MusicBox(rox.Window, loading.XDSLoader):
 		self.build_menu()
 		self.build_toolbar()
 		self.build_labels()
+		self.set_line_wrap()
 		self.build_misc()
 		self.set_fonts()
 		self.set_colors()
@@ -237,6 +241,8 @@ class MusicBox(rox.Window, loading.XDSLoader):
 		self.vbox.show_all()
 		self.show_hide_controls()
 		self.show_hide_buttons()
+		if not ALBUM_ART.int_value:
+			self.album_img.hide()
 		self.show()
 
 		#Start xmlrpc server
@@ -359,30 +365,33 @@ class MusicBox(rox.Window, loading.XDSLoader):
 		hbox = gtk.HBox()
 		vbox = gtk.VBox()
 		hbox.pack_start(self.album_img, False, False, 0)
-		hbox.pack_end(vbox, True, True, 5)
+		hbox.pack_end(vbox, True, True, 5) #padding is 5, see resize too.
 		self.display.put(hbox, 0, 0)
 		self.display_box = vbox
 
 		self.display_song = gtk.Label()
-		self.display_song.set_line_wrap(bool(WORDWRAP.int_value))
 		self.display_song.set_alignment(0.0, 0.0)
 
 		self.display_album = gtk.Label()
-		self.display_album.set_line_wrap(bool(WORDWRAP.int_value))
 		self.display_album.set_alignment(0.0, 0.0)
 
 		self.display_artist = gtk.Label()
-		self.display_artist.set_line_wrap(bool(WORDWRAP.int_value))
 		self.display_artist.set_alignment(0.0, 0.0)
 
 		self.display_status = gtk.Label()
-		self.display_status.set_line_wrap(bool(WORDWRAP.int_value))
 		self.display_status.set_alignment(0.0, 0.0)
 
 		vbox.pack_start(self.display_song, False, True, 0)
 		vbox.pack_start(self.display_album, False, True, 0)
 		vbox.pack_start(self.display_artist, False, True, 0)
 		vbox.pack_start(self.display_status, False, True, 0)
+
+
+	def set_line_wrap(self):
+		self.display_song.set_line_wrap(bool(WORDWRAP.int_value))
+		self.display_album.set_line_wrap(bool(WORDWRAP.int_value))
+		self.display_artist.set_line_wrap(bool(WORDWRAP.int_value))
+		self.display_status.set_line_wrap(bool(WORDWRAP.int_value))
 
 
 	def build_misc(self):
@@ -460,11 +469,14 @@ class MusicBox(rox.Window, loading.XDSLoader):
 		"""Called when the window resizes."""
 		width = rectangle[2]
 		height = rectangle[3]
+		# the -5 below is just arbitrary padding
 		try:
-			self.album_img.get_image()
-			awidth = width - 5
+			awidth = width -5
+			self.album_img.get_image() #raises an exception if not valid
 		except:
-			awidth = width - ALBUM_COVER_SIZE - 5
+			if ALBUM_ART.int_value:
+				awidth = width - ALBUM_COVER_SIZE -5
+
 		width = max(width, -1)
 		awidth = max(awidth, -1)
 
@@ -582,7 +594,15 @@ class MusicBox(rox.Window, loading.XDSLoader):
 			self.display_song.set_text(self.current_song.title)
 			self.display_artist.set_text(self.current_song.artist)
 			self.display_album.set_text(self.current_song.album)
+		except TypeError, detail:
+			rox.alert(str(detail))
+		except:
+			rox.alert(_("Failed to start playing %s") % self.current_song.filename)
 
+		if self.playlistUI:
+			self.playlistUI.sync()
+
+		try:
 			folder = os.path.dirname(self.current_song.filename)
 			pixbuf = None
 			for filename in ['.DirIcon',
@@ -598,16 +618,10 @@ class MusicBox(rox.Window, loading.XDSLoader):
 					pixbuf = gtk.gdk.pixbuf_new_from_file_at_size(image, ALBUM_COVER_SIZE, ALBUM_COVER_SIZE)
 					break
 			self.album_img.set_from_pixbuf(pixbuf)
-
-		except TypeError, detail:
-			rox.alert(str(detail))
 		except:
-			rox.alert(_("Failed to start playing %s") % self.current_song.filename)
+			pass
 
-		if self.playlistUI:
-			self.playlistUI.sync()
-
-		#force a resize because the labels have changed
+		#force a resize because the labels may have changed
 		self.resize(None, [0, 0, 0, 0])
 
 
@@ -757,6 +771,16 @@ class MusicBox(rox.Window, loading.XDSLoader):
 				self.toolbar.set_icon_size(gtk.ICON_SIZE_MENU)
 			else:
 				self.toolbar.set_icon_size(gtk.ICON_SIZE_SMALL_TOOLBAR)
+
+		if WORDWRAP.has_changed:
+			self.set_line_wrap()
+
+		if ALBUM_ART.has_changed:
+			if ALBUM_ART.int_value:
+				self.album_img.show()
+			else:
+				self.album_img.hide()
+#			self.resize(None, [0, 0, 0, 0])
 
 
 	def show_options(self, button=None):
