@@ -88,7 +88,7 @@ class Player:
 			try:
 				if HAVE_OSS:
 					self.dev = ossaudiodev.open('w')
-					self.dev.setparameters(ossaudiodev.AFMT_S16_NE, channels, rate)
+					self.dev.setparameters(ossaudiodev.AFMT_S16_LE, channels, rate)
 				elif HAVE_AO:
 					self.dev = ao.AudioDevice(self.id, bits, rate, channels)
 				else:
@@ -112,7 +112,7 @@ class Player:
 	def write(self, buff, bytes):
 		"""Write data to the audio device"""
 		if HAVE_OSS:
-			self.dev.writeall(buff)
+			self.dev.write(buff)
 		elif HAVE_AO:
 			self.dev.play(buff, bytes)
 		else:
@@ -207,7 +207,10 @@ class Player:
 					vf.time_seek(float(total_time * self.seek_val))
 					self.seek_val = 0
 				else:
-					(buff, bytes, bit) = vf.read(self.buffersize)
+					#for some reason with ossaudiodev a buffer greater
+					#than 512 bytes causes problems with ogg, smaller seems better
+					# but I'm afraid performance will suck.
+					(buff, bytes, bit) = vf.read(256)
 					if bytes == 0:
 						self.state = 'eof'
 						elapse = total_time

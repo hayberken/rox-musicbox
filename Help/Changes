@@ -2,6 +2,11 @@ MusicBox - an MP3/OGG Player for the ROX Desktop
 by Ken Hayber
 
 09-Apr-2004
+015
+- Oops! Last release broke OGG playback.  For some reason using a buffer larger than 512 bytes
+causes lots of ugly distortion.  I forced it to 256 and it seems OK on my system.
+
+09-Apr-2004
 014
 MusicBox changes:
 - Changed version numbering.  I like the simple serial number better than the dot notation.
