@@ -1,204 +1,270 @@
-# MusicBox Italian Translation.
-# Copyright @ 2003 Free Software Foundation, Inc.
-# Current translator: Yuri Bongiorno http://yuri.webhop.org, 2003.
-# Traduttori Italiani GNU:   http://www.linux.it/tp
-msgid ""
-msgstr ""
-"Project-Id-Version: MusicBox 0.0.9\n"
-"POT-Creation-Date: 2003-08-20 16:40+0200\n"
-"PO-Revision-Date: 2003-08-20 16:40+0200\n"
-"Last-Translator: Yuri Bongiorno http://yuri.webhop.org\n"
-"Language-Team: Italian <tp@lists.linux.it>\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Report-Msgid-Bugs-To: \n"
-
-#: playlistui.py:54
+#: playlistui.py:45
 msgid "Album"
 msgstr "Album"
 
-#: musicbox.py:128 playlistui.py:96
-#, fuzzy
+#: musicbox.py:120
 msgid "Quit"
 msgstr "Esci"
 
-#: musicbox.py:140 playlistui.py:71
+#: musicbox.py:130 playlistui.py:67
 msgid "Playlist"
-msgstr ""
+msgstr "Scaletta"
 
-#: musicbox.py:116 musicbox.py:177
+# MusicBox Italian Translation.
+# Copyright @ 2004 Free Software Foundation, Inc.
+# Current translator: Yuri Bongiorno http://yuri.webhop.org, 2004.
+#: musicbox.py:108 musicbox.py:167
 msgid "Pause"
 msgstr "Pausa"
 
-#: playlistui.py:53
+#: playlistui.py:46
 msgid "Title"
 msgstr "Titolo"
 
-#: musicbox.py:120 musicbox.py:164
+#: tips:27
+msgid "Randomize play order."
+msgstr "Ordine di riproduzione casuale."
+
+#: tips:5
+msgid "Pattern"
+msgstr "Modello"
+
+#: tips:12
+msgid "oss"
+msgstr "oss"
+
+#: musicbox.py:112 musicbox.py:154
 msgid "Next"
 msgstr "Successivo"
 
-#: musicbox.py:183
+#: musicbox.py:173
 msgid "Prev"
 msgstr "Precedente"
 
-#: musicbox.py:463
+#: musicbox.py:271
 msgid "Loading"
-msgstr ""
+msgstr "Caricamento"
 
-#: playlistui.py:87
-msgid "All songs"
-msgstr "Tutte le canzoni"
+#: tips:13
+msgid "Open Sound System driver"
+msgstr "Il driver Open Sound System"
 
-#: musicbox.py:122 playlistui.py:93
+#: musicbox.py:114 playlistui.py:89
 msgid "Save"
 msgstr "Salva"
 
-#: musicbox.py:294
+#: musicbox.py:289
 msgid " songs"
-msgstr " canzoni"
+msgstr " brani"
 
-#: musicbox.py:116 musicbox.py:177
-#, fuzzy
+#: tips:6 tips:7
+msgid ""
+"A python regular expression to parse the full path of each file into "
+"'artist', 'album', 'title' and 'track'.  Used when there is no tag info in "
+"the file."
+msgstr ""
+"Un'espressione regolare di python per ricavare dal percorso completo di "
+"ciascun file l'artista, l'album, il titolo e la traccia. Viene usato se nel "
+"file non ci sono tag di informazione."
+
+#: musicbox.py:108 musicbox.py:167
 msgid "Play"
-msgstr "In riproduzione"
+msgstr "Suona"
 
-#: musicbox.py:156
+#: musicbox.py:146 tips:24
 msgid "Repeat"
-msgstr "Ripetizione brano"
+msgstr "Ripeti"
 
-#: playlistui.py:55
+#: tips:11
+msgid "Gnome esound server"
+msgstr "Il server esound di Gnome"
+
+#: playlistui.py:47
 msgid "Track"
 msgstr "Traccia"
 
-#: musicbox.py:117 musicbox.py:170
+#: tips:1
+msgid "Settings"
+msgstr "Impostazioni"
+
+#: musicbox.py:109 musicbox.py:160
 msgid "Stop"
-msgstr "Stop"
+msgstr "Ferma"
 
-#: player.py:129
+#: player.py:130
 msgid "You must have MAD support to play mp3 files (%s)."
-msgstr ""
+msgstr " necessario il supporto a MAD per riprodurre i file mp3 (%s)."
 
-#: musicbox.py:125 musicbox.py:138
+#: musicbox.py:117 musicbox.py:128
 msgid "Options"
 msgstr "Opzioni"
 
-#: playlistui.py:56
+#: tips:10
+msgid "esd"
+msgstr "esd"
+
+#: tips:29 tips:30 tips:31 tips:32 tips:33
+msgid ""
+"How many songs to remember in shuffle mode so we don't replay too often."
+msgstr ""
+"Quanti brani memorizzare nella modalit A caso in modo da non riprodurli "
+"troppo spesso."
+
+#: playlistui.py:48
 msgid "Genre"
 msgstr "Genere"
 
-#: musicbox.py:294
+#: tips:3
+msgid "Path"
+msgstr "Percorso"
+
+#: musicbox.py:289
 msgid "loaded "
-msgstr ""
+msgstr "caricati "
 
-#: musicbox.py:126
+#: tips:20
+msgid "Buffer Size"
+msgstr "Dimensione del buffer"
+
+#: tips:14
+msgid "alsa"
+msgstr "alsa"
+
+#: musicbox.py:118
 msgid "Info"
-msgstr ""
+msgstr "Informazioni"
 
-#: playlistui.py:91
-msgid "New Filter..."
-msgstr "Nuovo filtro..."
-
-#: musicbox.py:440
-msgid " of "
-msgstr ""
-
-#: playlistui.py:57
-msgid "Length"
-msgstr ""
-
-#: playlistui.py:52
+#: playlistui.py:44
 msgid "Artist"
 msgstr "Artista"
 
-#: musicbox.py:454
+#: musicbox.py:402
 msgid "Time Remaining"
-msgstr ""
+msgstr "Tempo rimanente"
 
-#: musicbox.py:123 playlistui.py:94
+#: tips:15
+msgid "current Alsa driver"
+msgstr "Il driver Alsa attuale"
+
+#: musicbox.py:115
 msgid "Refresh"
 msgstr "Aggiorna"
 
-#: playlistui.py:87 playlistui.py:88 playlistui.py:89 playlistui.py:90
-#: playlistui.py:91
-msgid "Filter"
-msgstr "Filtro"
+#: tips:16
+msgid "alsa (old)"
+msgstr "alsa (old)"
 
-#: musicbox.py:361
+#: musicbox.py:336
 msgid "Failed to start playing %s"
 msgstr "Riproduzione di %s fallita"
 
-#: playlistui.py:89
-#, fuzzy
-msgid "This Album"
-msgstr "Questo album"
+#: tips:25
+msgid "Keep playing forever."
+msgstr "Continua a suonare per sempre."
 
-#: musicbox.py:471
-#, fuzzy
+#: musicbox.py:413
 msgid "Stopped"
 msgstr "Fermato"
 
-#: playlistui.py:313 playlistui.py:325 playlistui.py:337
-msgid "Please make a selection first."
-msgstr "Si deve fare prima una selezione."
+#: tips:17 tips:18 tips:19
+msgid "older (obsolete?) Alsa driver"
+msgstr "Il vecchio driver Alsa (obsoleto?)"
 
-#: musicbox.py:450
-#, fuzzy
+#: tips:8
+msgid "Output"
+msgstr "Output"
+
+#: tips:4
+msgid ""
+"The (optional) default location of your music.  This location will be "
+"scanned and loaded at startup when no command-line arguments are given.  It "
+"is a ':' separated list of directories, and/or .xml, .pls, .m3u, .mp3, .ogg "
+"files."
+msgstr ""
+"Il luogo predefinito (facoltativo) in cui si trovano i file musicali. Viene "
+"analizzato e caricato all'avvio se nella riga di comando non c' nessun "
+"argomento.  un elenco di directory separate da : e/o di file .xml, .pls, ."
+"m3u, .mp3, .ogg."
+
+#: musicbox.py:401
 msgid "Playing"
 msgstr "In riproduzione"
 
-#: musicbox.py:149
+#: tips:28
+msgid "Shuffle cache size"
+msgstr "Dimensioni cache"
+
+#: musicbox.py:139 tips:26
 msgid "Shuffle"
-msgstr "Riproduzione casuale"
+msgstr "A caso"
 
-#: player.py:126
+#: player.py:128
 msgid "You must have OGG support to play ogg files (%s)."
-msgstr "È necessario il supporto a OGG per riprodurre i file ogg (%s)."
+msgstr " necessario il supporto a OGG per riprodurre i file ogg (%s)."
 
-#: musicbox.py:119
-#, fuzzy
+#: tips:21 tips:22
+msgid ""
+"The size of the buffer used to read/write sound data.  A larger buffer may "
+"reduce skipping under heavy load."
+msgstr ""
+"La dimensione del buffer usato per leggere e scrivere i file sonori. Un "
+"grande buffer pu diminuire le interruzioni nei sistemi pesantemente caricati."
+
+#: musicbox.py:111
 msgid "Back"
-msgstr "Indietro"
+msgstr "Precedente"
 
-#: musicbox.py:469
-#, fuzzy
+#: tips:2
+msgid "Library"
+msgstr "Libreria"
+
+#: musicbox.py:411
 msgid "Paused"
 msgstr "In pausa"
 
-#: musicbox.py:288
-#, fuzzy
+#: musicbox.py:281
 msgid "Loading songs, please wait..."
-msgstr "Scansione in corso..."
+msgstr "Caricamento brani, attendere..."
 
-#: playlistui.py:90
-#, fuzzy
-msgid "This Genre"
-msgstr "Questo genere"
+#: tips:9
+msgid "Driver"
+msgstr "Driver"
 
-#: musicbox.py:294
+#: musicbox.py:289
 msgid "Ready"
+msgstr "Pronto"
+
+#: playlistui.py:91
+msgid "Close"
 msgstr ""
 
-#: playlistui.py:88
-msgid "This Artist"
-msgstr "Questo artista"
+#: tips:23
+msgid "Play Settings"
+msgstr "Impostazioni di riproduzione"
 
-#~ msgid "Bug Detected"
-#~ msgstr "Trovato bug"
+#~ msgid "All songs"
+#~ msgstr "Tutti i brani"
 
-#~ msgid "Show Details"
-#~ msgstr "Mostra dettagli"
+#~ msgid "New Filter..."
+#~ msgstr "Nuovo filtro..."
 
-#~ msgid ""
-#~ "<big><b>A programming error has been detected during the execution of "
-#~ "this program.</b></big>\n"
-#~ "\n"
-#~ "It probably isn't fatal, but should be reported to the developers "
-#~ "nonetheless."
-#~ msgstr ""
-#~ "<big><b>È stato trovato un errore di programmazione durantel'esecuzione "
-#~ "di questo programma.</b></big>\n"
-#~ "\n"
-#~ "Probabilmente non è un errore fatale, ma bisogna segnalarlo "
-#~ "aglisviluppatori."
+#~ msgid " of "
+#~ msgstr " di "
+
+#~ msgid "Length"
+#~ msgstr "Lunghezza"
+
+#~ msgid "Filter"
+#~ msgstr "Filtro"
+
+#~ msgid "This Album"
+#~ msgstr "Questo album"
+
+#~ msgid "Please make a selection first."
+#~ msgstr "Si deve fare prima una selezione."
+
+#~ msgid "This Genre"
+#~ msgstr "Questo genere"
+
+#~ msgid "This Artist"
+#~ msgstr "Questo artista"

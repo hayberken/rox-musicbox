@@ -19,10 +19,31 @@ Then launch it!  Initially it assumes that you put all your mp3 and/or ogg files
 in ~/Music.
 
 If these are not correct you must edit the Options to suit your setup.  For
-library changes just hit the refresh button, unless you used Drag and Drop in which
+library changes just hit the refresh menu item, unless you used Drag and Drop in which
 case the display will update automatically.  If you have a lot of files it will
-take considerable time to read them all - I'm working on this.  However, don't
-let that stop you from hitting the play button!  We got threads man.
+take considerable time to read them all - see below on how to speed things up.
+However, don't let that stop you from hitting the play button!  We got threads!
+
+In place of the ~/Music default library location you may enter:
+	* one or more directories separated by ':' like a path
+	* one or more *.pls or *.m3u files
+	* one or more *.xml files (saved from MusicBox)
+	* any combination of the above.
+You can also leave it blank and just load files dynamically.  This can be done in the
+following ways:
+	* Drag and Drop files or folders on the MusicBox main or Playlist windows
+	* Pass files or folders or playlists on the MusicBox command line.
+	* Use XMLrpc (see below)
+
+MusicBox currently exports the following commands via XMLrpc:
+	* load_args('song1.mp3 ~/LotsOfMusicHere anothersong.ogg')
+	* play(), pause(), next(), prev(), stop()
+
+Here is how to call these functions in python.
+	import xmlrpclib
+	client = xmlrpclib.Server("http://localhost:8989", None, False)
+	client.load_args('~/Music/somesong.ogg')
+	client.play()
 
 
 Tag Info and Filenames
@@ -44,6 +65,21 @@ The default pattern looks like this:
 This pattern throws away any leading path, and separates the rest as artist/album/title.
 The <track> option is also available if you have track numbers as part of your file
 naming scheme.
+
+After loading a large list of songs, you can save these in a Library to speed up
+reloading the next time.  To do this, right click on either the Main or Playlist windows
+and select Save.  A ROX savebox will appear with Library.xml showing defaulted to the
+Choices folder for MusicBox.  You may drag this file anywhere you want to save it and
+rename it if you wish. Be sure not to change the .xml extension or MusicBox will not
+know how to reload it. (FIXME)  This file may now be dragged into either MusicBox window
+to reload those songs. MusicBox will not need to examine each file again to get the tag
+info - that was saved in the xml file.  Loading times are much quicker this way.  You
+can also set one of these files in the Options dialog as your default library instead of
+the path to the actual song files.
+
+MusicBox will also use Extended Attributes for tag info if available.  These tags are
+my own creation and only are supported by my CD ripping application Ripper.  Xattrs are
+not widely supported yet, but I believe these will be the future of metadata.  Stay tuned.
 
 
 Dependencies
@@ -74,11 +110,8 @@ Esd, Alsa, OSS support.
 Drag and Drop adding of Songs, Directories of songs, and Playlists (m3u and pls)
 Shuffle play (with cache so you don't replay songs too frequently).
 Seek control bar to zip to specific parts of any song.
-Toggle between Normal and Mini views.
-Background Tag reading to speed up initial load times.
-Filter by Artist, Album, Genre
 Volume Control
-Niftier UI!
+Compact UI
 
 
 Conditions

@@ -1,6 +1,32 @@
 MusicBox - an MP3/OGG Player for the ROX Desktop
 by Ken Hayber
 
+13-May-2004
+016
+- Changed menu to use new Action menu system of ROX-Lib2
+- Fixed alignment of text in main window
+- Volume and Progress bars have finer stepping now
+- Playback thread is created at startup and reused.  Previoulsy each song started a new
+thread.  This caused race conditions and occasional lockups.
+- Playback now uses a queue to send songs from the main window to the Player.  Avoids
+race conditions and lockups.
+- Playlist now uses a GtkListModel for its storage.  This avoids needing a separate
+structure for the playlist and PlaylistUI.  It also means that the Main Window and
+PlaylistUI remain syncronized.  (e.g. Sorting now works properly!)
+- Show song title and remaining time in Iconified mode.
+- Prevent multiple Playlist windows.
+- Make Back/Prev button 'Really' work like a browser.  I mean it this time!
+- Went back to the old behavior for importing audio support libs.  Sometimes we would
+fail to import something we needed.
+- Make sure we send 'pause' state to main window.
+- Shuffle cache was never using the value from the Options dialog.  Fixed.
+- Initial Playlist window size and column widths fixed to show all info.  Still resizeable.
+- Removed Filters (until I can use Gtk 2.4's ListModel.filter_new() feature.  Needs PyGtk 2.4)
+- Added DnD to the Playlist! (using XMLrpc to send the info and commands to the main window)
+
+And last, but certainly not least...(OK, maybe it is least.)
+- A New (SVG) Icon!!!! (I made it myself.  I are a Artist.)
+
 09-Apr-2004
 015
 - Oops! Last release broke OGG playback.  For some reason using a buffer larger than 512 bytes

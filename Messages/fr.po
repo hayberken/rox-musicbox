@@ -12,174 +12,271 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: pygettext.py 1.4\n"
 
-#: playlistui.py:54
+#: playlistui.py:45
 msgid "Album"
 msgstr "Album"
 
-#: musicbox.py:128 playlistui.py:96
+#: musicbox.py:120
 #, fuzzy
 msgid "Quit"
 msgstr "Quitter"
 
-#: musicbox.py:140 playlistui.py:71
+#: musicbox.py:130 playlistui.py:67
 msgid "Playlist"
 msgstr "Liste de lecture"
 
-#: musicbox.py:116 musicbox.py:177
+#: musicbox.py:108 musicbox.py:167
 msgid "Pause"
 msgstr "Pause"
 
-#: playlistui.py:53
+#: playlistui.py:46
 msgid "Title"
 msgstr "Titre"
 
-#: musicbox.py:120 musicbox.py:164
+#: tips:27
+msgid "Randomize play order."
+msgstr ""
+
+#: tips:5
+msgid "Pattern"
+msgstr ""
+
+#: tips:12
+msgid "oss"
+msgstr ""
+
+#: musicbox.py:112 musicbox.py:154
 msgid "Next"
 msgstr "Suivant"
 
-#: musicbox.py:183
+#: musicbox.py:173
 msgid "Prev"
 msgstr "Précédent"
 
-#: musicbox.py:463
+#: musicbox.py:271
 msgid "Loading"
 msgstr ""
 
-#: playlistui.py:87
-msgid "All songs"
-msgstr "Toutes les chansons"
+#: tips:13
+msgid "Open Sound System driver"
+msgstr ""
 
-#: musicbox.py:122 playlistui.py:93
+#: musicbox.py:114 playlistui.py:89
 msgid "Save"
 msgstr "Sauver"
 
-#: musicbox.py:294
+#: musicbox.py:289
 msgid " songs"
 msgstr " chansons"
 
-#: musicbox.py:116 musicbox.py:177
+#: tips:6 tips:7
+msgid ""
+"A python regular expression to parse the full path of each file into "
+"'artist', 'album', 'title' and 'track'.  Used when there is no tag info in "
+"the file."
+msgstr ""
+
+#: musicbox.py:108 musicbox.py:167
 msgid "Play"
 msgstr "Lecture"
 
-#: musicbox.py:156
+#: musicbox.py:146 tips:24
 msgid "Repeat"
 msgstr "Répéter"
 
-#: playlistui.py:55
+#: tips:11
+msgid "Gnome esound server"
+msgstr ""
+
+#: playlistui.py:47
 msgid "Track"
 msgstr "Piste"
 
-#: musicbox.py:117 musicbox.py:170
+#: tips:1
+msgid "Settings"
+msgstr ""
+
+#: musicbox.py:109 musicbox.py:160
 msgid "Stop"
 msgstr "Stop"
 
-#: player.py:129
+#: player.py:130
 msgid "You must have MAD support to play mp3 files (%s)."
 msgstr "Vous devez avoir le support MAD pour jouer les fichiers mp3 (%s)."
 
-#: musicbox.py:125 musicbox.py:138
+#: musicbox.py:117 musicbox.py:128
 msgid "Options"
 msgstr "Options"
 
-#: playlistui.py:56
+#: tips:10
+msgid "esd"
+msgstr ""
+
+#: tips:29 tips:30 tips:31 tips:32 tips:33
+msgid ""
+"How many songs to remember in shuffle mode so we don't replay too often."
+msgstr ""
+
+#: playlistui.py:48
 msgid "Genre"
 msgstr "Genre"
 
-#: musicbox.py:294
+#: tips:3
+msgid "Path"
+msgstr ""
+
+#: musicbox.py:289
 msgid "loaded "
 msgstr "chargé"
 
-#: musicbox.py:126
+#: tips:20
+msgid "Buffer Size"
+msgstr ""
+
+#: tips:14
+msgid "alsa"
+msgstr ""
+
+#: musicbox.py:118
 msgid "Info"
 msgstr ""
 
-#: playlistui.py:91
-msgid "New Filter..."
-msgstr "Nouveau filtre..."
-
-#: musicbox.py:440
-msgid " of "
-msgstr " de "
-
-#: playlistui.py:57
-msgid "Length"
-msgstr "Longueur"
-
-#: playlistui.py:52
+#: playlistui.py:44
 msgid "Artist"
 msgstr "Artiste"
 
-#: musicbox.py:454
+#: musicbox.py:402
 msgid "Time Remaining"
 msgstr "Temps restant"
 
-#: musicbox.py:123 playlistui.py:94
+#: tips:15
+msgid "current Alsa driver"
+msgstr ""
+
+#: musicbox.py:115
 msgid "Refresh"
 msgstr "Raffraichir"
 
-#: playlistui.py:87 playlistui.py:88 playlistui.py:89 playlistui.py:90
-#: playlistui.py:91
-msgid "Filter"
-msgstr "Filtre"
+#: tips:16
+msgid "alsa (old)"
+msgstr ""
 
-#: musicbox.py:361
+#: musicbox.py:336
 msgid "Failed to start playing %s"
 msgstr "Impossible de lire %s"
 
-#: playlistui.py:89
-#, fuzzy
-msgid "This Album"
-msgstr "Cet Album"
+#: tips:25
+msgid "Keep playing forever."
+msgstr ""
 
-#: musicbox.py:471
+#: musicbox.py:413
 #, fuzzy
 msgid "Stopped"
 msgstr "Arreté"
 
-#: playlistui.py:313 playlistui.py:325 playlistui.py:337
-msgid "Please make a selection first."
-msgstr "Veuillez faire prealablement une selection"
+#: tips:17 tips:18 tips:19
+msgid "older (obsolete?) Alsa driver"
+msgstr ""
 
-#: musicbox.py:450
+#: tips:8
+msgid "Output"
+msgstr ""
+
+#: tips:4
+msgid ""
+"The (optional) default location of your music.  This location will be "
+"scanned and loaded at startup when no command-line arguments are given.  It "
+"is a ':' separated list of directories, and/or .xml, .pls, .m3u, .mp3, .ogg "
+"files."
+msgstr ""
+
+#: musicbox.py:401
 msgid "Playing"
 msgstr "Lecture en cours"
 
-#: musicbox.py:149
+#: tips:28
+msgid "Shuffle cache size"
+msgstr ""
+
+#: musicbox.py:139 tips:26
 msgid "Shuffle"
 msgstr "Mode Aléatoire"
 
-#: player.py:126
+#: player.py:128
 msgid "You must have OGG support to play ogg files (%s)."
 msgstr "Vous devez avoir le support OGG pour jouer les fichiers OGG (%s)."
 
-#: musicbox.py:119
+#: tips:21 tips:22
+msgid ""
+"The size of the buffer used to read/write sound data.  A larger buffer may "
+"reduce skipping under heavy load."
+msgstr ""
+
+#: musicbox.py:111
 #, fuzzy
 msgid "Back"
 msgstr "Retour"
 
-#: musicbox.py:469
+#: tips:2
+msgid "Library"
+msgstr ""
+
+#: musicbox.py:411
 #, fuzzy
 msgid "Paused"
 msgstr "En pause"
 
-#: musicbox.py:288
+#: musicbox.py:281
 #, fuzzy
 msgid "Loading songs, please wait..."
 msgstr "Chargement des chansons, veuillez patienter..."
 
-#: playlistui.py:90
-#, fuzzy
-msgid "This Genre"
-msgstr "Ce Genre"
+#: tips:9
+msgid "Driver"
+msgstr ""
 
-#: musicbox.py:294
+#: musicbox.py:289
 msgid "Ready"
 msgstr "Pret"
 
-#: playlistui.py:88
+#: playlistui.py:91
+msgid "Close"
+msgstr "Fermer"
+
+#: tips:23
 #, fuzzy
-msgid "This Artist"
-msgstr "Cet Artiste"
+msgid "Play Settings"
+msgstr "Lecture en cours"
+
+#~ msgid "All songs"
+#~ msgstr "Toutes les chansons"
+
+#~ msgid "New Filter..."
+#~ msgstr "Nouveau filtre..."
+
+#~ msgid " of "
+#~ msgstr " de "
+
+#~ msgid "Length"
+#~ msgstr "Longueur"
+
+#~ msgid "Filter"
+#~ msgstr "Filtre"
+
+#, fuzzy
+#~ msgid "This Album"
+#~ msgstr "Cet Album"
+
+#~ msgid "Please make a selection first."
+#~ msgstr "Veuillez faire prealablement une selection"
+
+#, fuzzy
+#~ msgid "This Genre"
+#~ msgstr "Ce Genre"
+
+#, fuzzy
+#~ msgid "This Artist"
+#~ msgstr "Cet Artiste"
 
 #~ msgid "Bug Detected"
 #~ msgstr "Erreur Detectée"
@@ -205,9 +302,6 @@ msgstr "Cet Artiste"
 
 #~ msgid "Comment"
 #~ msgstr "Commentaire"
-
-#~ msgid "Close"
-#~ msgstr "Fermer"
 
 #~ msgid "Play/Pause"
 #~ msgstr "Lecture/Pause"

@@ -27,13 +27,14 @@ try:
 
 #if not then start a new instance
 except socket.error:
-	box = musicbox.MusicBox()
-	box.show()
-
-	g.threads_enter()
-	rox.mainloop()
-	g.threads_leave()
-
+	try:
+		box = musicbox.MusicBox()
+		box.show()
+		g.threads_enter()
+		rox.mainloop()
+		g.threads_leave()
+	except:
+		rox.report_exception()
 #other errors here.
 except:
 	rox.report_exception()

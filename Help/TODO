@@ -1,7 +1,5 @@
 TODO items for MusicBox
 
-* Finish new playlistui code. (Almost)
-
 * Hide/disable volume control when Python 2.3 is not available?
 
 * How to update settings only when OK is pressed?

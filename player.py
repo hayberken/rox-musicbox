@@ -21,7 +21,7 @@
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 """
 
-import os, time, string, sys
+import os, time, string, sys, Queue
 
 try:
 	import ogg.vorbis
@@ -37,20 +37,22 @@ except:
 	HAVE_MAD = False
 	print 'No MP3 support!'
 
-HAVE_OSS = False
-HAVE_AO = False
 try:
 	import ossaudiodev
 	HAVE_OSS = True
 except:
 	print 'No OSS support!!'
-	try:
-		import ao
-		HAVE_AO = True
-	except:
-		print 'No OSS and no AO support Falling back to linuxaudiodev which sucks!!'
-		if not HAVE_AO and not HAVE_OSS:
-			import linuxaudiodev
+	HAVE_OSS = False
+
+try:
+	import ao
+	HAVE_AO = True
+except:
+	HAVE_AO = False
+
+if not HAVE_AO and not HAVE_OSS:
+	print 'No OSS and no AO support Falling back to linuxaudiodev which sucks!!'
+	import linuxaudiodev
 
 
 TYPE_OGG = 'application/ogg'
@@ -78,7 +80,7 @@ class Player:
 		self.callback = callback
 		self.buffersize = buffersize
 		self.dev = None
-
+		self.queue = Queue.Queue(5)
 
 	def open(self, rate=44100, channels=2):
 		"""Open and configure the audio device driver"""
@@ -86,11 +88,11 @@ class Player:
 		#try 3 times to open the device, then give up.
 		for x in range(3):
 			try:
-				if HAVE_OSS:
+				if HAVE_AO:
+					self.dev = ao.AudioDevice(self.id, bits, rate, channels)
+				elif HAVE_OSS:
 					self.dev = ossaudiodev.open('w')
 					self.dev.setparameters(ossaudiodev.AFMT_S16_LE, channels, rate)
-				elif HAVE_AO:
-					self.dev = ao.AudioDevice(self.id, bits, rate, channels)
 				else:
 					self.dev = linuxaudiodev.open('w')
 					self.dev.setparameters(rate, bits, channels, linuxaudiodev.AFMT_S16_NE)
@@ -101,52 +103,59 @@ class Player:
 	def close(self):
 		"""Close the current device if open and delete it"""
 		if self.dev:
-			if HAVE_OSS:
-				self.dev.close()
-			elif HAVE_AO:
+			if HAVE_AO:
 				self.dev = None
+			elif HAVE_OSS:
+				self.dev.close()
 			else:
 				self.dev = None
 
 
 	def write(self, buff, bytes):
 		"""Write data to the audio device"""
-		if HAVE_OSS:
-			self.dev.write(buff)
-		elif HAVE_AO:
+		if HAVE_AO:
 			self.dev.play(buff, bytes)
+		elif HAVE_OSS:
+			self.dev.write(buff)
 		else:
 			while self.dev.obuffree() < bytes:
 				time.sleep(0.2)
 			self.dev.write(buff[:bytes])
 
 	def play(self, name, type):
-		"""Check the filename and type and start the appropriate play-loop"""
+		"""Push the song info on the queue"""
 		if (type == TYPE_OGG and not HAVE_OGG):
 			raise TypeError, _('You must have OGG support to play ogg files (%s).') % name
-
 		if (type == TYPE_MP3 and not HAVE_MAD):
 			raise TypeError, _('You must have MAD support to play mp3 files (%s).') % name
+		self.queue.put((name, type))
 
-		if os.path.isfile(name):
-			if (type == TYPE_OGG and HAVE_OGG):
-				vf = ogg.vorbis.VorbisFile(name)
-				#self.info_ogg(vf)
-				self.start_ogg(vf)
+	def run(self):
+		"""Check the filename and type and start the appropriate play-loop"""
+		while True:
+			(name, type) = self.queue.get()
+			if os.path.isfile(name):
+				if (type == TYPE_OGG and HAVE_OGG):
+					vf = ogg.vorbis.VorbisFile(name)
+					#self.info_ogg(vf)
+					self.start_ogg(vf)
 
-			elif (type == TYPE_MP3 and HAVE_MAD):
-				mf = mad.MadFile(name, self.buffersize)
-				#self.info_mad(mf)
-				self.start_mad(mf)
+				elif (type == TYPE_MP3 and HAVE_MAD):
+					mf = mad.MadFile(name, self.buffersize)
+					#self.info_mad(mf)
+					self.start_mad(mf)
 
+				else:
+					raise ValueError, 'Unsupported file (%s).' % name
 			else:
-				raise ValueError, 'Unsupported file (%s).' % name
-		else:
-			raise SyntaxError, 'play takes a filename.'
+				raise SyntaxError, 'play takes a filename.'
 
 	def stop(self):
 		"""Set a flag telling the current play-loop to exit and close the device"""
 		self.state = 'stop'
+		while True:
+			try: self.queue.get_nowait()
+			except Queue.Empty: break
 
 	def pause(self):
 		"""Pause playback (works as a toggle between play and pause)"""
@@ -161,7 +170,7 @@ class Player:
 
 	def set_volume(self, volume):
 		"""Set the PCM volume to a new value"""
-		vol = int(volume*100)
+		vol = int(volume)
 		if HAVE_OSS:
 			mixer = ossaudiodev.openmixer()
 			if mixer != None:
@@ -175,7 +184,7 @@ class Player:
 			mixer = ossaudiodev.openmixer()
 			if mixer != None:
 				vol = mixer.get(ossaudiodev.SOUND_MIXER_PCM)
-				return float(max(vol[0], vol[1]))/100
+				return float(max(vol[0], vol[1]))
 		else:
 			return 0
 
@@ -210,7 +219,9 @@ class Player:
 					#for some reason with ossaudiodev a buffer greater
 					#than 512 bytes causes problems with ogg, smaller seems better
 					# but I'm afraid performance will suck.
-					(buff, bytes, bit) = vf.read(256)
+					if not HAVE_AO and HAVE_OSS:
+						self.buffersize = 256
+					(buff, bytes, bit) = vf.read(self.buffersize)
 					if bytes == 0:
 						self.state = 'eof'
 						elapse = total_time
@@ -220,7 +231,7 @@ class Player:
 						elapse = int(vf.time_tell())
 						remain = max(0, total_time - elapse)
 						self.write(buff, bytes)
-				if elapse != last_elapse:
+				if elapse != last_elapse or self.state == 'pause':
 					last_elapse = elapse
 					self.callback(self.state, remain, elapse)
 		except:
@@ -304,7 +315,7 @@ class Player:
 						elapse = mf.current_time() / 1000
 						remain = max(0, total_time - elapse)
 						self.write(buff, len(buff))
-				if elapse != last_elapse:
+				if elapse != last_elapse or self.state == 'pause':
 					last_elapse = elapse
 					self.callback(self.state, remain, elapse)
 		except:
