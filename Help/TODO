@@ -5,8 +5,6 @@ TODO items for MusicBox
 * How to update settings only when OK is pressed?
 (if enabled now it keeps trying to reload everything as you type the Library path)
 
-* Add options for Remaining, Elapsed time and/or Percentage instead of just Remain.
-
 * Add Edit id3 tags menu option? call out to Songer? Drag and drop to Songer?
 
 * Mutiple selection support

@@ -9,9 +9,9 @@
   <About>
     <Purpose>MP3/Ogg Music Player</Purpose>
     <Authors>Ken Hayber</Authors>
-    <Version>017(14-May-2004)</Version>
+    <Version>018(22-May-2004)</Version>
     <License>GNU General Public License</License>
-    <Homepage>http://khayber.dyndns.org/rox/musicbox</Homepage>
+    <Homepage>http://khayber.dyndns.org/wiki/index.php/MusicBox</Homepage>
   </About>
   <About xml:lang="it">
     <Purpose label="Scopo">riproduttore musicale</Purpose>

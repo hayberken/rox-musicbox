@@ -105,6 +105,10 @@ class PlaylistUI(rox.Window, loading.XDSLoader):
 		swin.add(view)
 		view.set_rules_hint(True)
 		self.view.set_reorderable(True)
+		self.view.set_search_column(COL_TITLE)
+
+		self.view.drag_source_set(g.gdk.BUTTON_PRESS_MASK, [('text/uri-list', 0, 0)], g.gdk.ACTION_COPY)
+		self.view.connect('drag_data_get', self.drag_data_get)
 
 		self.view.add_events(g.gdk.BUTTON_PRESS_MASK)
 		self.view.connect('button-press-event', self.button_press)
@@ -143,6 +147,11 @@ class PlaylistUI(rox.Window, loading.XDSLoader):
 
 		self.show()
 		self.sync()
+
+	def drag_data_get(self, widget, context, selection, targetType, eventTime):
+		print >>sys.stderr, selection.target, selection.format, selection.data
+		if selection.target == 'text/uri-list':
+			selection.set(selection.target, 8, 'test.fil\n')
 
 	def load(self):
 		"""Load the playlist either from a saved xml file, or from source dirs"""

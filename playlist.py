@@ -199,10 +199,11 @@ class Playlist(saving.Saveable):
 		"""Save the current (filtered?) playlist in xml format"""
 		f.write("<?xml version='1.0'?>\n<SongList>\n")
 
-		for song in self:
+		for index in range(len(self.song_list)):
+			song = self.get_song(index)
 			f.write("\t<Song>\n")
 			f.write("\t\t<Title>%s</Title>\n" % quote(song.title))
-			f.write("\t\t<Track>%s</Track>\n" % quote(song.track))
+			f.write("\t\t<Track>%s</Track>\n" % str(song.track))
 			f.write("\t\t<Album>%s</Album>\n" % quote(song.album))
 			f.write("\t\t<Artist>%s</Artist>\n" % quote(song.artist))
 			f.write("\t\t<Genre>%s</Genre>\n" % quote(song.genre))
