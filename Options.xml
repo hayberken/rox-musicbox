@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<options>
+  <section title="Display">
+    <frame label="Library">
+	    <entry name='library' label=''>
+	    The location of your MP3 files.
+	    </entry>
+    </frame>
+    <frame label="MP3 Player">
+	    <entry name='mp3_player' label=''>
+	    Choose between mpg123 or mpg321.
+	    </entry>
+    </frame>
+  </section>
+</options>

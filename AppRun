@@ -1,0 +1,17 @@
+#!/usr/bin/env python
+import findrox
+import rox
+import os
+import musicbox
+
+try:
+	import rox.basedir
+except ImportError:
+	rox.croak('Need ROX-Lib 1.9.7 or later:\n'
+		'http://rox.sourceforge.net/rox_lib.html')
+
+box = musicbox.MusicBox()
+box.show()
+box.update()
+
+rox.mainloop()
