@@ -56,18 +56,18 @@ BTN_OPTIONS = 8
 #Bitmaps (potentially) used in this application
 factory = gtk.IconFactory()
 for name in [
-			'media-next',	'media-pause',	'media-play',	'media-prev',
-			'media-repeat',	'media-shuffle','media-stop',	'media-track',
-#			'media-eject',	'media-ffwd',	'media-rewind',
-#			'volume-max',	'volume-medium','volume-min',	'volume-mute',
-#			'volume-zero',	'media-record',
-		]:
-	path = os.path.join(rox.app_dir, "images", name + ".png")
+			'media-next', 'media-pause', 'media-play', 'media-prev', 'media-repeat',
+			'media-shuffle', 'media-eject', 'media-ffwd', 'media-rewind',
+			'media-stop', 'media_track', 'media-record', 'stock_playlist',
+			'stock_volume-max', 'stock_volume-med', 'stock_volume-min',
+			'stock_volume-mute', 'stock_volume-0']:
+	path = os.path.join(rox.app_dir, "images", name + ".svg")
 	pixbuf = gtk.gdk.pixbuf_new_from_file(path)
 	if not pixbuf:
 		print >>sys.stderr, "Can't load stock icon '%s'" % name
-	gtk.stock_add([(name, name, 0, 0, "")])
-	factory.add(name, gtk.IconSet(pixbuf = pixbuf))
+	else:
+		gtk.stock_add([(name, name, 0, 0, "")])
+		factory.add(name, gtk.IconSet(pixbuf = pixbuf))
 factory.add_default()
 
 
@@ -110,8 +110,8 @@ SH_SEEKBAR = Option('seekbar', True)
 #Other GUI details
 WORDWRAP = Option('word_wrap', False)
 MINITOOLS = Option('mini_toolbar', False)
-TIMEDISPLAY = Option('time_display', 0)
-ALBUM_ART = Option('album_art', 0)
+TIMEDISPLAY = Option('time_display', False)
+ALBUM_ART = Option('album_art', True)
 
 tooltips = gtk.Tooltips()
 
@@ -137,13 +137,13 @@ def build_tool_options(box, node, label, option):
 		(type1, _("Next"), 'media-next', item_changed),
 		(type1, _("Repeat"), 'media-repeat', item_changed),
 		(type1, _("Shuffle"), 'media-shuffle', item_changed),
-		(type1, _("Playlist"), gtk.STOCK_INDEX, item_changed),
+		(type1, _("Playlist"), 'stock_playlist', item_changed), #gtk.STOCK_INDEX, item_changed),
 		(type1, _("Options"), gtk.STOCK_PREFERENCES, item_changed),
 	]
 
 	controls = []
 	for (type, text, icon, callback) in buttons:
-		image = gtk.image_new_from_stock(icon, gtk.ICON_SIZE_SMALL_TOOLBAR)
+		image = gtk.image_new_from_stock(icon, gtk.ICON_SIZE_LARGE_TOOLBAR)
 		controls.append(toolbar.insert_element(type, None, text, text,
 											None, image, callback, None, -1))
 
@@ -236,8 +236,12 @@ class MusicBox(rox.Window, loading.XDSLoader):
 		self.vbox.show_all()
 		self.show_hide_controls()
 		self.show_hide_buttons()
+
 		if not ALBUM_ART.int_value:
 			self.album_img.hide()
+		else:
+			self.display.set_size_request(ALBUM_COVER_SIZE, ALBUM_COVER_SIZE)
+
 		self.show()
 
 		#Start xmlrpc server
@@ -295,7 +299,7 @@ class MusicBox(rox.Window, loading.XDSLoader):
 			Menu.Separator(),
 
 			Menu.SubMenu(_('Playlist'), [
-				Menu.Action(_("Show"), 'show_playlist', '', gtk.STOCK_INDEX),
+				Menu.Action(_("Show"), 'show_playlist', '', 'stock_playlist'), #gtk.STOCK_INDEX),
 				Menu.Action(_("Open location"), 'show_dir', '', gtk.STOCK_GO_UP),
 				Menu.Action(_("Save"), 'save', '', gtk.STOCK_SAVE),
 				Menu.ToggleItem(_("Shuffle"), 'shuffle'),
@@ -316,7 +320,9 @@ class MusicBox(rox.Window, loading.XDSLoader):
 		self.toolbar = gtk.Toolbar()
 		self.toolbar.set_style(gtk.TOOLBAR_ICONS)
 		if bool(MINITOOLS.int_value):
-			self.toolbar.set_icon_size(gtk.ICON_SIZE_MENU)
+			self.toolbar.set_icon_size(gtk.ICON_SIZE_SMALL_TOOLBAR)
+		else:
+			self.toolbar.set_icon_size(gtk.ICON_SIZE_LARGE_TOOLBAR)
 
 		type1 = gtk.TOOLBAR_CHILD_BUTTON
 		type2 = gtk.TOOLBAR_CHILD_TOGGLEBUTTON
@@ -330,13 +336,14 @@ class MusicBox(rox.Window, loading.XDSLoader):
 			(type1, _("Next"), 'media-next', self.next),
 			(type2, _("Repeat"), 'media-repeat', lambda b: self.set_repeat(b.get_active())),
 			(type2, _("Shuffle"), 'media-shuffle', lambda b: self.set_shuffle(b.get_active())),
-			(type1, _("Playlist"), gtk.STOCK_INDEX, self.show_playlist),
+			(type1, _("Playlist"), 'stock_playlist', self.show_playlist),
+#			(type1, _("Playlist"), gtk.STOCK_INDEX, self.show_playlist),
 			(type1, _("Options"), gtk.STOCK_PREFERENCES, self.show_options),
 		]
 
 		buttons = []
 		for (type, text, icon, callback) in items:
-			image = gtk.image_new_from_stock(icon, gtk.ICON_SIZE_SMALL_TOOLBAR)
+			image = gtk.image_new_from_stock(icon, self.toolbar.get_icon_size())
 			buttons.append(self.toolbar.insert_element(type, None, text, text,
 											None, image, callback, None, -1))
 			if text == _("Play"): #this one changes later, so we have to save it
@@ -580,7 +587,7 @@ class MusicBox(rox.Window, loading.XDSLoader):
 
 	def play(self):
 		"""Play the current song"""
-		size = gtk.ICON_SIZE_SMALL_TOOLBAR
+		size = self.toolbar.get_icon_size()
 
 		try:
 			self.player.stop()
@@ -658,7 +665,7 @@ class MusicBox(rox.Window, loading.XDSLoader):
 
 	def stop(self, button=None):
 		"""Stop playing"""
-		size = gtk.ICON_SIZE_SMALL_TOOLBAR
+		size = self.toolbar.get_icon_size()
 		self.player.stop()
 		self.current_song = None
 		self.image_play.set_from_stock('media-play', size)
@@ -667,7 +674,7 @@ class MusicBox(rox.Window, loading.XDSLoader):
 
 	def pause(self, button=None):
 		"""Pause playing (toggle)"""
-		size = gtk.ICON_SIZE_SMALL_TOOLBAR
+		size = self.toolbar.get_icon_size()
 		self.player.pause()
 		if (self.player.state == 'play'):
 			self.image_play.set_from_stock('media-pause', size)
@@ -771,9 +778,9 @@ class MusicBox(rox.Window, loading.XDSLoader):
 
 		if MINITOOLS.has_changed:
 			if bool(MINITOOLS.int_value):
-				self.toolbar.set_icon_size(gtk.ICON_SIZE_MENU)
-			else:
 				self.toolbar.set_icon_size(gtk.ICON_SIZE_SMALL_TOOLBAR)
+			else:
+				self.toolbar.set_icon_size(gtk.ICON_SIZE_LARGE_TOOLBAR)
 
 		if WORDWRAP.has_changed:
 			self.set_line_wrap()
@@ -781,9 +788,10 @@ class MusicBox(rox.Window, loading.XDSLoader):
 		if ALBUM_ART.has_changed:
 			if ALBUM_ART.int_value:
 				self.album_img.show()
+				self.display.set_size_request(ALBUM_COVER_SIZE, ALBUM_COVER_SIZE)
 			else:
 				self.album_img.hide()
-#			self.resize(None, [0, 0, 0, 0])
+				self.display.set_size_request(-1, -1)
 
 
 	def show_options(self, button=None):
