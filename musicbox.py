@@ -39,9 +39,6 @@ APP_NAME = "MusicBox"
 APP_DIR = rox.app_dir
 APP_DOMAIN = 'hayber.us'
 
-
-#View options
-VIEW_DEFAULT_SIZE = (200, 100)
 ALBUM_COVER_SIZE = 90
 
 #Toolbar button indexes
@@ -116,6 +113,7 @@ MINITOOLS = Option('mini_toolbar', False)
 TIMEDISPLAY = Option('time_display', 0)
 ALBUM_ART = Option('album_art', 0)
 
+tooltips = gtk.Tooltips()
 
 
 def build_tool_options(box, node, label, option):
@@ -189,9 +187,6 @@ class MusicBox(rox.Window, loading.XDSLoader):
 		# Main window settings
 		self.set_title(APP_NAME)
 		self.set_role("MainWindow")
-		self.set_border_width(0)
-		self.set_default_size(VIEW_DEFAULT_SIZE[0], VIEW_DEFAULT_SIZE[1])
-		self.set_position(gtk.WIN_POS_MOUSE)
 
 		# Notifications
 		rox.app_options.add_notify(self.get_options)
@@ -400,14 +395,14 @@ class MusicBox(rox.Window, loading.XDSLoader):
 		self.volume_control = gtk.VScale(self.volume)
 		self.volume_control.set_draw_value(False)
 		self.volume_control.set_inverted(True)
-		self.volume_control.set_size_request(17, 90)
+		self.volume_control.set_size_request(-1, 90)
 
 		self.seek_bar = gtk.Adjustment(0.0, 0.0, 1.0, 0.01, 0.1, 0.0)
 		self.seek_id = self.seek_bar.connect('value_changed', self.adjust_seek_bar)
 		self.seek_bar_control = gtk.HScale(self.seek_bar)
 		self.seek_bar_control.set_update_policy(gtk.UPDATE_DELAYED)
 		self.seek_bar_control.set_draw_value(False)
-		self.seek_bar_control.set_size_request(100, 17)
+		self.seek_bar_control.set_size_request(100, -1)
 
 
 	def set_fonts(self):
@@ -594,6 +589,9 @@ class MusicBox(rox.Window, loading.XDSLoader):
 			self.display_song.set_text(self.current_song.title)
 			self.display_artist.set_text(self.current_song.artist)
 			self.display_album.set_text(self.current_song.album)
+
+			tooltips.set_tip(self.buttons[BTN_PLAY], 'Play ['+self.current_song.title+']', tip_private=None)
+
 		except TypeError, detail:
 			rox.alert(str(detail))
 		except:
@@ -716,6 +714,9 @@ class MusicBox(rox.Window, loading.XDSLoader):
 
 		if (self.window_state & gtk.gdk.WINDOW_STATE_ICONIFIED):
 			self.set_title(self.current_song.title+' - '+self.time_string)
+		else:
+			tooltips.set_tip(self.seek_bar_control, self.time_string, tip_private=None)
+
 
 		#update the volume control if something other than us changed it
 		self.volume.set_value(self.player.get_volume(MIXER_DEVICE.value))

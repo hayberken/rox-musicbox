@@ -68,9 +68,9 @@ class PlaylistUI(rox.Window, loading.XDSLoader):
 
 		self.set_title(APP_NAME+' - '+_("Playlist"))
 		self.set_role("PlayList")
-		self.set_border_width(0)
+#		self.set_border_width(0)
 		self.set_default_size(VIEW_DEFAULT_SIZE[0], VIEW_DEFAULT_SIZE[1])
-		self.set_position(gtk.WIN_POS_NONE)
+#		self.set_position(gtk.WIN_POS_NONE)
 
 		#capture wm delete event
 		self.connect('delete_event', self.delete_event)
