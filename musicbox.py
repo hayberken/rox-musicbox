@@ -1,5 +1,5 @@
 """
-	musicbox.py (play either ogg or mp3 files)
+	musicbox.py
 
 	Copyright 2004 Kenneth Hayber <ken@hayber.us>
 		All rights reserved.
@@ -42,6 +42,7 @@ APP_DOMAIN = 'hayber.us'
 
 #View options
 VIEW_DEFAULT_SIZE = (200, 100)
+ALBUM_COVER_SIZE = 90
 
 #Toolbar button indexes
 BTN_CLOSE = 0
@@ -358,7 +359,7 @@ class MusicBox(rox.Window, loading.XDSLoader):
 		hbox = gtk.HBox()
 		vbox = gtk.VBox()
 		hbox.pack_start(self.album_img, False, False, 0)
-		hbox.pack_end(vbox, True, True, 6)
+		hbox.pack_end(vbox, True, True, 5)
 		self.display.put(hbox, 0, 0)
 		self.display_box = vbox
 
@@ -461,9 +462,11 @@ class MusicBox(rox.Window, loading.XDSLoader):
 		height = rectangle[3]
 		try:
 			self.album_img.get_image()
-			awidth = width-6
+			awidth = width - 5
 		except:
-			awidth = width-96
+			awidth = width - ALBUM_COVER_SIZE - 5
+		width = max(width, -1)
+		awidth = max(awidth, -1)
 
 		if self.display_size != (width, height):
 			self.display_size = (width, height)
@@ -592,7 +595,7 @@ class MusicBox(rox.Window, loading.XDSLoader):
 				]:
 				image = os.path.join(folder, filename)
 				if os.access(image, os.R_OK):
-					pixbuf = gtk.gdk.pixbuf_new_from_file_at_size(image, 90, 90)
+					pixbuf = gtk.gdk.pixbuf_new_from_file_at_size(image, ALBUM_COVER_SIZE, ALBUM_COVER_SIZE)
 					break
 			self.album_img.set_from_pixbuf(pixbuf)
 
