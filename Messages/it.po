@@ -14,115 +14,120 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: musicbox.py:181
+#: musicbox.py:35
 msgid "Album"
 msgstr "Album"
 
-#: musicbox.py:73
+#: musicbox.py:436 musicbox.py:479
+#, fuzzy
+msgid "Pause"
+msgstr "In pausa"
+
+#: musicbox.py:93
 msgid "/Next"
 msgstr "/Successivo"
 
-#: musicbox.py:167
-msgid "Artist"
-msgstr "Artista"
+#: musicbox.py:34
+#, fuzzy
+msgid "Title"
+msgstr "Durata"
 
-#: musicbox.py:75
+#: musicbox.py:95
 msgid "/Toggle View"
 msgstr ""
 
-#: musicbox.py:195
-msgid "Time"
-msgstr "Durata"
-
-#: musicbox.py:92
+#: musicbox.py:113
 msgid "Refresh"
 msgstr "Aggiorna"
 
-#: musicbox.py:121 musicbox.py:121
+#: musicbox.py:147 musicbox.py:417
 msgid "Next"
 msgstr "Successivo"
 
-#: musicbox.py:76
+#: musicbox.py:96
 msgid "/Options"
 msgstr "/Opzioni"
 
-#: musicbox.py:360
+#: musicbox.py:466
 msgid " by "
 msgstr " di "
 
-#: musicbox.py:70
+#: musicbox.py:90
 msgid "/Stop"
 msgstr "/Stop"
 
-#: musicbox.py:139 musicbox.py:139
+#: musicbox.py:163 musicbox.py:398
 msgid "Prev"
 msgstr "Precedente"
 
-#: musicbox.py:91
+#: musicbox.py:111
 msgid "Options"
 msgstr "Opzioni"
 
-#: musicbox.py:247
-msgid " - Scanning, please wait..."
-msgstr " - Scansione in corso..."
-
-#: musicbox.py:115 musicbox.py:115
+#: musicbox.py:139
 msgid "Repeat"
 msgstr "Ripetizione brano"
 
-#: musicbox.py:111 musicbox.py:111
+#: musicbox.py:132
 msgid "Shuffle"
 msgstr "Riproduzione casuale"
 
-#: musicbox.py:369
-msgid "Stopped... "
-msgstr "Fermato"
-
-#: musicbox.py:174
-msgid "Song"
-msgstr "Brano"
-
-#: musicbox.py:125 musicbox.py:125
-msgid "Stop"
-msgstr "Stop"
-
-#: musicbox.py:79
-msgid "/Quit"
-msgstr "/Esci"
-
-#: musicbox.py:102 musicbox.py:102
-msgid "Volume"
-msgstr "Volume"
-
-#: musicbox.py:69
-msgid "/Play\\/Pause"
-msgstr "/Suona\\/Pausa"
-
-#: musicbox.py:359 musicbox.py:363
-msgid "Playing: "
-msgstr "In riproduzione: "
-
-#: musicbox.py:135 musicbox.py:135
-msgid "Play/Pause"
-msgstr "Suona/Pausa"
-
-#: musicbox.py:188
-msgid "Genre"
-msgstr "Genere"
-
-#: musicbox.py:142
-msgid "Close"
-msgstr "Chiudi"
-
-#: musicbox.py:367
-msgid "Paused... "
-msgstr "In pausa"
-
-#: musicbox.py:72
-msgid "/Back"
-msgstr "/Indietro"
-
-#: musicbox.py:77
+#: musicbox.py:97
 msgid "/Refresh"
 msgstr "/Aggiorna"
 
+#: musicbox.py:33
+msgid "Artist"
+msgstr "Artista"
+
+#: musicbox.py:152 musicbox.py:428 musicbox.py:481
+msgid "Stop"
+msgstr "Stop"
+
+#: musicbox.py:320
+msgid "unknown"
+msgstr ""
+
+#: musicbox.py:99
+msgid "/Quit"
+msgstr "/Esci"
+
+#: musicbox.py:239
+msgid " - Scanning, please wait..."
+msgstr " - Scansione in corso..."
+
+#: musicbox.py:89
+msgid "/Play\\/Pause"
+msgstr "/Suona\\/Pausa"
+
+#: musicbox.py:158
+msgid "Play/Pause"
+msgstr "Suona/Pausa"
+
+#: musicbox.py:36
+msgid "Genre"
+msgstr "Genere"
+
+#: musicbox.py:167
+msgid "Close"
+msgstr "Chiudi"
+
+#: musicbox.py:92
+msgid "/Back"
+msgstr "/Indietro"
+
+#: musicbox.py:125
+msgid "Seek"
+msgstr ""
+
+#~ msgid "Song"
+#~ msgstr "Brano"
+
+#~ msgid "Volume"
+#~ msgstr "Volume"
+
+#~ msgid "Playing: "
+#~ msgstr "In riproduzione: "
+
+#~ msgid "Stopped... "
+#~ msgstr "Fermato"

@@ -1,17 +1,44 @@
-			MusicBox
-			A Front-end to MPG123 and MPG321
-			by Ken Hayber
+MusicBox -
+an MP3/OGG Player for the ROX Desktop
+		by Ken Hayber
 
 Brief
 ~~~~~
-MPG123 and MPG123 are existing mp3 players for the text console.  These players have a
-remote control mode that allows them to be controlled by another application. MusicBox
-is such an application.  MusicBox scans a directory structure and allows browsing and
-playing of your music library.
+MusicBox plays your mp3 and ogg files (yea!).  It supports ogg via pyogg/libvorbis and
+mp3 via pymad/libmad.
+
+MusicBox supports mp3, ogg files, directories, .pls and .m3u files to build the playlist.
+Any and all of these can be used together.
 
 The latest version of MusicBox is at:
 
 	http://khayber.dyndns.org/rox/musicbox
+
+
+Instructions
+~~~~~~~~~~~~
+Extract the MusicBox appdir and copy it to wherever you normally put ROX apps.
+Then launch it!  Initially it assumes that you put all your mp3 and/or ogg files
+in ~/Music.
+
+If these are not correct you must edit the Options to suit your setup.  For
+library changes just hit the refresh button, unless you used Drag and Drop in which
+case the display will update automatically.  If you have a lot of files it will
+take considerable time to read them all - I'm working on this.  However, don't
+let that stop you from hitting the play button!  We got threads man.
+
+MusicBox depends on pyao/libao for sound output, pymad/libmad for mp3 processing
+and pyogg/libvorbis and friends for ogg support.
+
+Current versions as of this writing are:
+    pymad 0.4.1 (http://spacepants.org/src/pymad/)
+    libmad 0.14.2 (http://www.underbit.com/products/mad/)
+    pyogg, pyvorbis, libvorbis, libogg 1.0 (http://www.vorbis.com/download.psp)
+    libao 0.8.3 (http://www.vorbis.com/download.psp)
+    pyao  0.8 (http://www.vorbis.com/download.psp)
+
+Hopefully your distro will provide packages for these, otherwise you will have to
+download and build them from sources.
 
 
 Conditions
@@ -31,20 +58,4 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 Please report any bugs to me, <khayber at socal dot rr dot com>
-
-
-Instructions
-~~~~~~~~~~~~
-Extract the MusicBox appdir and copy it to wherever you normally put ROX apps.
-Then launch it!  Initially it assumes that you are using mpg321 and it is in 
-your $PATH.  It also assumes you put all your mp3 files in ~/Music.
-
-If these are not correct you must edit the Options to suit your setup.  For 
-changes to the mp3 player you must currently restart the app for it to take 
-effect (to be fixed later).  For library changes just hit the refresh button.
-
-If you don't hear anything playing you first need to troubleshoot whether 
-mpg123|321 is working for you normally.  MusicBox is just a controller for these.
-You may need to get and build/install one of them first if your distribution
-does not already have one installed.
 

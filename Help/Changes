@@ -1,6 +1,32 @@
-MusicBox
-MP3 Player (MPG123/MPG321 front-end)
+MusicBox - an MP3/OGG Player for the ROX Desktop
 by Ken Hayber
+
+29-Aug-2003
+0.0.7 (Version 0.0.6 wasn't very good)
+
+- Rewrite player code to use pymad, pyogg, pyao directly.  No more MPG123/321.  This
+	gives better control over the player and it now works correctly when using
+	esd (you can hear your sound effects and notifications; e.g. 'you've got mail!')
+
+- OGG!
+
+- Playlist support (.pls and .m3u)
+
+- Drag and Drop support - you can drag and drop folders, mp3, ogg, pls or m3u files
+	onto MusicBox.  If you hold the Shift key these files will be added to the
+	current list, otherwise the list will be replaced.  The result will be saved
+	as the default.
+
+- Moved remaining time and current song to the Title bar so that this information shows
+	while iconized.
+
+- Italian and Portugese (Brazil) translations (thanks to Yuri and Leandro) - but they
+	need a couple of small updates.
+
+- Decided that volume control was not going to happen, so I changed it to a Seek bar
+	so that you can skip to any point in the song.  It also keeps moving while the
+	song plays.
+
 
 23-Aug-2003
 0.0.5
@@ -16,7 +42,7 @@ by Ken Hayber
 	(This needs some work and should be optional I think)
 - I received an Italian translation (thanks yuri), but it is not working.  Someone tell
 	me what I'm doing wrong, please.
-	
+
 I've noticed that only ogg123 allows other sounds to be played when using esd.  This
 kinda sucks.  I'm looking at doing all the playing in python (pyogg, pyao, pymad) to
 see if that works any better.
@@ -26,9 +52,9 @@ see if that works any better.
 0.0.4
 - Added error handling for missing library path and missing mp3 player.
 - Default mp3 player to none and show options dialog at first run.
-- Removed 'Time' column for now because a) it was broken and b) when I fixed it it took 
+- Removed 'Time' column for now because a) it was broken and b) when I fixed it it took
 	WAY too long to load even my measly 300 song library.
-- Fixed Shuffle to use time.time() as the Random() seed to that it is actually 
+- Fixed Shuffle to use time.time() as the Random() seed to that it is actually
 	somewhat Random.
 - Don't load mp3 player until needed (first step to supporting ogg)
 
@@ -36,10 +62,10 @@ see if that works any better.
 - Edited the Options.xml to have a big tooltip for the mp3 player explaining some things.
 - Edited the README a bit (put MY email address in there instead of Thomas') giving some
 	basic instructions.
-- Changed mp3 player launching from os.popen2 to popen2.Popen3 so I can get 
+- Changed mp3 player launching from os.popen2 to popen2.Popen3 so I can get
 	the pid and kill it later if necessary (for me it is needed for mpg123, otherwise
 	the player never dies and runs at 100%)
-- Initial value of mp3 player is now ''.  MusicBox now detects that at startup and 
+- Initial value of mp3 player is now ''.  MusicBox now detects that at startup and
 	shows the Options dialog so you can specify your player.  (TODO: Need to detect
 	failed player launch and inform the user to try again)
 
@@ -48,9 +74,9 @@ see if that works any better.
 0.0.2
 - Fixed Prev button and rewrote Next button handling to match.
 - Implemented Repeat and Shuffle and their options.
-- Got ToggleButtons working thanks to this tutorial - 
+- Got ToggleButtons working thanks to this tutorial -
 	http://www.moeraki.com/pygtktutorial/index.html
-	
+
 
 17-Aug-2003
 -----------
