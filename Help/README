@@ -30,8 +30,21 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-Please report any bugs to me, <tal197@users.sourceforge.net>
+Please report any bugs to me, <khayber at socal dot rr dot com>
 
 
 Instructions
 ~~~~~~~~~~~~
+Extract the MusicBox appdir and copy it to wherever you normally put ROX apps.
+Then launch it!  Initially it assumes that you are using mpg321 and it is in 
+your $PATH.  It also assumes you put all your mp3 files in ~/Music.
+
+If these are not correct you must edit the Options to suit your setup.  For 
+changes to the mp3 player you must currently restart the app for it to take 
+effect (to be fixed later).  For library changes just hit the refresh button.
+
+If you don't hear anything playing you first need to troubleshoot whether 
+mpg123|321 is working for you normally.  MusicBox is just a controller for these.
+You may need to get and build/install one of them first if your distribution
+does not already have one installed.
+

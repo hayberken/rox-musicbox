@@ -38,7 +38,7 @@ rox.setup_app_options(APP_NAME)
 LIBRARY = Option('library', os.path.expanduser("~")+'/Music')
 
 #the name of your mp3 player (include full path if necessary)
-MP3_PLAYER = Option('mp3_player', 'mpg321')
+MP3_PLAYER = Option('mp3_player', '')
 
 SHUFFLE = Option('shuffle', 0)
 REPEAT = Option('repeat', 0)
@@ -237,9 +237,14 @@ class MusicBox(rox.Window):
 		#init the player instance and start the monitoring thread
 #TODO: add Ogg support
 		g.threads_init()
-		self.player = pympg123.Player(MP3_PLAYER.value, self.status_update)
-		self.foo = Thread(name='test', target=self.player.handle_audio)
-		self.foo.start()
+		
+		if MP3_PLAYER.value == '':
+			self.player = None
+			rox.edit_options()
+		else:
+			self.player = pympg123.Player(MP3_PLAYER.value, self.status_update)
+			self.foo = Thread(name='test', target=self.player.handle_audio)
+			self.foo.start()
 		
 		self.current_song = ""
 		self.current_artist = ""
@@ -298,6 +303,12 @@ class MusicBox(rox.Window):
 		self.current_artist = model.get_value(iter, COL_ARTIST)
 		self.current_song = model.get_value(iter, COL_TITLE)
 		self.image_play.set_from_file(BMP_PAUSE)
+
+		if self.player == None:
+			self.player = pympg123.Player(MP3_PLAYER.value, self.status_update)
+			self.foo = Thread(name='test', target=self.player.handle_audio)
+			self.foo.start()
+
 		self.player.play(self.current_file)
 
 	####################################################################

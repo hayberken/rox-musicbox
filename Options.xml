@@ -5,7 +5,8 @@
 		The location of your MP3 files.
 		</entry>
 		<entry name='mp3_player' label='MP3 Player'>
-		Choose between mpg123 or mpg321.
+		Choose between mpg123 or mpg321.  Enter the full path if it is not on your $PATH.
+	You may need to add options here to support your sound system. (e.g. mpg321 -o esd for gnome esound support.  Or mpg123 -a /dev/sound/dsp for devfs support)
 		</entry>
 	</section>
 
@@ -14,7 +15,7 @@
 		Randomize play order.
 		</toggle>
 		<toggle name='repeat' label='Repeat'>
-		Choose between mpg123 or mpg321.
+		Keep playing forever.
 		</toggle>
 	</section>
 	

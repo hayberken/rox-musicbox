@@ -92,6 +92,7 @@ import string
 from fcntl import fcntl, F_SETFL, F_SETFD
 import time
 import termios
+import popen2
 
 class Player:
 	
@@ -127,13 +128,14 @@ class Player:
 		# opens the process -- sets the "process in" pipe as self.pin, and out as self.pout
 		# note that 'boo' is specified as the filename, as of mpg123 59r, you have to specify a filename, or
 		# just SOMETHING after the -R (remote) switch for it to work!
-		self.process = os.popen2(self.mp3_player+" -R boo","b",1)
-		self.pin = self.process[0]
-		self.pout = self.process[1]
-
+		self.process = popen2.Popen3(self.mp3_player+" -R boo",True,1)
+		self.pin = self.process.tochild #self.process[0]
+		self.pout = self.process.fromchild #self.process[1]
+		
 	def shutdown(self):
 		self.debug("Shutdown")
 		self.pin.write("QUIT\012")
+		os.kill(self.process.pid, 9)
 		self.running = 0
 
 	def initvars(self):

@@ -1,7 +1,28 @@
-			MusicBox
-			MP3 Player (MPG123/MPG321 front-end)
-			by Ken Hayber
+	MusicBox
+	MP3 Player (MPG123/MPG321 front-end)
+	by Ken Hayber
+
+19-Aug-2003
+0.0.3
+- Edited the Options.xml to have a big tooltip for the mp3 player explaining some things.
+- Edited the README a bit (put MY email address in there instead of Thomas') giving some
+	basic instructions.
+- Changed mp3 player launching from os.popen2 to popen2.Popen3 so I can get 
+	the pid and kill it later if necessary (for me it is needed for mpg123, otherwise
+	the player never dies and runs at 100%)
+- Initial value of mp3 player is now ''.  MusicBox now detects that at startup and 
+	shows the Options dialog so you can specify your player.  (TODO: Need to detect
+	failed player launch and inform the user to try again)
 
 18-Aug-2003
+-----------
+0.0.2
+- Fixed Prev button and rewrote Next button handling to match.
+- Implemented Repeat and Shuffle and their options.
+- Got ToggleButtons working thanks to this tutorial - 
+	http://www.moeraki.com/pygtktutorial/index.html
+	
+
+17-Aug-2003
 -----------
 First release!
