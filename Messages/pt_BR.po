@@ -1,0 +1,130 @@
+# Brazilian Translation of MusicBox 
+# Copyright (C) 2003 Leandro Pereira <leandro@linuxmag.com.br>
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: MusicBox 0.05\n"
+"PO-Revision-Date: Sun Aug 17 18:52:30 2003\n"
+"Last-Translator: Leandro Pereira <leandro@linuxmag.com.br>\n"
+"Language-Team: Leandro Pereira <leandro@linuxmag.com.br>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: musicbox.py:35
+msgid "Album"
+msgstr "Álbum"
+
+#: musicbox.py:436 musicbox.py:479
+#, fuzzy
+msgid "Pause"
+msgstr "Em pausa... "
+
+#: musicbox.py:93
+msgid "/Next"
+msgstr "/Próximo"
+
+#: musicbox.py:34
+#, fuzzy
+msgid "Title"
+msgstr "Tempo"
+
+#: musicbox.py:95
+msgid "/Toggle View"
+msgstr "/Alterar modo de exibição"
+
+#: musicbox.py:113
+msgid "Refresh"
+msgstr "Atualizar"
+
+#: musicbox.py:147 musicbox.py:417
+msgid "Next"
+msgstr "Próxima"
+
+#: musicbox.py:96
+msgid "/Options"
+msgstr "/Opções"
+
+#: musicbox.py:466
+msgid " by "
+msgstr " por "
+
+#: musicbox.py:90
+msgid "/Stop"
+msgstr "/Parar"
+
+#: musicbox.py:163 musicbox.py:398
+msgid "Prev"
+msgstr "Anterior"
+
+#: musicbox.py:111
+msgid "Options"
+msgstr "Opções"
+
+#: musicbox.py:139
+msgid "Repeat"
+msgstr "Repetir"
+
+#: musicbox.py:132
+msgid "Shuffle"
+msgstr "Embaralhar"
+
+#: musicbox.py:97
+msgid "/Refresh"
+msgstr "/Atualizar"
+
+#: musicbox.py:33
+msgid "Artist"
+msgstr "Artista"
+
+#: musicbox.py:152 musicbox.py:428 musicbox.py:481
+msgid "Stop"
+msgstr "Parar"
+
+#: musicbox.py:320
+msgid "unknown"
+msgstr ""
+
+#: musicbox.py:99
+msgid "/Quit"
+msgstr "/Sair"
+
+#: musicbox.py:239
+msgid " - Scanning, please wait..."
+msgstr " - Procurando, favor aguardar..."
+
+#: musicbox.py:89
+msgid "/Play\\/Pause"
+msgstr "/Reproduzir\\/Pausar"
+
+#: musicbox.py:158
+msgid "Play/Pause"
+msgstr "Reproduzir/Pausar"
+
+#: musicbox.py:36
+msgid "Genre"
+msgstr "Gênero"
+
+#: musicbox.py:167
+msgid "Close"
+msgstr "Fechar"
+
+#: musicbox.py:92
+msgid "/Back"
+msgstr "/Voltar"
+
+#: musicbox.py:125
+msgid "Seek"
+msgstr ""
+
+#~ msgid "Song"
+#~ msgstr "Canção"
+
+#~ msgid "Volume"
+#~ msgstr "Volume"
+
+#~ msgid "Playing: "
+#~ msgstr "Reproduzindo: "
+
+#~ msgid "Stopped... "
+#~ msgstr "Parado... "
