@@ -1,8 +1,8 @@
 """
 	playlist.py
-		Implement a mp3/ogg playlist for music player apps.
+		Implement a playlist for music player apps.
 
-	Copyright 2004 Kenneth Hayber <khayber@socal.rr.com>
+	Copyright 2004 Kenneth Hayber <ken@hayber.us>
 		All rights reserved.
 
 	This program is free software; you can redistribute it and/or modify
@@ -20,13 +20,15 @@
 """
 from __future__ import generators
 
-import rox, os, re, stat, time, string, gtk, gobject
+import rox, os, sys, re, stat, time, string, gtk, gobject
 from rox import saving
 from urllib import quote, unquote
 
 import genres
 from random import Random
 from xml.dom.minidom import parse, parseString, Document
+
+import mbtypes
 
 try:
 	import xattr
@@ -57,8 +59,12 @@ except:
 	HAVE_MAD = False
 	print 'No MP3 support!'
 
-if not HAVE_MAD and not HAVE_OGG:
-	raise ImportError, 'You must have at least one of either Ogg Vorbis or\nMAD libraries installed with the python bindings.'
+try:
+	import flac
+	HAVE_FLAC = True
+except:
+	HAVE_FLAC = False
+	print "No FLAC support!"
 
 
 def strip_padding(s):
@@ -66,10 +72,6 @@ def strip_padding(s):
 		s = s[:-1]
 	return s
 
-
-TYPE_OGG = 'application/ogg'
-TYPE_MP3 = 'audio/x-mp3'
-TYPE_LIST = [TYPE_OGG, TYPE_MP3]
 
 #Column indicies
 COL_FILE = 0
@@ -80,6 +82,7 @@ COL_ARTIST = 4
 COL_GENRE = 5
 COL_LENGTH = 6
 COL_TYPE = 7
+COL_ICON = 8
 
 
 class Song:
@@ -96,41 +99,52 @@ class Song:
 		self.type = type
 
 
-class Playlist(saving.Saveable):
+class Playlist(saving.Saveable, gobject.GObject):
 	"""A class to find and process mp3 and ogg files for a music player"""
 
 	def __init__(self, CacheSize, guess_re=None):
 		"""Constructor for the song list"""
 		self.rndm = Random(time.time()) # for shuffle
-		self.iter_curr = -1
+		self.curr_index = -1
 		self.shuffle_cache = []
 		self.shuffle_cache_size = CacheSize
 		self.library = []
 		self.guess_re = guess_re
 
+		self.filter_col = None
+		self.filter_data = None
+
 		#filename, title, track, album, artist, genre, length, type
-		self.song_list = gtk.ListStore(str, str, int, str, str, str, int, str)
-		self.song_list.set_sort_func(COL_TRACK, self.comparemethod, COL_TRACK)
+		self.model = gtk.ListStore(str, str, int, str, str, str, int, str, str)
+		self.model.set_sort_func(COL_TRACK, self.comparemethod, COL_TRACK)
+		self.song_list_filter = self.model.filter_new()
+		self.song_list_filter.set_visible_func(self.the_filter)
+		self.song_list = gtk.TreeModelSort(self.song_list_filter)
+
 
 	def __len__(self):
 		return len(self.song_list)
 
 	def shuffle(self):
 		"""Randomize the iterator index (so the next song is random)"""
-		if self.iter_curr != -1:
-			self.shuffle_cache.append(self.iter_curr)
+		try:
+			self.shuffle_cache.append(self.get_index())
 			if len(self.shuffle_cache) > self.shuffle_cache_size:
 				self.shuffle_cache.pop(0)
+		except:
+			pass
 
-		#shuffle the list?
-		num_songs = len(self.song_list)
+		num_songs = len(self)
 		while True:
 			n = self.rndm.randrange(0, num_songs)
 			if self.shuffle_cache_size >= num_songs:
 				break
 			if n not in self.shuffle_cache:
 				break
-		self.iter_curr = n
+		self.set_index(n)
+
+	def get_model(self):
+		return self.song_list
 
 	def get_song(self, index):
 		"""Create a Song object from the data at index"""
@@ -146,60 +160,93 @@ class Playlist(saving.Saveable):
 		return Song(filename, title, track, album, artist, genre, length, type)
 
 	def set(self, index):
-		if self.iter_curr != -1:
-			self.shuffle_cache.append(self.iter_curr)
+		try:
+			self.shuffle_cache.append(self.get_index())
 			if len(self.shuffle_cache) > self.shuffle_cache_size:
 				self.shuffle_cache.pop(0)
-		self.iter_curr = index
+		except:
+			pass
+		self.set_index(index)
 
 	def get(self, index=None):
-		if self.iter_curr == -1:
-			self.iter_curr = 0
 		if index == None:
-			return self.get_song(self.iter_curr)
-		else:
-			return self.get_song(index)
+			try:
+				index = self.get_index()
+			except:
+				index = 0
+				self.set_index(index)
+		return self.get_song(index)
+
+	def delete(self, index):
+		try:
+			del self.song_list[index]
+		except:
+			rox.report_exception()
+
+	def set_index(self, index):
+		self.curr_index = index
+		iter = self.song_list.get_iter((self.curr_index,))
+		self.model.set(iter, COL_ICON, 'media-track')
 
 	def get_index(self):
-		if self.iter_curr == -1:
+		if self.curr_index == -1:
 			raise 'No index set'
-		return self.iter_curr
+		return self.curr_index
 
 	def first(self):
-		self.iter_curr = 0
-		return self.get_song(0)
+		self.set_index(0)
+		return self.get_song(self.get_index())
 
 	def last(self):
-		self.iter_curr = len(self.song_list)-1
-		return self.get_song(self.iter_curr)
+		self.set_index(len(self)-1)
+		return self.get_song(self.get_index())
 
 	def next(self):
-		if self.iter_curr != -1:
-			self.shuffle_cache.append(self.iter_curr)
+		try:
+			self.shuffle_cache.append(self.get_index())
 			if len(self.shuffle_cache) > self.shuffle_cache_size:
 				self.shuffle_cache.pop(0)
-		try:
-			self.iter_curr += 1
-			return self.get_song(self.iter_curr)
 		except:
-			self.iter_curr = len(self.song_list)-1
+			pass
+
+		try:
+			self.set_index(self.get_index()+1)
+			return self.get_song(self.get_index())
+		except:
+			self.set_index(len(self)-1)
 			raise StopIteration
 
 	def prev(self):
 		try:
-			self.iter_curr = self.shuffle_cache.pop()
-			return self.get_song(self.iter_curr)
+			self.set_index(self.shuffle_cache.pop())
+			return self.get_song(self.get_index())
 		except:
 			raise StopIteration
 
 	def get_previous(self):
 		return len(self.shuffle_cache)
 
+	def the_filter(self, model, iter):
+		"""Implement a simple filter for the playlist"""
+		if self.filter_col:
+			if model.get_value(iter, self.filter_col) == self.filter_data:
+				return True
+			else:
+				return False
+		else:
+			return True
+
+	def set_filter(self, column, data):
+		"""The filter function above is a callback.  This is the control interface"""
+		self.filter_col = column
+		self.filter_data = data
+		self.song_list_filter.refilter()
+
 	def save(self, f):
 		"""Save the current (filtered?) playlist in xml format"""
 		f.write("<?xml version='1.0'?>\n<SongList>\n")
 
-		for index in range(len(self.song_list)):
+		for index in range(len(self)):
 			song = self.get_song(index)
 			f.write("\t<Song>\n")
 			f.write("\t\t<Title>%s</Title>\n" % quote(song.title))
@@ -219,7 +266,6 @@ class Playlist(saving.Saveable):
 		songs = dom1.getElementsByTagName("Song")
 
 		for song in songs:
-
 			while gtk.events_pending():
 				gtk.main_iteration()
 
@@ -239,12 +285,8 @@ class Playlist(saving.Saveable):
 			except: pass
 			length = 0
 
-			self.album_list[album] = True
-			self.artist_list[artist] = True
-			self.genre_list[genre] = True
-
-			iter_new = self.song_list.append()
-			self.song_list.set(iter_new,
+			iter_new = self.model.append()
+			self.model.set(iter_new,
 						COL_FILE, filename,
 						COL_TITLE, title,
 						COL_TRACK, track,
@@ -257,7 +299,7 @@ class Playlist(saving.Saveable):
 
 	def get_tag_info(self):
 		"""Update the entire song_list with the tag info from each file"""
-		for index in len(self.song_list):
+		for index in len(self):
 			song = self.get_song(index)
 			self.get_tag_info_from_file(song)
 
@@ -266,12 +308,15 @@ class Playlist(saving.Saveable):
 		song.type = str(rox.mime.get_type(song.filename))
 
 		if not self.get_xattr_info(song):
-			if song.type == TYPE_MP3 and HAVE_MAD:
+			if song.type == mbtypes.TYPE_MP3 and HAVE_MAD:
 				#print 'using mp3 tags'
 				self.get_id3_tag_info(song)
-			elif song.type == TYPE_OGG and HAVE_OGG:
+			elif song.type == mbtypes.TYPE_OGG and HAVE_OGG:
 				#print 'using ogg info'
 				self.get_ogg_info(song)
+#TODO		elif song.type == mbtypes.TYPE_FLAC:
+#				#print 'using flac info'
+#				self.get_flac_info(song)
 			else:
 				print song.filename
 
@@ -365,7 +410,7 @@ class Playlist(saving.Saveable):
 	def get_songs(self, library, callback, replace=True):
 		"""load all songs found by iterating over library into song_list..."""
 		if replace:
-			self.iter_curr = -1 #reset cuz we don't know how many songs we're gonna load
+			self.curr_index = -1 #reset cuz we don't know how many songs we're gonna load
 
 		self.callback = callback
 
@@ -374,11 +419,7 @@ class Playlist(saving.Saveable):
 		else:
 			self.library.extend(library)
 
-		self.song_list.clear()
-		self.album_list = {}	#album: True
-		self.artist_list = {}	#artist: True
-		self.genre_list = {}	#genre: True
-
+		self.model.clear()
 		for library_element in self.library:
 			library_element = os.path.expanduser(library_element)
 			if os.access(library_element, os.R_OK):
@@ -392,14 +433,11 @@ class Playlist(saving.Saveable):
 						self.process_pls(library_element)
 					elif ext == '.m3u':
 						self.process_m3u(library_element)
-					elif ext == '.xml':
+					elif ext == '.xml' or ext == '.music':
 						self.load(library_element)
 					else:
 						#assume the element is just a song...
 						self.add_song(library_element)
-		#print self.album_list.keys()
-		#print self.artist_list.keys()
-		#print self.genre_list.keys()
 
 	def add_song(self, filename):
 		"""Add a file to the song_list if the mime_type is acceptable"""
@@ -408,7 +446,7 @@ class Playlist(saving.Saveable):
 			gtk.main_iteration()
 
 		type = str(rox.mime.get_type(filename))
-		if type in TYPE_LIST and os.access(filename, os.R_OK):
+		if type in mbtypes.TYPE_LIST and os.access(filename, os.R_OK):
 			song = self.guess(filename, type)
 			if song != None:
 				self.get_tag_info_from_file(song)
@@ -417,12 +455,8 @@ class Playlist(saving.Saveable):
 				if song.length == None:
 					song.length = 0
 
-				self.album_list[song.album] = True
-				self.artist_list[song.artist] = True
-				self.genre_list[song.genre] = True
-
-				iter_new = self.song_list.append()
-				self.song_list.set(iter_new,
+				iter_new = self.model.append(None)
+				self.model.set(iter_new,
 							COL_FILE, song.filename,
 							COL_TITLE, song.title,
 							COL_TRACK, song.track,
@@ -451,7 +485,6 @@ class Playlist(saving.Saveable):
 				else:
 					item1 = artist1
 					item2 = artist2
-				#print item1, item2
 
 			if item1 < item2:
 				return -1
@@ -464,7 +497,7 @@ class Playlist(saving.Saveable):
 
 	def guess(self, filename, type):
 		"""Guess some info about the file based on path/filename"""
-		try:	m = re.match(self.guess_re, filename)
+		try:	m = re.match(self.guess_re, os.path.abspath(filename))
 		except:	m = re.match('^.*/(?P<artist>.*)/(?P<album>.*)/(?P<title>.*)', filename)
 		try:	title = m.group('title')
 		except:	title = filename

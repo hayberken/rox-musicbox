@@ -7,18 +7,20 @@
 			<Label xml:lang="de">Einstellungen...</Label>
 		</Item>
 	</AppMenu>
-	<Summary>MP3/Ogg Music Player</Summary>
+	<Summary>Music Player</Summary>
 	<Summary xml:lang="it">Un riproduttore di MP3/Ogg</Summary>
 	<CanRun>
 		<MimeType type="audio/x-mp3"/>
+		<MimeType type="audio/x-wav"/>
+		<MimeType type="audio/x-flac"/>
 		<MimeType type="application/ogg"/>
 	</CanRun>
 	<About>
-		<Purpose>MP3/Ogg Music Player</Purpose>
+		<Purpose>ROX Music Player</Purpose>
 		<Authors>Ken Hayber</Authors>
-		<Version>020(26-Oct-2004)</Version>
+		<Version>021 (09-Jan-2005)</Version>
 		<License>GNU General Public License</License>
-		<Homepage>http://khayber.dyndns.org/wiki/index.php/MusicBox</Homepage>
+		<Homepage>http://www.hayber.us/wiki/index.php/MusicBox</Homepage>
 	</About>
 	<About xml:lang="it">
 		<Purpose label="Scopo">riproduttore musicale</Purpose>

@@ -1,28 +1,36 @@
 ﻿MusicBox -
 an MP3/OGG Player for the ROX Desktop
-		by Ken Hayber
+		by Ken Hayber (ken@hayber.us)
 
 Brief
 ~~~~~
-MusicBox plays your mp3 and ogg files.  It supports ogg via pyogg/libvorbis and
-mp3 via pymad/libmad.
+MusicBox plays your mp3, wav, flac and ogg files.  It requires several external python
+modules and libraries to support its featurs.  These modules are listed below.  Typically
+these modules are detected at runtime and features are gracefully degraded if things are
+not found (where possible).
+
+I have attempted to keep the interface simple, yet flexible and featureful.  There are
+many features that other players have that MusicBox will likely never have.  Such is life.
 
 The latest version of MusicBox is at:
+	http://www.hayber.us/wiki/index.php/ROX/MusicBox
 
-	http://khayber.dyndns.org/rox/musicbox
-
+Share and Enjoy!
 
 Instructions
 ~~~~~~~~~~~~
 Extract the MusicBox appdir and copy it to wherever you normally put ROX apps.
-Then launch it!  Initially it assumes that you put all your mp3 and/or ogg files
-in ~/Music.
+Then launch it!  Initially it assumes that you put all your music files
+in ~/Music, but this is easily changed.
 
-If these are not correct you must edit the Options to suit your setup.  For
-library changes just hit the refresh menu item, unless you used Drag and Drop in which
-case the display will update automatically.  If you have a lot of files it will
-take considerable time to read them all - see below on how to speed things up.
-However, don't let that stop you from hitting the play button!  We got threads!
+If these are not correct you must edit the Options to suit your setup. If there
+are any errors at startup, you can run the Options dialog without launching the
+application using ROX Filer's menu (right click on the AppDir icon).
+
+For library changes just hit the refresh menu item, unless you used Drag and Drop
+in which case the display will update automatically.  If you have a lot of files
+it will take considerable time to read them all - see below on how to speed things up.
+However, don't let that stop you from hitting the play button - we got threads!
 
 In place of the ~/Music default library location you may enter:
 	* one or more directories separated by ':' like a path
@@ -33,17 +41,20 @@ You can also leave it blank and just load files dynamically.  This can be done i
 following ways:
 	* Drag and Drop files or folders on the MusicBox main or Playlist windows
 	* Pass files or folders or playlists on the MusicBox command line.
-	* Use XMLrpc (see below)
+	* Use remote control functions (see below)
 
-MusicBox currently exports the following commands via XMLrpc:
-	* load_args('song1.mp3 ~/LotsOfMusicHere anothersong.ogg')
-	* play(), pause(), next(), prev(), stop()
+MusicBox currently exports the following commands via rpc
+ - load_songs  #replace existing and start playing
+ - add_songs   #append to existing
+ - play
+ - pause
+ - next
+ - prev
+ - stop
 
-Here is how to call these functions in python.
-	import xmlrpclib
-	client = xmlrpclib.Server("http://localhost:8989", None, False)
-	client.load_args('~/Music/somesong.ogg')
-	client.play()
+See the file xsoap.py to learn how to call these functions in python.
+Also, see the Extras directory for useful examples of this.
+We also support a similar set of command line options. (try: rox MusicBox -h)
 
 
 Tag Info and Filenames
@@ -84,17 +95,41 @@ not widely supported yet, but I believe these will be the future of metadata.  S
 
 Dependencies
 ~~~~~~~~~~~~
-MusicBox depends on pyao/libao for sound output, pymad/libmad for mp3 processing
-and pyogg/libvorbis and friends for ogg support.
+MusicBox depends on the following external modules/libraries for various features.
+Current versions that I am developing with as of this writing are listed below.
+However older versions probably work fine except as noted.
 
-Current versions as of this writing are:
+Basics
+	ROX-Lib2 1.9.16 (http://rox.sourceforge.net)
+	GTK+ 2.4.14 [req >= 2.4]
+	GLib 2.6.0 (http://www.gtk.org)
+	PyGtk 2.4.1 [req >= 2.4]
+
+Audio output (optional if your python supports ossaudiodev
+              or linuxaudiodev, but highly recommended)
+    libao 0.8.5
+    pyao  0.82 (http://www.vorbis.com)
+
+MP3 (optional, but you need at least one format supported)
     pymad 0.4.1 (http://spacepants.org/src/pymad/)
-    libmad 0.14.2 (http://www.underbit.com/products/mad/)
-    pyogg, pyvorbis, libvorbis, libogg 1.0 (http://www.vorbis.com/download.psp)
-    libao 0.8.3 (http://www.vorbis.com/download.psp)
-    pyao  0.8 (http://www.vorbis.com/download.psp)
-Optional:
-	pyid3lib, id3lib (for ID3v2 tags!)
+    libmad 0.15.1 (http://www.underbit.com/products/mad/)
+
+ID3 tag support (optional)
+	pyid3lib 0.5.1,
+	id3lib 3.8.3 (http://pyid3lib.sourceforge.net)
+
+OGG (optional)
+    pyogg 1.3,
+	pyvorbis 1.3,
+	libvorbis 1.1.0,
+	libogg 1.1.2 (http://www.vorbis.com)
+
+FLAC (optional)
+	libflac 1.1.0 (http://flac.sourceforge.net)
+	pyflac 0.0.1 (included, but must be built)
+
+WAV (standard)
+	python's built in wave module
 
 Hopefully your distro will provide packages for these, otherwise you will have to
 download and build them from sources.
@@ -102,15 +137,21 @@ download and build them from sources.
 NOTE: I have discovered that pygtk before version 1.99.17 doesn't support threads all
 that well, so you must have 1.99.17 or higher.  Sorry.
 
+NOTE: The pyflac module is 0.0.1 and does not seem to be supported by anyone, although
+I seem to see support for it in Debian (sarge?).  I included a copy with a very slightly
+modified Makefile so that you should just have to type make in the 'flac' folder.  If
+you already have a copy installed (e.g. in your normal python modules directory) just
+delete or rename this folder.
+
 
 Features:
 ~~~~~~~~~
-MP3 and OGG support.
+MP3, OGG, Flac, Wav support.
 Esd, Alsa, OSS support.
 Drag and Drop adding of Songs, Directories of songs, and Playlists (m3u and pls)
 Shuffle play (with cache so you don't replay songs too frequently).
 Seek control bar to zip to specific parts of any song.
-Volume Control
+Volume Control (OSS mixer only)
 Compact UI
 
 
@@ -130,5 +171,5 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-Please report any bugs to me, <khayber at socal dot rr dot com>
+Please report any bugs to me, <ken@hayber.us>
 

@@ -1,6 +1,19 @@
 MusicBox - an MP3/OGG Player for the ROX Desktop
 by Ken Hayber
 
+14-Jan-2005
+021
+- Add Wav and Flac support (Flac support is not complete - no tag info is supported,
+  seeking during playback does not work)
+- Reworked player code for modularity to support the above.
+- Filters are back!  And they _really_ work this time.
+- Requires PyGTK/GTK 2.4 now :(
+- MenuKey patch from Rds for those with evil(Windows) keyboards.
+
+** Note: flac support depends on the pyflac module which you probably don't have.  I included
+a copy in the 'flac' directory, but you must build it first.  Just type make in that
+folder.  If you have this (e.g. Debian users?) just delete or rename this folder. **
+
 26-Oct-2004
 020
 - Add support for editing options without starting player

@@ -2,7 +2,7 @@
 	playlistui.py
 		Playlist UI for MusicBox application.
 
-	Copyright 2004 Kenneth Hayber <khayber@socal.rr.com>
+	Copyright 2004 Kenneth Hayber <ken@hayber.us>
 		All rights reserved.
 
 	This program is free software; you can redistribute it and/or modify
@@ -27,7 +27,8 @@ import rox
 from rox import Menu, saving, loading, mime, filer
 
 import playlist
-from playlist import COL_FILE, COL_TITLE, COL_TRACK, COL_ALBUM, COL_ARTIST, COL_GENRE, COL_LENGTH, COL_TYPE
+from playlist import COL_FILE, COL_TITLE, COL_TRACK, COL_ALBUM, COL_ARTIST
+from playlist import COL_GENRE, COL_LENGTH, COL_TYPE , COL_ICON
 
 
 #Who am I and how did I get here?
@@ -49,7 +50,7 @@ COLUMNS = [
 #	(_("Type"), COL_TYPE, str, 60),
 ]
 
-DND_TYPES = ['audio/x-mp3' 'application/ogg' 'inode/directory']
+import mbtypes
 
 class PlaylistUI(rox.Window, loading.XDSLoader):
 	"""the playlist UI for MusicBox"""
@@ -57,7 +58,7 @@ class PlaylistUI(rox.Window, loading.XDSLoader):
 	def __init__(self, the_playlist, musicbox):
 		"""Constructor"""
 		rox.Window.__init__(self)
-		loading.XDSLoader.__init__(self, DND_TYPES)
+		loading.XDSLoader.__init__(self, mbtypes.TYPE_LIST)
 
 		self.playlist = the_playlist  #this is a reference to the main playlist
 		self.library = []
@@ -76,17 +77,21 @@ class PlaylistUI(rox.Window, loading.XDSLoader):
 		# Menu
 		self.add_events(gtk.gdk.BUTTON_PRESS_MASK)
 		self.connect('button-press-event', self.button_press)
+		self.connect('popup-menu', self.menukey_press)
 
 		Menu.set_save_name(APP_NAME)
 		self.menu = Menu.Menu('main', [
-#			Menu.SubMenu(_('Filter'), [
-#				Menu.Action(_("All songs"), 'filter_none', ''),
-#				Menu.Action(_("This Artist"), 'filter_artist', ''),
-#				Menu.Action(_("This Album"), 'filter_album', ''),
-#				Menu.Action(_("This Genre"), 'filter_genre', ''),
-#				Menu.Action(_("New Filter..."), 'filter_new', '')
-#				]),
-#			Menu.Separator(),
+			Menu.Action(_("Play"), 'play'),
+			Menu.Action(_("Delete"), 'delete'),
+#			Menu.Action(_("Sync"), 'sync'),
+			Menu.SubMenu(_('Filter'), [
+				Menu.Action(_("All songs"), 'filter'),
+				Menu.Action(_("This Artist"), 'filter', None, None, (COL_ARTIST,)),
+				Menu.Action(_("This Album"), 'filter', None, None, (COL_ALBUM,)),
+				Menu.Action(_("This Genre"), 'filter', None, None, (COL_GENRE,)),
+#				Menu.Action(_("New Filter..."), 'filter_new')
+				]),
+			Menu.Separator(),
 			Menu.Action(_("Save"), 'save', '', gtk.STOCK_SAVE),
 			Menu.Action(_("Open location"), 'show_dir', '', gtk.STOCK_GO_UP),
 			Menu.Separator(),
@@ -101,8 +106,7 @@ class PlaylistUI(rox.Window, loading.XDSLoader):
 		swin.set_border_width(0)
 		swin.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
 
-#		view = gtk.TreeView(self.playlist.song_list.filter_new())
-		view = gtk.TreeView(self.playlist.song_list)
+		view = gtk.TreeView(self.playlist.get_model())
 		self.view = view
 		swin.add(view)
 		view.set_rules_hint(True)
@@ -116,12 +120,12 @@ class PlaylistUI(rox.Window, loading.XDSLoader):
 		self.view.add_events(gtk.gdk.BUTTON_PRESS_MASK)
 		self.view.connect('button-press-event', self.button_press)
 
-		#TODO: A little icon showing the current song playing...
-		#cell = gtk.CellRendererPixbuf()
-		#column = gtk.TreeViewColumn('', cell)
-		#view.append_column(column)
-		#column.set_resizable(False)
-		#column.set_reorderable(False)
+		#icon showing the current song...
+		cell = gtk.CellRendererPixbuf()
+		column = gtk.TreeViewColumn('', cell, stock_id=COL_ICON)
+		view.append_column(column)
+		column.set_resizable(False)
+		column.set_reorderable(False)
 
 		for n in range(len(COLUMNS)):
 			cell = gtk.CellRendererText()
@@ -151,6 +155,18 @@ class PlaylistUI(rox.Window, loading.XDSLoader):
 		self.show()
 		self.sync()
 
+	def filter(self, col=None):
+		if col:
+			try:
+				iter = self.playlist.get_model().get_iter((self.curr_index,))
+				data = self.playlist.get_model().get_value(iter, col)
+			except:
+				rox.info(_("Please select a song first."))
+				return
+		else:
+			data = None
+		self.playlist.set_filter(col, data)
+
 	def drag_data_get(self, widget, context, selection, targetType, eventTime):
 		print >>sys.stderr, selection.target, selection.format, selection.data
 		if selection.target == 'text/uri-list':
@@ -168,7 +184,8 @@ class PlaylistUI(rox.Window, loading.XDSLoader):
 
 	def save(self):
 		"""Save the current list"""
-		box = saving.SaveBox(self.playlist, rox.choices.save(APP_NAME, 'Library.xml'), 'text/xml')
+#		box = saving.SaveBox(self.playlist, rox.choices.save(APP_NAME, 'Library.xml'), 'text/xml')
+		box = saving.SaveBox(self.playlist, rox.choices.save(APP_NAME, 'MyMusic.music'), 'application/x-music-playlist')
 		box.show()
 
 	def sync(self):
@@ -177,32 +194,37 @@ class PlaylistUI(rox.Window, loading.XDSLoader):
 			index = self.playlist.get_index()
 			self.view.set_cursor((index,))
 			self.view.scroll_to_cell((index,))
+			self.curr_index = index
 		except:
 			pass
 
-	def play(self):
+	def delete(self, *dummy):
+		try:
+			song = self.playlist.delete(self.curr_index)
+		except:
+			rox.alert(_("No track selected."))
+
+	def play(self, *dummy):
 		"""Play the current song"""
 		try:
+			self.playlist.set(self.curr_index)
 			self.musicbox.play()
 		except:
 			rox.report_exception()
 
 	def activate(self, view, path, column):
 		"""Double-click handler, plays the song"""
-		self.playlist.set(path[0])
 		self.play()
 
 	def set_selection(self, selection):
 		"""Tell the playlist what we currently have selected"""
-		#print selection
-		pass
+		(cursor, thing) = self.view.get_cursor()
+		self.curr_index = cursor[0]
 
 	def show_dir(self, *dummy):
 		''' Pops up a filer window. '''
 		try:
-			(cursor, thing) = self.view.get_cursor()
-			index = cursor[0]
-			song = self.playlist.get(index)
+			song = self.playlist.get(self.curr_index)
 			filer.show_file(song.filename)
 		except:
 			rox.alert(_("No track selected."))
@@ -221,6 +243,9 @@ class PlaylistUI(rox.Window, loading.XDSLoader):
 			return 0
 		self.menu.popup(self, event)
 		return 1
+
+	def menukey_press(self, widget):
+		self.menu.popup(self, None)
 
 	def col_activate(self, column):
 		"""Set the selected column as the search <Ctrl-S> column"""

@@ -25,6 +25,11 @@
 			The size of the buffer used to read/write sound data.  A larger buffer may reduce skipping under heavy load.
 			</numentry>
 		</frame>
+		<frame label='Mixer Device'>
+			<entry name='mixer_device' label='Path'>
+			The /dev entry for your mixer.  Typically /dev/mixer.
+			</entry>
+		</frame>
 
 		<frame label='Play Settings' columns='2'>
 		<hbox>

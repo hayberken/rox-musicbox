@@ -1,7 +1,7 @@
 """
 	musicbox.py (play either ogg or mp3 files)
 
-	Copyright 2004 Kenneth Hayber <khayber@socal.rr.com>
+	Copyright 2004 Kenneth Hayber <ken@hayber.us>
 		All rights reserved.
 
 	This program is free software; you can redistribute it and/or modify
@@ -27,8 +27,9 @@ import rox
 from rox import Menu, app_options, loading, saving, InfoWin, OptionsBox, filer
 from rox.options import Option
 
+
 try:
-	import player, playlist, playlistui, xsoap
+	import player, playlist, playlistui, xsoap, mbtypes
 except:
 	rox.report_exception()
 
@@ -57,8 +58,8 @@ BTN_OPTIONS = 8
 factory = gtk.IconFactory()
 for name in [
 			'media-next',	'media-pause',	'media-play',	'media-prev',
-			'media-repeat',	'media-shuffle','media-stop',
-#			'media-eject',	'media-ffwd',	'media-rewind',	'media-track',
+			'media-repeat',	'media-shuffle','media-stop',	'media-track',
+#			'media-eject',	'media-ffwd',	'media-rewind',
 #			'volume-max',	'volume-medium','volume-min',	'volume-mute',
 #			'volume-zero',	'media-record',
 		]:
@@ -72,7 +73,10 @@ factory.add_default()
 
 
 #Options.xml processing
-rox.setup_app_options(APP_NAME)
+from rox import choices
+choices.migrate(APP_NAME, 'hayber.us')
+rox.setup_app_options(APP_NAME, site='hayber.us')
+Menu.set_save_name(APP_NAME, site='hayber.us')
 
 #assume that everyone puts their music in ~/Music
 LIBRARY = Option('library', os.path.expanduser('~')+'/Music')
@@ -82,6 +86,7 @@ LIBRARY_RE = Option('library_re', '^.*/(?P<artist>.*)/(?P<album>.*)/(?P<title>.*
 
 #the ao driver type you want to use (esd, oss, alsa, alsa09, ...)
 DRIVER_ID = Option('driver_id', 'esd')
+MIXER_DEVICE = Option('mixer_device', '/dev/mixer')
 
 SHUFFLE = Option('shuffle', 0)
 REPEAT = Option('repeat', 0)
@@ -163,7 +168,6 @@ TOOLOPTIONS = Option('toolbar_disable', -1)
 
 rox.app_options.notify()
 
-DND_TYPES = ['audio/x-mp3' 'application/ogg' 'inode/directory']
 
 class MusicBox(rox.Window, loading.XDSLoader):
 	"""A Music Player for mp3 and ogg - main class"""
@@ -175,7 +179,7 @@ class MusicBox(rox.Window, loading.XDSLoader):
 	def __init__(self):
 		"""Constructor for MusicBox"""
 		rox.Window.__init__(self)
-		loading.XDSLoader.__init__(self, DND_TYPES)
+		loading.XDSLoader.__init__(self, mbtypes.TYPE_LIST)
 
 		# Main window settings
 		self.set_title(APP_NAME)
@@ -201,6 +205,15 @@ class MusicBox(rox.Window, loading.XDSLoader):
 		self.repeat = bool(REPEAT.int_value)
 
 		# Build and Init everything
+#GTK2.4		self.uimanager = gtk.UIManager()
+#GTK2.4		self.uimanager.insert_action_group(self.build_actions(), 0)
+#GTK2.4		self.uimanager.add_ui_from_file('ui.xml')
+#GTK2.4		self.menu = self.uimanager.get_widget('/ui/popup')
+#GTK2.4		self.toolbar = self.uimanager.get_widget('/ui/toolbar')
+#GTK2.4		self.add_events(gtk.gdk.BUTTON_PRESS_MASK)
+#GTK2.4		self.connect('button-press-event', self.button_press)
+#GTK2.4		self.connect('popup-menu', self.menukey_press)
+
 		self.build_menu()
 		self.build_toolbar()
 		self.build_labels()
@@ -228,12 +241,11 @@ class MusicBox(rox.Window, loading.XDSLoader):
 		self.server()
 
 		self.playlist = playlist.Playlist(SHUFFLE_CACHE_SIZE.int_value, LIBRARY_RE.value)
-		self.player = player.Player(DRIVER_ID.value,
-								AUDIO_BUFFER_SIZE.int_value)
+		self.player = player.Player(DRIVER_ID.value, AUDIO_BUFFER_SIZE.int_value)
 		self.foo = Thread(name='player', target=self.player.run)
 		self.foo.setDaemon(True)
 		self.foo.start()
-		self.volume.set_value(self.player.get_volume())
+		self.volume.set_value(self.player.get_volume(MIXER_DEVICE.value))
 
 		if len(sys.argv) > 1:
 			self.load_args(sys.argv[1:], True)
@@ -242,11 +254,34 @@ class MusicBox(rox.Window, loading.XDSLoader):
 
 		gobject.timeout_add(500, self.display_update)
 
+#GTK2.4	def build_actions(self):
+#GTK2.4		actions = gtk.ActionGroup('main')
+#GTK2.4		actions.add_action(gtk.Action('quit', _("Quit"), _("Quit the application"), gtk.STOCK_QUIT))
+#GTK2.4		actions.add_action(gtk.Action('close', _("Close"), _("Close this window"), gtk.STOCK_CLOSE))
+#GTK2.4
+#GTK2.4		actions.add_action(gtk.Action('options', _("Options"), _("Edit Options"), gtk.STOCK_PREFERENCES))
+#GTK2.4		actions.add_action(gtk.Action('info', _("Info"), _("Show program info"), gtk.STOCK_DIALOG_INFO))
+#GTK2.4
+#GTK2.4		actions.add_action(gtk.Action('play', _("Play"), _("Play"), 'media-play'))
+#GTK2.4		actions.add_action(gtk.Action('stop', _("Stop"), _("Stop"), 'media-stop'))
+#GTK2.4		actions.add_action(gtk.Action('prev', _("Prev"), _("Prev"), 'media-prev'))
+#GTK2.4		actions.add_action(gtk.Action('next', _("Next"), _("Next"), 'media-next'))
+#GTK2.4
+#GTK2.4		actions.add_action(gtk.Action('playlist', _("Playlist"), _("Show Playlist"), gtk.STOCK_INDEX))
+#GTK2.4		actions.add_action(gtk.Action('open', _("Open"), _("Open Location"), gtk.STOCK_GO_UP))
+#GTK2.4		actions.add_action(gtk.Action('save', _("Save"), _("Save Playlist"), gtk.STOCK_SAVE))
+#GTK2.4
+#GTK2.4		actions.add_action(gtk.Action('shuffle', _("Shuffle"), _("Shuffle"), 'media-shuffle'))
+#GTK2.4		actions.add_action(gtk.Action('repeat', _("Repeat"), _("Repeat"), 'media-repeat'))
+#GTK2.4
+#GTK2.4		actions.add_action(gtk.Action('none', None, None, 0))
+#GTK2.4		return actions
+
 
 	def build_menu(self):
 		self.add_events(gtk.gdk.BUTTON_PRESS_MASK)
 		self.connect('button-press-event', self.button_press)
-		Menu.set_save_name(APP_NAME)
+		self.connect('popup-menu', self.menukey_press)
 		self.menu = Menu.Menu('main', [
 			Menu.Action(_("Play")+'\/'+_("Pause"), 'play_pause', '', 'media-play'),
 			Menu.Action(_("Stop"), 'stop', '', 'media-stop'),
@@ -477,11 +512,7 @@ class MusicBox(rox.Window, loading.XDSLoader):
 	def load(self):
 		"""Load the playlist either from a saved xml file, or from source dirs"""
 		self.display_status.set_text(_("Loading songs, please wait..."))
-		if self.playlistUI:
-			self.playlistUI.view.set_model(None)
-
 		self.playlist.get_songs(self.library, self.loading, self.replace_library)
-
 		self.display_status.set_text(_("Ready")+': '+_("loaded ")+str(len(self.playlist))+_(" songs"))
 
 		if len(self.playlist):
@@ -489,16 +520,14 @@ class MusicBox(rox.Window, loading.XDSLoader):
 		else:
 			self.set_sensitive(False)
 
-		if self.playlistUI:
-			self.playlistUI.view.set_model(self.playlist.song_list)
-
 		if self.replace_library and len(self.playlist):
 			self.next()
 
 
 	def save(self):
 		"""Save the current list"""
-		box = saving.SaveBox(self.playlist, rox.choices.save(APP_NAME, 'Library.xml'), 'text/xml')
+#		box = saving.SaveBox(self.playlist, rox.choices.save(APP_NAME, 'Library.xml'), 'text/xml')
+		box = saving.SaveBox(self.playlist, rox.choices.save(APP_NAME, 'MyMusic.music'), 'application/x-music-playlist')
 		box.show()
 
 
@@ -636,7 +665,7 @@ class MusicBox(rox.Window, loading.XDSLoader):
 			self.set_title(self.current_song.title+' - '+self.time_string)
 
 		#update the volume control if something other than us changed it
-		self.volume.set_value(self.player.get_volume())
+		self.volume.set_value(self.player.get_volume(MIXER_DEVICE.value))
 
 		return True #keep running
 
@@ -723,8 +752,12 @@ class MusicBox(rox.Window, loading.XDSLoader):
 		if event.button != 3:
 			return 0
 		self.menu.popup(self, event)
+#GTK2.4		self.menu.popup(None, None, None, event.button, 0)
 		return 1
 
+	def menukey_press(self, widget):
+		''' Called when the user hits the menu key on their keyboard. '''
+		self.menu.popup(self, None)
 
 	def get_info(self):
 		InfoWin.infowin(APP_NAME)
@@ -737,7 +770,7 @@ class MusicBox(rox.Window, loading.XDSLoader):
 
 	def adjust_volume(self, vol):
 		"""Set the playback volume"""
-		self.player.set_volume(vol.get_value())
+		self.player.set_volume(vol.get_value(), MIXER_DEVICE.value)
 
 
 	def xds_drag_motion(self, widget, context, x, y, timestamp):

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: Tue Oct 26 21:33:07 2004\n"
+"PO-Revision-Date: Fri Jan 14 19:24:57 2005\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Generated-By: pygettext.py 1.1\n"
 
 
-#: musicbox.py:470
+#: musicbox.py:504
 msgid "Loading"
 msgstr ""
 
@@ -22,11 +22,11 @@ msgstr ""
 msgid "older (obsolete?) Alsa driver"
 msgstr ""
 
-#: playlistui.py:45
+#: playlistui.py:46
 msgid "Title"
 msgstr ""
 
-#: tips:23
+#: tips:27
 msgid "Play Settings"
 msgstr ""
 
@@ -34,19 +34,19 @@ msgstr ""
 msgid "oss"
 msgstr ""
 
-#: tips:51
+#: tips:55
 msgid "Background Color:"
 msgstr ""
 
-#: tips:46 tips:47
+#: tips:50 tips:51
 msgid "The font used for the Song Title"
 msgstr ""
 
-#: playlistui.py:208
+#: playlistui.py:222
 msgid "No track selected."
 msgstr ""
 
-#: tips:3
+#: tips:3 tips:24
 msgid "Path"
 msgstr ""
 
@@ -54,51 +54,51 @@ msgstr ""
 msgid "Buffer Size"
 msgstr ""
 
-#: musicbox.py:133 musicbox.py:268 musicbox.py:296
-msgid "Options"
-msgstr ""
-
-#: tips:41
+#: tips:45
 msgid "Display"
 msgstr ""
 
-#: tips:33
+#: tips:37
 msgid "elapse"
 msgstr ""
 
-#: player.py:133
+#: player.py:137
 msgid "You must have OGG support to play ogg files (%s)."
 msgstr ""
 
-#: musicbox.py:260
+#: musicbox.py:294
 msgid "Show"
 msgstr ""
 
-#: player.py:131
+#: player.py:135
 msgid "File not found or not accessible (%s)."
 msgstr ""
 
-#: tips:44
+#: tips:48
 msgid "The font used for Other text"
 msgstr ""
 
-#: musicbox.py:485
+#: musicbox.py:515
 msgid "Ready"
 msgstr ""
 
-#: tips:66
+#: tips:70
 msgid "Use miniature size toolbar buttons"
 msgstr ""
 
-#: tips:36 tips:37 tips:38 tips:39 tips:40
+#: playlistui.py:86
+msgid "This Artist"
+msgstr ""
+
+#: tips:40 tips:41 tips:42 tips:43 tips:44
 msgid "Show remaining time"
 msgstr ""
 
-#: musicbox.py:272
+#: musicbox.py:306
 msgid "Quit"
 msgstr ""
 
-#: musicbox.py:132 musicbox.py:259 musicbox.py:295 playlistui.py:67
+#: musicbox.py:134 musicbox.py:293 musicbox.py:329 playlistui.py:68
 msgid "Playlist"
 msgstr ""
 
@@ -106,15 +106,15 @@ msgstr ""
 msgid "Pattern"
 msgstr ""
 
-#: musicbox.py:129 musicbox.py:256 musicbox.py:292
+#: musicbox.py:131 musicbox.py:290 musicbox.py:326
 msgid "Next"
 msgstr ""
 
-#: tips:63
+#: tips:67
 msgid "Word Wrap"
 msgstr ""
 
-#: musicbox.py:262 playlistui.py:90
+#: musicbox.py:296 playlistui.py:92
 msgid "Save"
 msgstr ""
 
@@ -122,7 +122,11 @@ msgstr ""
 msgid "A python regular expression to parse the full path of each file into 'artist', 'album', 'title' and 'track'.  Used when there is no tag info in the file."
 msgstr ""
 
-#: tips:48
+#: player.py:141
+msgid "You must have FLAC support to play flac files (%s)."
+msgstr ""
+
+#: tips:52
 msgid "Colors"
 msgstr ""
 
@@ -130,7 +134,11 @@ msgstr ""
 msgid "esd"
 msgstr ""
 
-#: musicbox.py:269
+#: tips:25 tips:26
+msgid "The /dev entry for your mixer.  Typically /dev/mixer."
+msgstr ""
+
+#: musicbox.py:303
 msgid "Info"
 msgstr ""
 
@@ -138,7 +146,7 @@ msgstr ""
 msgid "Settings"
 msgstr ""
 
-#: tips:25
+#: tips:29
 msgid "Keep playing forever."
 msgstr ""
 
@@ -146,7 +154,7 @@ msgstr ""
 msgid "Gnome esound server"
 msgstr ""
 
-#: tips:34
+#: tips:38
 msgid "Show elapsed time"
 msgstr ""
 
@@ -154,63 +162,75 @@ msgstr ""
 msgid "The (optional) default location of your music.  This location will be scanned and loaded at startup when no command-line arguments are given.  It is a ':' separated list of directories, and/or .xml, .pls, .m3u, .mp3, .ogg files."
 msgstr ""
 
-#: musicbox.py:623
+#: musicbox.py:650
 msgid "Playing"
 msgstr ""
 
-#: tips:28
+#: tips:32
 msgid "Shuffle cache size"
 msgstr ""
 
-#: musicbox.py:131 musicbox.py:263 musicbox.py:294 tips:26
+#: musicbox.py:133 musicbox.py:297 musicbox.py:328 tips:30
 msgid "Shuffle"
 msgstr ""
 
-#: musicbox.py:255
+#: musicbox.py:289
 msgid "Back"
 msgstr ""
 
-#: musicbox.py:628
+#: musicbox.py:655
 msgid "Paused"
 msgstr ""
 
-#: musicbox.py:479
+#: musicbox.py:513
 msgid "Loading songs, please wait..."
 msgstr ""
 
-#: tips:60
+#: tips:23
+msgid "Mixer Device"
+msgstr ""
+
+#: tips:64
 msgid "Seek"
 msgstr ""
 
-#: musicbox.py:251
+#: musicbox.py:285
 msgid "Pause"
 msgstr ""
 
-#: tips:29 tips:30 tips:31
+#: tips:33 tips:34 tips:35
 msgid "How many songs to remember in shuffle mode so we don't replay too often."
+msgstr ""
+
+#: playlistui.py:88
+msgid "This Genre"
 msgstr ""
 
 #: tips:13
 msgid "Open Sound System driver"
 msgstr ""
 
-#: tips:54
+#: tips:58
 msgid "Widgets"
 msgstr ""
 
-#: tips:57
+#: playlistui.py:85
+msgid "All songs"
+msgstr ""
+
+#: tips:61
 msgid "Show/Hide the Toolbar"
 msgstr ""
 
-#: musicbox.py:485
+#: musicbox.py:515
 msgid " songs"
 msgstr ""
 
-#: musicbox.py:127 musicbox.py:251 musicbox.py:290 musicbox.py:304
+#: musicbox.py:129 musicbox.py:285 musicbox.py:324 musicbox.py:338
 msgid "Play"
 msgstr ""
 
-#: musicbox.py:130 musicbox.py:264 musicbox.py:293 tips:24
+#: musicbox.py:132 musicbox.py:298 musicbox.py:327 tips:28
 msgid "Repeat"
 msgstr ""
 
@@ -218,39 +238,47 @@ msgstr ""
 msgid "Driver"
 msgstr ""
 
-#: tips:64
-msgid "Word wrap display strings"
+#: musicbox.py:135 musicbox.py:302 musicbox.py:330
+msgid "Options"
 msgstr ""
 
-#: tips:49
+#: tips:53
 msgid "Text Color:"
 msgstr ""
 
-#: musicbox.py:485
+#: musicbox.py:515
 msgid "loaded "
 msgstr ""
 
-#: tips:42
+#: tips:46
 msgid "Fonts"
 msgstr ""
 
-#: tips:65
+#: tips:69
 msgid "Mini Toolbar"
+msgstr ""
+
+#: playlistui.py:84
+msgid "Filter"
 msgstr ""
 
 #: tips:16
 msgid "alsa (old)"
 msgstr ""
 
-#: musicbox.py:630
+#: playlistui.py:87
+msgid "This Album"
+msgstr ""
+
+#: musicbox.py:657
 msgid "Stopped"
 msgstr ""
 
-#: tips:32
+#: tips:36
 msgid "Time"
 msgstr ""
 
-#: tips:59
+#: tips:63
 msgid "Show/Hide the Volume control"
 msgstr ""
 
@@ -262,71 +290,71 @@ msgstr ""
 msgid "Library"
 msgstr ""
 
-#: tips:67
+#: tips:71
 msgid "Select the buttons you want on the toolbar:"
 msgstr ""
 
-#: tips:35
+#: tips:39
 msgid "remain"
 msgstr ""
 
-#: musicbox.py:261 playlistui.py:91
+#: musicbox.py:295 playlistui.py:93
 msgid "Open location"
 msgstr ""
 
-#: musicbox.py:125 musicbox.py:288 playlistui.py:93
+#: musicbox.py:127 musicbox.py:322 playlistui.py:95
 msgid "Close"
 msgstr ""
 
-#: playlistui.py:44
+#: playlistui.py:45
 msgid "Album"
 msgstr ""
 
-#: tips:27
+#: tips:31
 msgid "Randomize play order."
 msgstr ""
 
-#: tips:50
+#: tips:54
 msgid "Text color."
 msgstr ""
 
-#: musicbox.py:126 musicbox.py:289
+#: musicbox.py:128 musicbox.py:323
 msgid "Prev"
 msgstr ""
 
-#: playlistui.py:46
+#: playlistui.py:47
 msgid "Track"
 msgstr ""
 
-#: musicbox.py:128 musicbox.py:252 musicbox.py:291
+#: musicbox.py:130 musicbox.py:286 musicbox.py:325
 msgid "Stop"
 msgstr ""
 
-#: player.py:135
+#: player.py:139
 msgid "You must have MAD support to play mp3 files (%s)."
 msgstr ""
 
-#: tips:58
+#: tips:62
 msgid "Volume"
 msgstr ""
 
-#: tips:55
+#: tips:59
 msgid "Show/Hide:"
 msgstr ""
 
-#: tips:43
+#: tips:47
 msgid "Base font:"
 msgstr ""
 
-#: playlistui.py:47
+#: playlistui.py:48
 msgid "Genre"
 msgstr ""
 
-#: tips:61 tips:62
+#: tips:65 tips:66
 msgid "Show/Hide the Seek control"
 msgstr ""
 
-#: tips:56
+#: tips:60
 msgid "Toolbar"
 msgstr ""
 
@@ -334,24 +362,32 @@ msgstr ""
 msgid "alsa"
 msgstr ""
 
-#: playlistui.py:43
+#: playlistui.py:44
 msgid "Artist"
 msgstr ""
 
-#: musicbox.py:540
+#: musicbox.py:567
 msgid "Failed to start playing %s"
+msgstr ""
+
+#: tips:68
+msgid "Word wrap display strings"
 msgstr ""
 
 #: tips:8
 msgid "Output"
 msgstr ""
 
-#: tips:52 tips:53
+#: tips:56 tips:57
 msgid "The background color of the main display area."
 msgstr ""
 
-#: tips:45
+#: tips:49
 msgid "Title font:"
+msgstr ""
+
+#: playlistui.py:163
+msgid "Please select a song first."
 msgstr ""
 
 #: tips:15

@@ -1,8 +1,8 @@
 """
 	xsoap.py:  an X rpc module
 
-	Copyright 2004 Kenneth Hayber <khayber@socal.rr.com>
-		All rights reserved.
+	Copyright 2004 Kenneth Hayber <ken@hayber.us>
+	All rights reserved.
 
 	This module implements a method to register a window to receive rpc commands and
 	parameters from another application.
