@@ -1,0 +1,128 @@
+# MusicBox Italian Translation.
+# Copyright @ 2003 Free Software Foundation, Inc.
+# Current translator: Yuri Bongiorno http://yuri.webhop.org, 2003.
+# Traduttori Italiani GNU:   http://www.linux.it/tp
+msgid ""
+msgstr ""
+"Project-Id-Version: MusicBox 0.0.2\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2003-08-20 16:40+0200\n"
+"PO-Revision-Date: 2003-08-20 16:40+0200\n"
+"Last-Translator: Yuri Bongiorno http://yuri.webhop.org\n"
+"Language-Team: Italian <tp@lists.linux.it>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: musicbox.py:181
+msgid "Album"
+msgstr "Album"
+
+#: musicbox.py:73
+msgid "/Next"
+msgstr "/Successivo"
+
+#: musicbox.py:167
+msgid "Artist"
+msgstr "Artista"
+
+#: musicbox.py:75
+msgid "/Toggle View"
+msgstr ""
+
+#: musicbox.py:195
+msgid "Time"
+msgstr "Durata"
+
+#: musicbox.py:92
+msgid "Refresh"
+msgstr "Aggiorna"
+
+#: musicbox.py:121 musicbox.py:121
+msgid "Next"
+msgstr "Successivo"
+
+#: musicbox.py:76
+msgid "/Options"
+msgstr "/Opzioni"
+
+#: musicbox.py:360
+msgid " by "
+msgstr " di "
+
+#: musicbox.py:70
+msgid "/Stop"
+msgstr "/Stop"
+
+#: musicbox.py:139 musicbox.py:139
+msgid "Prev"
+msgstr "Precedente"
+
+#: musicbox.py:91
+msgid "Options"
+msgstr "Opzioni"
+
+#: musicbox.py:247
+msgid " - Scanning, please wait..."
+msgstr " - Scansione in corso..."
+
+#: musicbox.py:115 musicbox.py:115
+msgid "Repeat"
+msgstr "Ripetizione brano"
+
+#: musicbox.py:111 musicbox.py:111
+msgid "Shuffle"
+msgstr "Riproduzione casuale"
+
+#: musicbox.py:369
+msgid "Stopped... "
+msgstr "Fermato"
+
+#: musicbox.py:174
+msgid "Song"
+msgstr "Brano"
+
+#: musicbox.py:125 musicbox.py:125
+msgid "Stop"
+msgstr "Stop"
+
+#: musicbox.py:79
+msgid "/Quit"
+msgstr "/Esci"
+
+#: musicbox.py:102 musicbox.py:102
+msgid "Volume"
+msgstr "Volume"
+
+#: musicbox.py:69
+msgid "/Play\\/Pause"
+msgstr "/Suona\\/Pausa"
+
+#: musicbox.py:359 musicbox.py:363
+msgid "Playing: "
+msgstr "In riproduzione: "
+
+#: musicbox.py:135 musicbox.py:135
+msgid "Play/Pause"
+msgstr "Suona/Pausa"
+
+#: musicbox.py:188
+msgid "Genre"
+msgstr "Genere"
+
+#: musicbox.py:142
+msgid "Close"
+msgstr "Chiudi"
+
+#: musicbox.py:367
+msgid "Paused... "
+msgstr "In pausa"
+
+#: musicbox.py:72
+msgid "/Back"
+msgstr "/Indietro"
+
+#: musicbox.py:77
+msgid "/Refresh"
+msgstr "/Aggiorna"
+
