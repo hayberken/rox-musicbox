@@ -54,7 +54,7 @@ msgstr "Próxima"
 msgid "Prev"
 msgstr "Anterior"
 
-#: musicbox.py:271
+#: musicbox.py:275
 msgid "Loading"
 msgstr ""
 
@@ -66,7 +66,7 @@ msgstr ""
 msgid "Save"
 msgstr ""
 
-#: musicbox.py:289
+#: musicbox.py:293
 msgid " songs"
 msgstr ""
 
@@ -127,7 +127,7 @@ msgstr "Gênero"
 msgid "Path"
 msgstr ""
 
-#: musicbox.py:289
+#: musicbox.py:293
 msgid "loaded "
 msgstr ""
 
@@ -147,7 +147,7 @@ msgstr ""
 msgid "Artist"
 msgstr "Artista"
 
-#: musicbox.py:402
+#: musicbox.py:412
 msgid "Time Remaining"
 msgstr ""
 
@@ -163,7 +163,7 @@ msgstr "Atualizar"
 msgid "alsa (old)"
 msgstr ""
 
-#: musicbox.py:336
+#: musicbox.py:346
 msgid "Failed to start playing %s"
 msgstr ""
 
@@ -171,7 +171,7 @@ msgstr ""
 msgid "Keep playing forever."
 msgstr ""
 
-#: musicbox.py:413
+#: musicbox.py:423
 #, fuzzy
 msgid "Stopped"
 msgstr "Parado... "
@@ -192,7 +192,7 @@ msgid ""
 "files."
 msgstr ""
 
-#: musicbox.py:401
+#: musicbox.py:411
 #, fuzzy
 msgid "Playing"
 msgstr "Reproduzindo"
@@ -224,12 +224,12 @@ msgstr "Voltar"
 msgid "Library"
 msgstr ""
 
-#: musicbox.py:411
+#: musicbox.py:421
 #, fuzzy
 msgid "Paused"
 msgstr "Em pausa"
 
-#: musicbox.py:281
+#: musicbox.py:285
 #, fuzzy
 msgid "Loading songs, please wait..."
 msgstr "Procurando, favor aguardar..."
@@ -238,7 +238,7 @@ msgstr "Procurando, favor aguardar..."
 msgid "Driver"
 msgstr ""
 
-#: musicbox.py:289
+#: musicbox.py:293
 msgid "Ready"
 msgstr ""
 

@@ -2,6 +2,18 @@ MusicBox - an MP3/OGG Player for the ROX Desktop
 by Ken Hayber
 
 13-May-2004
+017
+- Due to user feedback, changed how Drag and Drop works.
+  * Main Window defaults to replacing the current playlist.
+  * Playlist Window defaults to appending to the current playlist.
+  * Ctrl pressed when dropping on either Window always appends.
+  * Shift pressed when dropping on either Window always replaces.
+  * When replacing always play after the load completes.
+  * At startup with no args or rpc input, don't play.  Otherwise always play.
+- Replaced rpc call load_args() with load_songs() and add_songs().  The first
+one always replaces, the second one always appends.
+
+13-May-2004
 016
 - Changed menu to use new Action menu system of ROX-Lib2
 - Fixed alignment of text in main window

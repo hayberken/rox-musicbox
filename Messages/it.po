@@ -41,7 +41,7 @@ msgstr "Successivo"
 msgid "Prev"
 msgstr "Precedente"
 
-#: musicbox.py:271
+#: musicbox.py:275
 msgid "Loading"
 msgstr "Caricamento"
 
@@ -53,7 +53,7 @@ msgstr "Il driver Open Sound System"
 msgid "Save"
 msgstr "Salva"
 
-#: musicbox.py:289
+#: musicbox.py:293
 msgid " songs"
 msgstr " brani"
 
@@ -118,7 +118,7 @@ msgstr "Genere"
 msgid "Path"
 msgstr "Percorso"
 
-#: musicbox.py:289
+#: musicbox.py:293
 msgid "loaded "
 msgstr "caricati "
 
@@ -138,7 +138,7 @@ msgstr "Informazioni"
 msgid "Artist"
 msgstr "Artista"
 
-#: musicbox.py:402
+#: musicbox.py:412
 msgid "Time Remaining"
 msgstr "Tempo rimanente"
 
@@ -154,7 +154,7 @@ msgstr "Aggiorna"
 msgid "alsa (old)"
 msgstr "alsa (old)"
 
-#: musicbox.py:336
+#: musicbox.py:346
 msgid "Failed to start playing %s"
 msgstr "Riproduzione di %s fallita"
 
@@ -162,7 +162,7 @@ msgstr "Riproduzione di %s fallita"
 msgid "Keep playing forever."
 msgstr "Continua a suonare per sempre."
 
-#: musicbox.py:413
+#: musicbox.py:423
 msgid "Stopped"
 msgstr "Fermato"
 
@@ -186,7 +186,7 @@ msgstr ""
 "argomento.  un elenco di directory separate da : e/o di file .xml, .pls, ."
 "m3u, .mp3, .ogg."
 
-#: musicbox.py:401
+#: musicbox.py:411
 msgid "Playing"
 msgstr "In riproduzione"
 
@@ -218,11 +218,11 @@ msgstr "Precedente"
 msgid "Library"
 msgstr "Libreria"
 
-#: musicbox.py:411
+#: musicbox.py:421
 msgid "Paused"
 msgstr "In pausa"
 
-#: musicbox.py:281
+#: musicbox.py:285
 msgid "Loading songs, please wait..."
 msgstr "Caricamento brani, attendere..."
 
@@ -230,7 +230,7 @@ msgstr "Caricamento brani, attendere..."
 msgid "Driver"
 msgstr "Driver"
 
-#: musicbox.py:289
+#: musicbox.py:293
 msgid "Ready"
 msgstr "Pronto"
 

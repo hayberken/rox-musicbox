@@ -44,7 +44,7 @@ COLUMNS = [
 	(_("Artist"), COL_ARTIST, str, 200),
 	(_("Album"), COL_ALBUM, str, 200),
 	(_("Title"), COL_TITLE, str, 200),
-	(_("Track"), COL_TRACK, int, 40),
+	(_("Track"), COL_TRACK, int, 50),
 	(_("Genre"), COL_GENRE, str, 80),
 #	(_("Length"), COL_LENGTH, int, 60),
 #	(_("Type"), COL_TYPE, str, 60),
@@ -109,11 +109,11 @@ class PlaylistUI(rox.Window, loading.XDSLoader):
 		self.view.connect('button-press-event', self.button_press)
 
 		#TODO: A little icon showing the current song playing...
-		cell = g.CellRendererPixbuf()
-		column = g.TreeViewColumn('', cell)
-		view.append_column(column)
-		column.set_resizable(False)
-		column.set_reorderable(False)
+		#cell = g.CellRendererPixbuf()
+		#column = g.TreeViewColumn('', cell)
+		#view.append_column(column)
+		#column.set_resizable(False)
+		#column.set_reorderable(False)
 
 		for n in range(len(COLUMNS)):
 			cell = g.CellRendererText()
@@ -148,7 +148,10 @@ class PlaylistUI(rox.Window, loading.XDSLoader):
 		try:
 			import xmlrpclib
 			client = xmlrpclib.Server("http://localhost:8989", None, False)
-			client.load_args(self.library)
+			if self.replace_library:
+				client.load_songs(self.library)
+			else:
+				client.add_args(self.library)
 		except:
 			rox.report_exception()
 
@@ -206,12 +209,10 @@ class PlaylistUI(rox.Window, loading.XDSLoader):
 
 	def xds_drag_drop(self, widget, context, data, info, time):
 		"""Check if the Shift key is pressed or not when Dropping files"""
-		if context.actions & g.gdk.ACTION_MOVE:
-			pass
 		if context.actions & g.gdk.ACTION_COPY:
-			self.replace_library = True
-		else:
 			self.replace_library = False
+		else:
+			self.replace_library = True
 		return loading.XDSLoader.xds_drag_drop(self, widget, context, data, info, time)
 
 	def xds_load_uris(self, uris):

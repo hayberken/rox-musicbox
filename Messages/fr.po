@@ -3,9 +3,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: MusicBox 0.0.12\n"
+"Project-Id-Version: MusicBox 017\n"
 "POT-Creation-Date: Tue Sep  2 12:18:32 2003\n"
-"PO-Revision-Date: 2003-09-02 12:23-0300\n"
+"PO-Revision-Date: 2004-05-15 00:23-0300\n"
 "Last-Translator: Sebastien Person <personseb@yahoo.fr>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -17,7 +17,6 @@ msgid "Album"
 msgstr "Album"
 
 #: musicbox.py:120
-#, fuzzy
 msgid "Quit"
 msgstr "Quitter"
 
@@ -35,15 +34,15 @@ msgstr "Titre"
 
 #: tips:27
 msgid "Randomize play order."
-msgstr ""
+msgstr "Ordre de lecture aléatoire."
 
 #: tips:5
 msgid "Pattern"
-msgstr ""
+msgstr "Motif de recherche"
 
 #: tips:12
 msgid "oss"
-msgstr ""
+msgstr "oss"
 
 #: musicbox.py:112 musicbox.py:154
 msgid "Next"
@@ -53,19 +52,19 @@ msgstr "Suivant"
 msgid "Prev"
 msgstr "Précédent"
 
-#: musicbox.py:271
+#: musicbox.py:275
 msgid "Loading"
-msgstr ""
+msgstr "Chargement"
 
 #: tips:13
 msgid "Open Sound System driver"
-msgstr ""
+msgstr "driver OSS"
 
 #: musicbox.py:114 playlistui.py:89
 msgid "Save"
 msgstr "Sauver"
 
-#: musicbox.py:289
+#: musicbox.py:293
 msgid " songs"
 msgstr " chansons"
 
@@ -75,6 +74,9 @@ msgid ""
 "'artist', 'album', 'title' and 'track'.  Used when there is no tag info in "
 "the file."
 msgstr ""
+"Une expression régulière python pour parcourir le chemin complet de chaque "
+"fichier par 'artiste', 'album', 'titre' et 'piste'. Ceci est utilisé quand "
+"aucune informations n'est contenue dans le fichier"
 
 #: musicbox.py:108 musicbox.py:167
 msgid "Play"
@@ -86,7 +88,7 @@ msgstr "Répéter"
 
 #: tips:11
 msgid "Gnome esound server"
-msgstr ""
+msgstr "Serveur esound Gnome"
 
 #: playlistui.py:47
 msgid "Track"
@@ -94,7 +96,7 @@ msgstr "Piste"
 
 #: tips:1
 msgid "Settings"
-msgstr ""
+msgstr "Réglages"
 
 #: musicbox.py:109 musicbox.py:160
 msgid "Stop"
@@ -110,12 +112,14 @@ msgstr "Options"
 
 #: tips:10
 msgid "esd"
-msgstr ""
+msgstr "esd"
 
 #: tips:29 tips:30 tips:31 tips:32 tips:33
 msgid ""
 "How many songs to remember in shuffle mode so we don't replay too often."
 msgstr ""
+"Nombre de chansons a se rapeller en mode shuffle de manière à ne pas les  "
+"rejouer trop souvent."
 
 #: playlistui.py:48
 msgid "Genre"
@@ -123,35 +127,35 @@ msgstr "Genre"
 
 #: tips:3
 msgid "Path"
-msgstr ""
+msgstr "Chemin"
 
-#: musicbox.py:289
+#: musicbox.py:293
 msgid "loaded "
-msgstr "chargé"
+msgstr "chargé "
 
 #: tips:20
 msgid "Buffer Size"
-msgstr ""
+msgstr "Taille du buffer"
 
 #: tips:14
 msgid "alsa"
-msgstr ""
+msgstr "alsa"
 
 #: musicbox.py:118
 msgid "Info"
-msgstr ""
+msgstr "Informations"
 
 #: playlistui.py:44
 msgid "Artist"
 msgstr "Artiste"
 
-#: musicbox.py:402
+#: musicbox.py:412
 msgid "Time Remaining"
 msgstr "Temps restant"
 
 #: tips:15
 msgid "current Alsa driver"
-msgstr ""
+msgstr "driver Alsa courant"
 
 #: musicbox.py:115
 msgid "Refresh"
@@ -159,28 +163,27 @@ msgstr "Raffraichir"
 
 #: tips:16
 msgid "alsa (old)"
-msgstr ""
+msgstr "alsa (ancien)"
 
-#: musicbox.py:336
+#: musicbox.py:346
 msgid "Failed to start playing %s"
 msgstr "Impossible de lire %s"
 
 #: tips:25
 msgid "Keep playing forever."
-msgstr ""
+msgstr "Jouer en boucle."
 
-#: musicbox.py:413
-#, fuzzy
+#: musicbox.py:423
 msgid "Stopped"
-msgstr "Arreté"
+msgstr "Arrêté"
 
 #: tips:17 tips:18 tips:19
 msgid "older (obsolete?) Alsa driver"
-msgstr ""
+msgstr "ancien driver Alsa (obsolète?)"
 
 #: tips:8
 msgid "Output"
-msgstr ""
+msgstr "Pilote de sortie"
 
 #: tips:4
 msgid ""
@@ -189,18 +192,22 @@ msgid ""
 "is a ':' separated list of directories, and/or .xml, .pls, .m3u, .mp3, .ogg "
 "files."
 msgstr ""
+"Le répertoire par défaut de votre musique. Ce répertoire sera scanné et "
+"chargé au démarrage quand aucun argument de ligne de commande n'est donné. "
+"C'est une liste séparée de répertoires, et/ou de fichiers .xml, .pls, .m3u, ."
+"mp3, .ogg."
 
-#: musicbox.py:401
+#: musicbox.py:411
 msgid "Playing"
 msgstr "Lecture en cours"
 
 #: tips:28
 msgid "Shuffle cache size"
-msgstr ""
+msgstr "Taille du cache du mode aléatoire"
 
 #: musicbox.py:139 tips:26
 msgid "Shuffle"
-msgstr "Mode Aléatoire"
+msgstr "Mode aléatoire"
 
 #: player.py:128
 msgid "You must have OGG support to play ogg files (%s)."
@@ -211,42 +218,40 @@ msgid ""
 "The size of the buffer used to read/write sound data.  A larger buffer may "
 "reduce skipping under heavy load."
 msgstr ""
+"Taille du buffer utilisé pour lire/écrire les données audio. Un buffer "
+"important permet de réduire les problèmes lors d'importante charge système."
 
 #: musicbox.py:111
-#, fuzzy
 msgid "Back"
-msgstr "Retour"
+msgstr "Précédent"
 
 #: tips:2
 msgid "Library"
-msgstr ""
+msgstr "Bibliothèque musicale"
 
-#: musicbox.py:411
-#, fuzzy
+#: musicbox.py:421
 msgid "Paused"
 msgstr "En pause"
 
-#: musicbox.py:281
-#, fuzzy
+#: musicbox.py:285
 msgid "Loading songs, please wait..."
 msgstr "Chargement des chansons, veuillez patienter..."
 
 #: tips:9
 msgid "Driver"
-msgstr ""
+msgstr "Pilote"
 
-#: musicbox.py:289
+#: musicbox.py:293
 msgid "Ready"
-msgstr "Pret"
+msgstr "Prêt"
 
 #: playlistui.py:91
 msgid "Close"
 msgstr "Fermer"
 
 #: tips:23
-#, fuzzy
 msgid "Play Settings"
-msgstr "Lecture en cours"
+msgstr "Réglages de lecture"
 
 #~ msgid "All songs"
 #~ msgstr "Toutes les chansons"
@@ -268,7 +273,7 @@ msgstr "Lecture en cours"
 #~ msgstr "Cet Album"
 
 #~ msgid "Please make a selection first."
-#~ msgstr "Veuillez faire prealablement une selection"
+#~ msgstr "Veuillez faire préalablement une sélection"
 
 #, fuzzy
 #~ msgid "This Genre"
@@ -279,7 +284,7 @@ msgstr "Lecture en cours"
 #~ msgstr "Cet Artiste"
 
 #~ msgid "Bug Detected"
-#~ msgstr "Erreur Detectée"
+#~ msgstr "Erreur Détectée"
 
 #~ msgid "Type"
 #~ msgstr "Type"

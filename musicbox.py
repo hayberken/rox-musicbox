@@ -91,10 +91,10 @@ class MusicBox(rox.Window, loading.XDSLoader):
 
 		self.connect('delete_event', self.delete_event)
 		self.connect('window-state-event', self.window_state_event)
+		self.connect('drag-motion', self.xds_drag_motion)
 
 		# Set some defaults
-		self.replace_library = True
-		self.library_changed = False
+		self.replace_library = False
 		self.library = LIBRARY.value.split(':')
 
 		self.playlist = None
@@ -231,7 +231,10 @@ class MusicBox(rox.Window, loading.XDSLoader):
 		self.foo.start()
 		self.volume.set_value(self.player.get_volume())
 
-		self.load_args(sys.argv[1:])
+		if len(sys.argv) > 1:
+			self.load_args(sys.argv[1:], True)
+		else:
+			self.load_args([], False)
 
 		#start xmlrpc server to listen for remote commands
 		thd_load = Thread(name='xmlrpc', target=self.server)
@@ -247,7 +250,8 @@ class MusicBox(rox.Window, loading.XDSLoader):
 	def server(self):
 		"""Run an XMLRPC server to process external/remote commands"""
 		server = SimpleXMLRPCServer(('localhost', 8989))
-		server.register_function(self.load_args)
+		server.register_function(self.add_songs)
+		server.register_function(self.load_songs)
 		server.register_function(self.play)
 		server.register_function(self.prev)
 		server.register_function(self.next)
@@ -296,26 +300,32 @@ class MusicBox(rox.Window, loading.XDSLoader):
 		if self.playlistUI:
 			self.playlistUI.view.set_model(self.playlist.song_list)
 
-		if self.library_changed and len(self.playlist):
+		if self.replace_library and len(self.playlist):
 			self.play()
 
 		g.threads_leave()
-		self.library_changed = False
 
 	def save(self):
 		"""Save the current list"""
 		box = saving.SaveBox(self.playlist, rox.choices.save(APP_NAME, 'Library.xml'), 'text/xml')
 		box.show()
 
-	def load_args(self, args):
+	def load_args(self, args, replace=True):
 		"""Accept files and folders from the command line (or dropped on our icon)"""
+		self.replace_library = replace
 		if len(args):
 			path = []
 			for s in args:
 				path.append(s)
 			self.library = path
-			self.library_changed = True
 		self.update_thd()
+
+	def add_songs(self, args):
+		self.load_args(args, False)
+		return True #needed for xmlrpc
+
+	def load_songs(self, args):
+		self.load_args(args, True)
 		return True #needed for xmlrpc
 
 	def play(self):
@@ -480,11 +490,12 @@ class MusicBox(rox.Window, loading.XDSLoader):
 		"""Set the playback volume"""
 		self.player.set_volume(vol.get_value())
 
+	def xds_drag_motion(self, widget, context, x, y, timestamp):
+		pass
+
 	def xds_drag_drop(self, widget, context, data, info, time):
 		"""Check if the Shift key is pressed or not when Dropping files"""
 		if context.actions & g.gdk.ACTION_MOVE:
-			pass
-		if context.actions & g.gdk.ACTION_COPY:
 			self.replace_library = True
 		else:
 			self.replace_library = False
