@@ -34,6 +34,7 @@ from playlist import COL_GENRE, COL_LENGTH, COL_TYPE , COL_ICON
 #Who am I and how did I get here?
 APP_NAME = "MusicBox"
 APP_DIR = rox.app_dir
+APP_DOMAIN = 'hayber.us'
 
 #View options
 VIEW_DEFAULT_SIZE = (760, 400)
@@ -79,7 +80,6 @@ class PlaylistUI(rox.Window, loading.XDSLoader):
 		self.connect('button-press-event', self.button_press)
 		self.connect('popup-menu', self.menukey_press)
 
-		Menu.set_save_name(APP_NAME)
 		self.menu = Menu.Menu('main', [
 			Menu.Action(_("Play"), 'play'),
 			Menu.Action(_("Delete"), 'delete'),
@@ -185,7 +185,10 @@ class PlaylistUI(rox.Window, loading.XDSLoader):
 	def save(self):
 		"""Save the current list"""
 #		box = saving.SaveBox(self.playlist, rox.choices.save(APP_NAME, 'Library.xml'), 'text/xml')
-		box = saving.SaveBox(self.playlist, rox.choices.save(APP_NAME, 'MyMusic.music'), 'application/x-music-playlist')
+#		box = saving.SaveBox(self.playlist, rox.choices.save(APP_NAME, 'MyMusic.music'), 'application/x-music-playlist')
+		file = 'MyMusic.music'
+		path = os.path.join(rox.basedir.save_config_path(APP_NAME, APP_DOMAIN), file)
+		box = saving.SaveBox(self.playlist, path, 'application/x-music-playlist')
 		box.show()
 
 	def sync(self):

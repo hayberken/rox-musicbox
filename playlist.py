@@ -116,10 +116,11 @@ class Playlist(saving.Saveable, gobject.GObject):
 
 		#filename, title, track, album, artist, genre, length, type
 		self.model = gtk.ListStore(str, str, int, str, str, str, int, str, str)
-		self.model.set_sort_func(COL_TRACK, self.comparemethod, COL_TRACK)
+#		self.model.set_sort_func(COL_TRACK, self.comparemethod, COL_TRACK)
 		self.song_list_filter = self.model.filter_new()
 		self.song_list_filter.set_visible_func(self.the_filter)
 		self.song_list = gtk.TreeModelSort(self.song_list_filter)
+		self.song_list.set_sort_func(COL_TRACK, self.comparemethod, COL_TRACK)
 
 
 	def __len__(self):

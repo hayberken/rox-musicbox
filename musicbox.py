@@ -37,6 +37,7 @@ except:
 #Who am I and how did I get here?
 APP_NAME = "MusicBox"
 APP_DIR = rox.app_dir
+APP_DOMAIN = 'hayber.us'
 
 
 #View options
@@ -74,9 +75,9 @@ factory.add_default()
 
 #Options.xml processing
 from rox import choices
-choices.migrate(APP_NAME, 'hayber.us')
-rox.setup_app_options(APP_NAME, site='hayber.us')
-Menu.set_save_name(APP_NAME, site='hayber.us')
+choices.migrate(APP_NAME, APP_DOMAIN)
+rox.setup_app_options(APP_NAME, site=APP_DOMAIN)
+Menu.set_save_name(APP_NAME, site=APP_DOMAIN)
 
 #assume that everyone puts their music in ~/Music
 LIBRARY = Option('library', os.path.expanduser('~')+'/Music')
@@ -350,8 +351,16 @@ class MusicBox(rox.Window, loading.XDSLoader):
 		self.display = gtk.Layout()
 		self.display_size = (0, 0)
 		self.display.connect('size-allocate', self.resize)
-		self.vvbox = gtk.VBox()
-		self.display.put(self.vvbox, 6, 0)
+
+		self.album_img = gtk.Image()
+		self.album_img.set_alignment(0.0, 0.0)
+
+		hbox = gtk.HBox()
+		vbox = gtk.VBox()
+		hbox.pack_start(self.album_img, False, False, 0)
+		hbox.pack_end(vbox, True, True, 6)
+		self.display.put(hbox, 0, 0)
+		self.display_box = vbox
 
 		self.display_song = gtk.Label()
 		self.display_song.set_line_wrap(bool(WORDWRAP.int_value))
@@ -369,10 +378,10 @@ class MusicBox(rox.Window, loading.XDSLoader):
 		self.display_status.set_line_wrap(bool(WORDWRAP.int_value))
 		self.display_status.set_alignment(0.0, 0.0)
 
-		self.vvbox.pack_start(self.display_song, False, True, 0)
-		self.vvbox.pack_start(self.display_album, False, True, 0)
-		self.vvbox.pack_start(self.display_artist, False, True, 0)
-		self.vvbox.pack_start(self.display_status, False, True, 0)
+		vbox.pack_start(self.display_song, False, True, 0)
+		vbox.pack_start(self.display_album, False, True, 0)
+		vbox.pack_start(self.display_artist, False, True, 0)
+		vbox.pack_start(self.display_status, False, True, 0)
 
 
 	def build_misc(self):
@@ -448,16 +457,21 @@ class MusicBox(rox.Window, loading.XDSLoader):
 
 	def resize(self, widget, rectangle):
 		"""Called when the window resizes."""
-		#the -18 is for the volume control?
-		width = rectangle[2]-18
+		width = rectangle[2]
 		height = rectangle[3]
+		try:
+			self.album_img.get_image()
+			awidth = width-6
+		except:
+			awidth = width-96
+
 		if self.display_size != (width, height):
 			self.display_size = (width, height)
-			self.vvbox.set_size_request(width, height)
-			self.display_song.set_size_request(width, -1)
-			self.display_album.set_size_request(width, -1)
-			self.display_artist.set_size_request(width, -1)
-			self.display_status.set_size_request(width, -1)
+			self.display_box.set_size_request(awidth, -1)
+			self.display_song.set_size_request(awidth, -1)
+			self.display_album.set_size_request(awidth, -1)
+			self.display_artist.set_size_request(awidth, -1)
+			self.display_status.set_size_request(awidth, -1)
 
 
 	def set_sensitive(self, state):
@@ -527,7 +541,9 @@ class MusicBox(rox.Window, loading.XDSLoader):
 	def save(self):
 		"""Save the current list"""
 #		box = saving.SaveBox(self.playlist, rox.choices.save(APP_NAME, 'Library.xml'), 'text/xml')
-		box = saving.SaveBox(self.playlist, rox.choices.save(APP_NAME, 'MyMusic.music'), 'application/x-music-playlist')
+		file = 'MyMusic.music'
+		path = os.path.join(rox.basedir.save_config_path(APP_NAME, APP_DOMAIN), file)
+		box = saving.SaveBox(self.playlist, path, 'application/x-music-playlist')
 		box.show()
 
 
@@ -563,6 +579,23 @@ class MusicBox(rox.Window, loading.XDSLoader):
 			self.display_song.set_text(self.current_song.title)
 			self.display_artist.set_text(self.current_song.artist)
 			self.display_album.set_text(self.current_song.album)
+
+			folder = os.path.dirname(self.current_song.filename)
+			pixbuf = None
+			for filename in ['.DirIcon',
+				'Folder.jpg', 'folder.jpg', '.folder.jpg',
+				'Folder.png', 'folder.png', '.folder.png',
+				'Album.jpg', 'album.jpg', '.album.jpg',
+				'Album.png', 'album.png', '.album.png',
+				'Cover.jpg', 'cover.jpg', '.cover.jpg',
+				'Cover.png', 'cover.png', '.cover.png',
+				]:
+				image = os.path.join(folder, filename)
+				if os.access(image, os.R_OK):
+					pixbuf = gtk.gdk.pixbuf_new_from_file_at_size(image, 90, 90)
+					break
+			self.album_img.set_from_pixbuf(pixbuf)
+
 		except TypeError, detail:
 			rox.alert(str(detail))
 		except:
@@ -570,6 +603,9 @@ class MusicBox(rox.Window, loading.XDSLoader):
 
 		if self.playlistUI:
 			self.playlistUI.sync()
+
+		#force a resize because the labels have changed
+		self.resize(None, [0, 0, 0, 0])
 
 
 	def play_pause(self, button=None):
