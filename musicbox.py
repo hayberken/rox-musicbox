@@ -1,15 +1,34 @@
+"""
+	musicbox.py (play either ogg or mp3 files)
+
+	Copyright 2004 Kenneth Hayber <khayber@socal.rr.com>
+		All rights reserved.
+
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License.
+
+	This program is distributed in the hope that it will be useful
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+"""
+
 from __future__ import generators
+
+import os, sys, re, string, threading
+from threading import *
+from SimpleXMLRPCServer import SimpleXMLRPCServer
 
 import rox
 from rox import g, Menu, app_options, loading, saving, mime, InfoWin
 from rox.options import Option
 
-import os, sys, re, string, threading
-from threading import *
-
 import player, playlist, playlistui
-
-from SimpleXMLRPCServer import SimpleXMLRPCServer
 
 
 #Who am I and how did I get here?
@@ -63,7 +82,7 @@ class MusicBox(rox.Window, loading.XDSLoader):
 		# Main window settings
 		#######################################
 		self.set_title(APP_NAME)
-		self.set_border_width(1)
+		self.set_border_width(0)
 		self.set_default_size(VIEW_DEFAULT_SIZE[0], VIEW_DEFAULT_SIZE[1])
 		self.set_position(g.WIN_POS_MOUSE)
 		#self.set_resizable(False)
@@ -72,11 +91,14 @@ class MusicBox(rox.Window, loading.XDSLoader):
 		rox.app_options.add_notify(self.get_options)
 
 		self.connect('delete_event', self.delete_event)
+		self.connect('window-state-event', self.window_state_event)
 
 		# Set some defaults
 		#######################################
 		self.replace_library = True
-		self.player = None
+		self.library_changed = False
+		self.library = LIBRARY.value.split(':')
+
 		self.playlist = None
 		self.current_song = None
 
@@ -166,17 +188,19 @@ class MusicBox(rox.Window, loading.XDSLoader):
 		# Create layout, and text display(s)
 		#######################################
 		self.display = g.Layout()
+		self.display.set_size_request(250, 140)
 		self.display.modify_bg(g.STATE_NORMAL, g.gdk.color_parse('#A6A699'))
 
 		self.display_song = g.Label()
 		self.display_song.set_line_wrap(True)
-		self.display.put(self.display_song, 10, 10)
+		self.display_song.set_size_request(250, 90)
+		self.display.put(self.display_song, 10, 0)
 
 		self.display_status = g.Label()
-		self.display.put(self.display_status, 10, 90)
+		self.display.put(self.display_status, 10, 100)
 
 		self.display_time = g.Label()
-		self.display.put(self.display_time, 10, 110)
+		self.display.put(self.display_time, 10, 120)
 
 		self.volume = g.Adjustment(0.5, 0.0, 1.0, 0.1, 0.1, 0.0)
 		self.volume.connect('value_changed', self.adjust_volume)
@@ -210,6 +234,12 @@ class MusicBox(rox.Window, loading.XDSLoader):
 		# Kick things off...
 		#######################################
 		self.show()
+
+		self.player = player.Player(self.status_update,
+								DRIVER_ID.value,
+								AUDIO_BUFFER_SIZE.int_value)
+
+		self.volume.set_value(self.player.get_volume())
 
 		self.load_args(sys.argv[1:])
 
@@ -258,7 +288,7 @@ class MusicBox(rox.Window, loading.XDSLoader):
 		self.display_status.set_text(_("Loading songs, please wait..."))
 		g.threads_leave()
 
-		self.playlist.get_songs(os.path.expanduser(LIBRARY.value), LIBRARY_RE.value)
+		self.playlist.get_songs(self.library, LIBRARY_RE.value)
 
 		g.threads_enter()
 		self.display_status.set_text(_("Ready")+': '+_("loaded ")+str(len(self.playlist))+_(" songs"))
@@ -268,11 +298,11 @@ class MusicBox(rox.Window, loading.XDSLoader):
 		else:
 			self.set_sensitive(False)
 
-		if LIBRARY.has_changed and len(self.playlist):
+		if self.library_changed and len(self.playlist):
 			self.play()
 		g.threads_leave()
 
-		LIBRARY.has_changed = False
+		self.library_changed = False
 
 
 	####################################################################
@@ -286,20 +316,17 @@ class MusicBox(rox.Window, loading.XDSLoader):
 	def load_args(self, args):
 		"""Accept files and folders from the command line (or dropped on our icon)"""
 		if len(args):
-			path = ''
+			path = []
 			#concatenate them all together with ':', like a PATH.
 			for s in args:
-				if path == '':
-					path = s
-				else:
-					path = path+':'+s
+				path.append(s)
 
 			#Shift key is down or not?  Add vs Replace
 			if self.replace_library:
-				LIBRARY.value = path
+				self.library = path
 			else:
-				LIBRARY.value += ':'+path
-			LIBRARY.has_changed = True
+				self.library.extend(path)
+			self.library_changed = True
 
 		self.update_thd()
 
@@ -310,27 +337,22 @@ class MusicBox(rox.Window, loading.XDSLoader):
 	def play(self):
 		"""Play the current song"""
 		self.image_play.set_from_file(BMP_PAUSE)
-
 		self.current_song = self.playlist.get()
 
-		if self.player and self.player.state != 'stop':
+		if self.player.state != 'stop':
 			self.player.stop()
 
-		self.player = None
-		self.foo = None
-
 		try:
-			self.player = player.Player(self.current_song.filename,
-								str(mime.get_type(self.current_song.filename)),
-								self.status_update,
-								DRIVER_ID.value,
-								AUDIO_BUFFER_SIZE.int_value)
-
-			self.volume.set_value(self.player.get_volume())
-			self.foo = Thread(name='player', target=self.player.play)
+			self.foo = None
+			self.foo = Thread(name='player',
+								target=self.player.play,
+								args=(
+									self.current_song.filename,
+									str(mime.get_type(self.current_song.filename))
+								)
+							)
 			self.foo.setDaemon(True)
 			self.foo.start()
-
 		except TypeError, detail:
 			rox.info(str(detail))
 			return False
@@ -348,8 +370,7 @@ class MusicBox(rox.Window, loading.XDSLoader):
 	####################################################################
 	def play_pause(self, button=None):
 		"""Play button handler (toggle between play and pause)"""
-		if (self.player) and ((self.player.state == 'play') or
-			(self.player.state == 'pause')):
+		if (self.player.state == 'play') or (self.player.state == 'pause'):
 			self.pause()
 		else:
 			self.play()
@@ -376,12 +397,13 @@ class MusicBox(rox.Window, loading.XDSLoader):
 
 		if self.shuffle.get_active():
 			self.playlist.shuffle()
-
-		try:
-			self.current_song = self.playlist.next()
-		except StopIteration:
-			if self.repeat.get_active():
-				self.current_song = self.playlist.first()
+			self.current_song = self.playlist.get()
+		else:
+			try:
+				self.current_song = self.playlist.next()
+			except StopIteration:
+				if self.repeat.get_active():
+					self.current_song = self.playlist.first()
 
 		self.play()
 
@@ -391,14 +413,8 @@ class MusicBox(rox.Window, loading.XDSLoader):
 	####################################################################
 	def stop(self, button=None):
 		"""Stop playing"""
-		if (self.player) and (self.player.state != 'stop'):
-			self.player.stop()
-			self.player = None
-			self.foo = None
-
-		self.display_status.set_text(_("Stopped"))
-		self.display_song.set_text('')
-		self.display_time.set_text('')
+		self.player.stop()
+		self.foo = None
 		self.image_play.set_from_file(BMP_PLAY)
 		return True
 
@@ -407,7 +423,7 @@ class MusicBox(rox.Window, loading.XDSLoader):
 	def pause(self, button=None):
 		"""Pause playing (toggle)"""
 		self.player.pause()
-		if (self.player) and (self.player.state == 'play'):
+		if (self.player.state == 'play'):
 			self.image_play.set_from_file(BMP_PAUSE)
 		else:
 			self.image_play.set_from_file(BMP_PLAY)
@@ -419,8 +435,9 @@ class MusicBox(rox.Window, loading.XDSLoader):
 		"""Status update (elapsed time, end of song, etc."""
 		g.threads_enter()
 
-		song_string = str(self.playlist.get_index()+1)+_(" of ")+str(len(self.playlist))
+		self.volume.set_value(self.player.get_volume())
 
+		song_string = str(self.playlist.get_index()+1)+_(" of ")+str(len(self.playlist))
 		if state == 'play':
 			duration = int(remain + progress)
 
@@ -430,17 +447,14 @@ class MusicBox(rox.Window, loading.XDSLoader):
 			minremain = string.zfill(str(remain%3600/60),2)
 			secremain = string.zfill(str(remain%3600%60),2)
 
-			try:
-				percent = 100*(float(progress)/duration)
-				percent = repr(int(percent)) + '%'
-			except ZeroDivisionError:
-				pass
-
 			self.display_status.set_text(_("Playing")+': '+song_string)
 			self.display_song.set_text(self.current_song.title+"\n"+ \
 										self.current_song.artist+"\n"+ \
 										self.current_song.album)
 			self.display_time.set_text(_("Time Remaining")+': '+minremain+':'+secremain)
+
+			if (self.window_state & g.gdk.WINDOW_STATE_ICONIFIED):
+				self.set_title(self.current_song.title+' - '+minremain+':'+secremain)
 
 			self.we_did_it = True
 			self.seek_bar.set_value(float(progress)/duration)
@@ -455,8 +469,6 @@ class MusicBox(rox.Window, loading.XDSLoader):
 			self.display_status.set_text(_("Paused")+': '+song_string)
 		elif state == 'stop':
 			self.display_status.set_text(_("Stopped"))
-			self.display_song.set_text('')
-			self.display_time.set_text('')
 		elif state == 'eof':
 			self.next()
 
@@ -470,11 +482,17 @@ class MusicBox(rox.Window, loading.XDSLoader):
 
 
 	####################################################################
+	def window_state_event(self, window, event):
+		"""Track changes in window state and such..."""
+		self.my_gdk_window = event.window
+		self.window_state = event.new_window_state
+
+
+	####################################################################
 	def close(self, button = None):
 		"""Stop playing, kill the player and exit"""
 
-		if self.player:
-			self.stop()
+		self.stop()
 
 		if self.playlistUI:
 			self.playlistUI.close()
@@ -531,15 +549,13 @@ class MusicBox(rox.Window, loading.XDSLoader):
 			self.we_did_it = False
 		else:
 			#process those caused by dragging the slider
-			if self.player:
-				self.player.seek(pos.get_value())
+			self.player.seek(pos.get_value())
 
 
 	####################################################################
 	def adjust_volume(self, vol):
 		"""Set the playback volume"""
-		if self.player:
-			self.player.set_volume(vol.get_value())
+		self.player.set_volume(vol.get_value())
 
 
 	####################################################################
@@ -557,29 +573,20 @@ class MusicBox(rox.Window, loading.XDSLoader):
 	####################################################################
 	def xds_load_uris(self, uris):
 		"""Accept files and folders dropped on us as new Library"""
-		path = ''
+		path = []
 		#strip off the 'file://' part and concatenate them all
 		#together with ':', like a PATH.
 		for s in uris:
-			x = re.match('^file://(.*)', s)
-			if x:
-				if path == '':
-					path = x.group(1)
-				else:
-					path = path+':'+x.group(1)
+			path.append(rox.get_local_path(s))
 
 		#Shift key is down or not?  Add vs Replace
 		if self.replace_library:
-			LIBRARY.value = path
+			self.library = path
 		else:
-			LIBRARY.value += ':'+path
-
-		#rox.app_options.save()
-		LIBRARY.has_changed = True
+			self.library.extend(path)
+		self.libary_changed = True
 
 		thd_load = Thread(name='load', target=self.load)
 		thd_load.setDaemon(True)
 		thd_load.start()
-
-
 

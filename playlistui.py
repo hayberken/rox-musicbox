@@ -1,3 +1,24 @@
+"""
+	playlistui.py
+		Playlist UI for MusicBox application.
+
+	Copyright 2004 Kenneth Hayber <khayber@socal.rr.com>
+		All rights reserved.
+
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License.
+
+	This program is distributed in the hope that it will be useful
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+"""
+
 from __future__ import generators
 
 import rox
@@ -20,8 +41,8 @@ VIEW_DEFAULT_SIZE = (600, 400)
 COL_FILE = 0
 COL_ARTIST = 1
 COL_TITLE = 2
-COL_TRACK = 3
-COL_ALBUM = 4
+COL_ALBUM = 3
+COL_TRACK = 4
 COL_GENRE = 5
 COL_LENGTH = 6
 COL_TYPE = 7
@@ -34,7 +55,6 @@ COLUMNS = [
 	(_("Track"), COL_TRACK),
 	(_("Genre"), COL_GENRE),
 	(_("Length"), COL_LENGTH),
-	(_("Type"), COL_TYPE),
 ]
 
 
@@ -49,7 +69,7 @@ class PlaylistUI(rox.Window):
 		self.callback = callback #to pass back play() commands to the main window
 
 		self.set_title(APP_NAME+' - '+_("Playlist"))
-		self.set_border_width(1)
+		self.set_border_width(0)
 		self.set_default_size(VIEW_DEFAULT_SIZE[0], VIEW_DEFAULT_SIZE[1])
 		self.set_position(g.WIN_POS_NONE)
 
@@ -83,15 +103,14 @@ class PlaylistUI(rox.Window):
 		swin = g.ScrolledWindow()
 		self.scroll_window = swin
 
-		swin.set_border_width(4)
+		swin.set_border_width(0)
 		swin.set_policy(g.POLICY_AUTOMATIC, g.POLICY_AUTOMATIC)
-		swin.set_shadow_type(g.SHADOW_IN)
 
 		self.store = g.ListStore(str, str, str, str, str, str, str, str, int)
 		view = g.TreeView(self.store)
 		self.view = view
 		swin.add(view)
-		#view.set_rules_hint(True)
+		view.set_rules_hint(True)
 
 		self.view.add_events(g.gdk.BUTTON_PRESS_MASK)
 		self.view.connect('button-press-event', self.button_press)
@@ -111,6 +130,8 @@ class PlaylistUI(rox.Window):
 			column.set_resizable(True)
 			column.set_reorderable(True)
 			column.connect('clicked', self.col_activate)
+
+		self.store.set_sort_func(COL_TRACK, self.comparemethod, COL_TRACK)
 
 		view.connect('row-activated', self.activate)
 		self.selection = view.get_selection()
@@ -173,6 +194,7 @@ class PlaylistUI(rox.Window):
 		save_index = self.playlist.get_index()
 
 		self.store.clear()
+		self.scroll_window.hide()
 		g.threads_leave()
 
 		for song in self.playlist:
@@ -183,6 +205,7 @@ class PlaylistUI(rox.Window):
 				g.threads_leave()
 
 		g.threads_enter()
+		self.scroll_window.show()
 		self.playlist.set(save_index)
 		self.sync()
 		self.selection.handler_unblock(self.handler)
@@ -254,6 +277,25 @@ class PlaylistUI(rox.Window):
 	def col_activate(self, column):
 		"""Set the selected column as the search <Ctrl-S> column"""
 		self.view.set_search_column(column.get_sort_column_id())
+
+
+	####################################################################
+	def comparemethod(self, model, iter1, iter2, user_data):
+		"""Method to sort by Track and others"""
+		try:
+			if user_data == COL_TRACK:
+				item1 = model.get_value(iter1, COL_ALBUM)+model.get_value(iter1, COL_TRACK)
+				item2 = model.get_value(iter2, COL_ALBUM)+model.get_value(iter2, COL_TRACK)
+				#print item1, item2
+
+			if item1 < item2:
+				return -1
+			elif item1 > item2:
+				return 1
+			else:
+				return 0
+		except:
+			return 0
 
 
 	####################################################################

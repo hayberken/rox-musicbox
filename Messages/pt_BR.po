@@ -11,196 +11,175 @@ msgstr ""
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: playlistui.py:33
+#: playlistui.py:54
 msgid "Album"
 msgstr "Álbum"
 
-#: musicbox.py:106 playlistui.py:76
+#: musicbox.py:128 playlistui.py:96
 #, fuzzy
 msgid "Quit"
 msgstr "Sair"
 
-#: musicbox.py:118 playlistui.py:51
+#: musicbox.py:140 playlistui.py:71
 msgid "Playlist"
 msgstr ""
 
-#: musicbox.py:94 musicbox.py:155
+#: musicbox.py:116 musicbox.py:177
 #, fuzzy
 msgid "Pause"
 msgstr "Em pausa... "
 
-#: playlistui.py:32
+#: playlistui.py:53
 #, fuzzy
 msgid "Title"
 msgstr "Tempo"
 
-#: gtkexcepthook.py:15
-msgid "Bug Detected"
-msgstr ""
-
-#: musicbox.py:98 musicbox.py:142
+#: musicbox.py:120 musicbox.py:164
 msgid "Next"
 msgstr "Próxima"
 
-#: musicbox.py:161
+#: musicbox.py:183
 msgid "Prev"
 msgstr "Anterior"
 
-#: musicbox.py:449
+#: musicbox.py:463
 msgid "Loading"
 msgstr ""
 
-#: playlistui.py:67
+#: playlistui.py:87
 msgid "All songs"
 msgstr ""
 
-#: musicbox.py:100 playlistui.py:73
+#: musicbox.py:122 playlistui.py:93
 msgid "Save"
 msgstr ""
 
-#: musicbox.py:264
+#: musicbox.py:294
 msgid " songs"
 msgstr ""
 
-#: musicbox.py:94 musicbox.py:155
+#: musicbox.py:116 musicbox.py:177
 #, fuzzy
 msgid "Play"
 msgstr "Reproduzindo"
 
-#: musicbox.py:134
+#: musicbox.py:156
 msgid "Repeat"
 msgstr "Repetir"
 
-#: playlistui.py:34
+#: playlistui.py:55
 msgid "Track"
 msgstr ""
 
-#: playlistui.py:37
-msgid "Type"
-msgstr ""
-
-#: musicbox.py:95 musicbox.py:148
+#: musicbox.py:117 musicbox.py:170
 msgid "Stop"
 msgstr "Parar"
 
-#: player.py:68
+#: player.py:129
 msgid "You must have MAD support to play mp3 files (%s)."
 msgstr ""
 
-#: musicbox.py:439
-#, fuzzy
-msgid "Playing"
-msgstr "Reproduzindo"
+#: musicbox.py:125 musicbox.py:138
+msgid "Options"
+msgstr "Opções"
 
-#: playlistui.py:35
+#: playlistui.py:56
 msgid "Genre"
 msgstr "Gênero"
 
-#: musicbox.py:264
+#: musicbox.py:294
 msgid "loaded "
 msgstr ""
 
-#: musicbox.py:104
+#: musicbox.py:126
 msgid "Info"
 msgstr ""
 
-#: playlistui.py:71
+#: playlistui.py:91
 msgid "New Filter..."
 msgstr ""
 
-#: musicbox.py:422
+#: musicbox.py:440
 msgid " of "
 msgstr ""
 
-#: playlistui.py:36
+#: playlistui.py:57
 msgid "Length"
 msgstr ""
 
-#: playlistui.py:31
+#: playlistui.py:52
 msgid "Artist"
 msgstr "Artista"
 
-#: musicbox.py:443
+#: musicbox.py:454
 msgid "Time Remaining"
 msgstr ""
 
-#: musicbox.py:101 playlistui.py:74
+#: musicbox.py:123 playlistui.py:94
 msgid "Refresh"
 msgstr "Atualizar"
 
-#: playlistui.py:67 playlistui.py:68 playlistui.py:69 playlistui.py:70
-#: playlistui.py:71
+#: playlistui.py:87 playlistui.py:88 playlistui.py:89 playlistui.py:90
+#: playlistui.py:91
 msgid "Filter"
 msgstr ""
 
-#: musicbox.py:339
+#: musicbox.py:361
 msgid "Failed to start playing %s"
 msgstr ""
 
-#: playlistui.py:69
+#: playlistui.py:89
 #, fuzzy
 msgid "This Album"
 msgstr "Álbum"
 
-#: musicbox.py:399 musicbox.py:453
+#: musicbox.py:471
 #, fuzzy
 msgid "Stopped"
 msgstr "Parado... "
 
-#: gtkexcepthook.py:19
-msgid "Show Details"
-msgstr ""
-
-#: playlistui.py:271 playlistui.py:283 playlistui.py:295
+#: playlistui.py:313 playlistui.py:325 playlistui.py:337
 msgid "Please make a selection first."
 msgstr ""
 
-#: musicbox.py:103 musicbox.py:116
-msgid "Options"
-msgstr "Opções"
+#: musicbox.py:450
+#, fuzzy
+msgid "Playing"
+msgstr "Reproduzindo"
 
-#: musicbox.py:127
+#: musicbox.py:149
 msgid "Shuffle"
 msgstr "Embaralhar"
 
-#: player.py:65
+#: player.py:126
 msgid "You must have OGG support to play ogg files (%s)."
 msgstr ""
 
-#: musicbox.py:97
+#: musicbox.py:119
 #, fuzzy
 msgid "Back"
 msgstr "Voltar"
 
-#: musicbox.py:451
+#: musicbox.py:469
 #, fuzzy
 msgid "Paused"
 msgstr "Em pausa"
 
-#: musicbox.py:258
+#: musicbox.py:288
 #, fuzzy
 msgid "Loading songs, please wait..."
 msgstr "Procurando, favor aguardar..."
 
-#: playlistui.py:70
+#: playlistui.py:90
 #, fuzzy
 msgid "This Genre"
 msgstr "Gênero"
 
-#: musicbox.py:264
+#: musicbox.py:294
 msgid "Ready"
 msgstr ""
 
-#: gtkexcepthook.py:12
-msgid ""
-"<big><b>A programming error has been detected during the execution of this "
-"program.</b></big>\n"
-"\n"
-"It probably isn't fatal, but should be reported to the developers "
-"nonetheless."
-msgstr ""
-
-#: playlistui.py:68
+#: playlistui.py:88
 #, fuzzy
 msgid "This Artist"
 msgstr "Artista"

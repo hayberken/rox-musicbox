@@ -1,9 +1,25 @@
-'''
-player.py (play either ogg or mp3 files)
+"""
+	player.py (play either ogg or mp3 files)
 
-based on ogg123.py By Andrew Chatham Based on ogg123.c by Keneth Arnold.
-also based on mpg123.py from the pymad module (no attribution in those sources)
-'''
+	based on ogg123.py By Andrew Chatham Based on ogg123.c by Keneth Arnold.
+	also based on mpg123.py from the pymad module (no attribution in those sources)
+
+	Portions, Copyright 2004 Kenneth Hayber <khayber@socal.rr.com>
+		All rights reserved.
+
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 2 of the License.
+
+	This program is distributed in the hope that it will be useful
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+"""
 
 import os, time, string, sys
 
@@ -21,22 +37,20 @@ except:
 	HAVE_MAD = False
 	print 'No MP3 support!'
 
-try:
-	import ao
-	HAVE_AO = True
-except:
-	HAVE_AO = False
-	print 'No AO support!!'
-
+HAVE_OSS = False
+HAVE_AO = False
 try:
 	import ossaudiodev
 	HAVE_OSS = True
 except:
-	HAVE_OSS = False
 	print 'No OSS support!!'
-
-if not HAVE_AO and not HAVE_OSS:
-	import linuxaudiodev
+	try:
+		import ao
+		HAVE_AO = True
+	except:
+		print 'No OSS and no AO support Falling back to linuxaudiodev which sucks!!'
+		if not HAVE_AO and not HAVE_OSS:
+			import linuxaudiodev
 
 
 TYPE_OGG = 'application/ogg'
@@ -45,86 +59,108 @@ TYPE_LIST = [TYPE_OGG, TYPE_MP3]
 
 
 class Player:
+	"""
+		A class to playback MP3 and OGG sound files to an audio device.
+		Supports/depends on libmad, libvorbis, libogg, libao, pyao,
+		linuxaudiodev and/or ossaudiodev
+	"""
 	state = 'stop'
 	seek_val = 0
 
-	def __init__(self, name, m_type, callback, id=None, buffersize=4096):
+	def __init__(self, callback, id=None, buffersize=4096):
+		"""Initialize the Player instance"""
 		if HAVE_AO:
 			if id is None:
 				self.id = ao.driver_id('esd') #also can be 'oss', 'alsa', 'alsa09', etc.
 			else:
 				self.id = id
 
-		self.name = name
-		self.m_type = m_type
 		self.callback = callback
 		self.buffersize = buffersize
-
-		if (self.m_type == TYPE_OGG and not HAVE_OGG):
-			raise TypeError, _('You must have OGG support to play ogg files (%s).') % self.name
-
-		if (self.m_type == TYPE_MP3 and not HAVE_MAD):
-			raise TypeError, _('You must have MAD support to play mp3 files (%s).') % self.name
+		self.dev = None
 
 
-	# Open and configure the audio device driver
 	def open(self, rate=44100, channels=2):
+		"""Open and configure the audio device driver"""
 		bits=16
-		if HAVE_AO:
-			self.dev = ao.AudioDevice(self.id, bits, rate, channels)
-		elif HAVE_OSS:
-			self.dev = ossaudiodev.open('w')
-			self.dev.setparameters(ossaudiodev.AFMT_S16_NE, channels, rate)
-		else:
-			self.dev = linuxaudiodev.open('w')
-			self.dev.setparameters(rate, bits, channels, linuxaudiodev.AFMT_S16_NE)
+		#try 3 times to open the device, then give up.
+		for x in range(3):
+			try:
+				if HAVE_OSS:
+					self.dev = ossaudiodev.open('w')
+					self.dev.setparameters(ossaudiodev.AFMT_S16_NE, channels, rate)
+				elif HAVE_AO:
+					self.dev = ao.AudioDevice(self.id, bits, rate, channels)
+				else:
+					self.dev = linuxaudiodev.open('w')
+					self.dev.setparameters(rate, bits, channels, linuxaudiodev.AFMT_S16_NE)
+				break
+			except:
+				time.sleep(1)
+
+	def close(self):
+		"""Close the current device if open and delete it"""
+		if self.dev:
+			if HAVE_OSS:
+				self.dev.close()
+			elif HAVE_AO:
+				self.dev = None
+			else:
+				self.dev = None
 
 
-	# Write data to the audio device
 	def write(self, buff, bytes):
-		if HAVE_AO:
-			self.dev.play(buff, bytes)
-		elif HAVE_OSS:
+		"""Write data to the audio device"""
+		if HAVE_OSS:
 			self.dev.writeall(buff)
+		elif HAVE_AO:
+			self.dev.play(buff, bytes)
 		else:
 			while self.dev.obuffree() < bytes:
 				time.sleep(0.2)
 			self.dev.write(buff[:bytes])
 
-	# Figure out what type the file is and start playing it.
-	def play(self):
-		if os.path.isfile(self.name):
-			if (self.m_type == TYPE_OGG and HAVE_OGG):
-				vf = ogg.vorbis.VorbisFile(self.name)
+	def play(self, name, type):
+		"""Check the filename and type and start the appropriate play-loop"""
+		if (type == TYPE_OGG and not HAVE_OGG):
+			raise TypeError, _('You must have OGG support to play ogg files (%s).') % name
+
+		if (type == TYPE_MP3 and not HAVE_MAD):
+			raise TypeError, _('You must have MAD support to play mp3 files (%s).') % name
+
+		if os.path.isfile(name):
+			if (type == TYPE_OGG and HAVE_OGG):
+				vf = ogg.vorbis.VorbisFile(name)
 				#self.info_ogg(vf)
 				self.start_ogg(vf)
 
-			elif (self.m_type == TYPE_MP3 and HAVE_MAD):
-				mf = mad.MadFile(self.name, self.buffersize)
+			elif (type == TYPE_MP3 and HAVE_MAD):
+				mf = mad.MadFile(name, self.buffersize)
 				#self.info_mad(mf)
 				self.start_mad(mf)
 
 			else:
-				raise ValueError, 'Unsupported file (%s).' % self.name
+				raise ValueError, 'Unsupported file (%s).' % name
 		else:
-			raise SyntaxError, 'Play takes a filename.'
+			raise SyntaxError, 'play takes a filename.'
 
 	def stop(self):
+		"""Set a flag telling the current play-loop to exit and close the device"""
 		self.state = 'stop'
-		time.sleep(0.2)
-		del self.dev
-		time.sleep(0.2) # just to be sure that the device has time to shutdown
 
 	def pause(self):
+		"""Pause playback (works as a toggle between play and pause)"""
 		if self.state == 'play':
 			self.state = 'pause'
 		elif self.state == 'pause':
 			self.state = 'play'
 
 	def seek(self, percent):
+		"""Jump to a specific point in the song by percent"""
 		self.seek_val = percent
 
 	def set_volume(self, volume):
+		"""Set the PCM volume to a new value"""
 		vol = int(volume*100)
 		if HAVE_OSS:
 			mixer = ossaudiodev.openmixer()
@@ -134,6 +170,7 @@ class Player:
 			pass
 
 	def get_volume(self):
+		"""Return the current volume setting"""
 		if HAVE_OSS:
 			mixer = ossaudiodev.openmixer()
 			if mixer != None:
@@ -142,14 +179,16 @@ class Player:
 		else:
 			return 0
 
+
 	#############################
 	# OGG-specific stuff
 	#############################
 	def info_ogg(self, vf):
+		"""Display some OGG information"""
 		print vf.comment().as_dict()
 
-	# OGG playback loop
 	def start_ogg(self, vf):
+		"""Open the audio device and start playing an OGG file"""
 		self.state = 'play'
 
 		total_time = int(vf.time_total(0))
@@ -157,35 +196,42 @@ class Player:
 		elapse = 0
 		last_elapse = 0
 
-		vi = vf.info()
-		self.open(vi.rate, vi.channels)
+		try:
+			vi = vf.info()
+			self.open(vi.rate, vi.channels)
 
-		while self.state == 'play' or self.state == 'pause':
-			if self.state == 'pause':
-				time.sleep(1)
-			elif self.seek_val:
-				vf.time_seek(float(total_time * self.seek_val))
-				self.seek_val = 0
-			else:
-				(buff, bytes, bit) = vf.read(self.buffersize)
-				if bytes == 0:
-					self.state = 'eof'
-					elapse = total_time
-					last_elapse = 0
-					remain = 0
+			while self.state == 'play' or self.state == 'pause':
+				if self.state == 'pause':
+					time.sleep(1)
+				elif self.seek_val:
+					vf.time_seek(float(total_time * self.seek_val))
+					self.seek_val = 0
 				else:
-					elapse = int(vf.time_tell())
-					remain = total_time - elapse
-					self.write(buff, bytes)
-			if elapse != last_elapse:
-				last_elapse = elapse
-				self.callback(self.state, remain, elapse)
+					(buff, bytes, bit) = vf.read(self.buffersize)
+					if bytes == 0:
+						self.state = 'eof'
+						elapse = total_time
+						last_elapse = 0
+						remain = 0
+					else:
+						elapse = int(vf.time_tell())
+						remain = max(0, total_time - elapse)
+						self.write(buff, bytes)
+				if elapse != last_elapse:
+					last_elapse = elapse
+					self.callback(self.state, remain, elapse)
+		except:
+			self.state = 'stop'
+
+		self.callback(self.state, 0, 0)
+		self.close()
 
 
 	#############################
 	# MAD/MP3-specific stuff
 	#############################
 	def info_mad(self, mf):
+		"""Display some MP3 information"""
 		if mf.layer() == mad.LAYER_I:
 			print "MPEG Layer I"
 		elif mf.layer() == mad.LAYER_II:
@@ -221,9 +267,8 @@ class Player:
 		secs = millis / 1000
 		print "total time %d ms (%dm%2ds)" % (millis, secs / 60, secs % 60)
 
-
-	# MP3 playback loop
 	def start_mad(self, mf):
+		"""Open the audio device and start playing an MP3 file"""
 		self.state = 'play'
 
 		total_time = mf.total_time()/1000
@@ -235,25 +280,32 @@ class Player:
 			channels = 1
 		else:
 			channels = 2
-		self.open(mf.samplerate(), channels)
 
-		while self.state == 'play' or self.state == 'pause':
-			if self.state == 'pause':
-				time.sleep(1)
-			elif self.seek_val:
-				mf.seek_time(long(total_time * self.seek_val * 1000))
-				self.seek_val = 0
-			else:
-				buff = mf.read()
-				if buff is None:
-					self.state = 'eof'
-					elapse = total_time
-					last_elapse = 0
-					remain = 0
+		try:
+			self.open(mf.samplerate(), channels)
+
+			while self.state == 'play' or self.state == 'pause':
+				if self.state == 'pause':
+					time.sleep(1)
+				elif self.seek_val:
+					mf.seek_time(long(total_time * self.seek_val * 1000))
+					self.seek_val = 0
 				else:
-					elapse = mf.current_time() / 1000
-					remain = total_time - elapse
-					self.write(buff, len(buff))
-			if elapse != last_elapse:
-				last_elapse = elapse
-				self.callback(self.state, remain, elapse)
+					buff = mf.read()
+					if buff is None:
+						self.state = 'eof'
+						elapse = total_time
+						last_elapse = 0
+						remain = 0
+					else:
+						elapse = mf.current_time() / 1000
+						remain = max(0, total_time - elapse)
+						self.write(buff, len(buff))
+				if elapse != last_elapse:
+					last_elapse = elapse
+					self.callback(self.state, remain, elapse)
+		except:
+			self.state = 'stop'
+
+		self.callback(self.state, 0, 0)
+		self.close()

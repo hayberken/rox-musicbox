@@ -2,10 +2,14 @@
 <AppInfo>
   <Summary>MP3/Ogg Music Player</Summary>
   <Summary xml:lang="it">Un riproduttore di MP3/Ogg</Summary>
+  <CanRun>
+	  <MimeType type="audio/x-mp3"/>
+	  <MimeType type="application/ogg"/>
+  </CanRun>
   <About>
     <Purpose>MP3/Ogg Music Player</Purpose>
     <Authors>Ken Hayber</Authors>
-    <Version>0.0.13 (05-Jan-2004)</Version>
+    <Version>014 (09-Apr-2004)</Version>
     <License>GNU General Public License</License>
     <Homepage>http://khayber.dyndns.org/rox/musicbox</Homepage>
   </About>
@@ -23,4 +27,11 @@
      <License label="Licencia"/>
      <Homepage label="Sitio web"/>
    </About>
+   <About xml:lang="fr">
+     <Purpose label="A propos">lecteur de musique</Purpose>
+     <Version label="Version"/>
+     <Author label="Auteur"/>
+     <License label="Licence"/>
+     <Homepage label="Site web"/>
+    </About>
 </AppInfo>

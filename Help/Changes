@@ -1,6 +1,32 @@
 MusicBox - an MP3/OGG Player for the ROX Desktop
 by Ken Hayber
 
+09-Apr-2004
+014
+MusicBox changes:
+- Changed version numbering.  I like the simple serial number better than the dot notation.
+- Removed the gtkexceptionhook.py thing in favor of a simple rox.report_exception() call.
+- Moved the genre list into a separate file to make it easier to share with other apps.
+- Updated findrox.py, again :)
+- Applied two patches from Eric Gillespie (don't use ':' as separator in DnD paths
+and allow relative paths in m3u files)
+- Set window borders to 0 to look better in WMs with no window borders.
+- When iconized show title and remaining time in title (icon caption)
+- Word wrap song title, artist, album in display window
+- Refactor player.py a bit and improve error handling.
+- Make ossaudiodev the default playback device (instead of ao)
+- Update volume control widget if someone else changes PCM volume.
+- DnD of directories and playlists does not change your default Library.
+Playlist changes:
+- Add initial track sorting code (slow!)
+- The Prev button now works like a browser Back button.
+- Fix long-standing Unicode vs Ansi support in id3 tags.
+- Add support for Extended Attributes as song tags
+(user.Title, user.Artist, user.Album, user.Genre, user.Track)
+Playlist UI changes:
+- Remove Type column
+- Sort by Track (really sorts by Album, then by Track which is what you would expect)
+
 05-Jan-2004
 0.0.13
 - Fixed a couple of bugs with crashing on empty playlists.

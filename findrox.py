@@ -13,7 +13,7 @@ def version(major, minor, micro):
 	add it to sys.path. If version is missing or too old, either
 	prompt the user, or (if possible) upgrade it automatically."""
 
-	if os.path.exists('/uri/0install/rox.sourceforge.net'):
+	if not os.getenv('ROXLIB_DISABLE_ZEROINSTALL') and os.path.exists('/uri/0install/rox.sourceforge.net'):
 		# We're using ZeroInstall. Good :-)
 		zpath = '/uri/0install/rox.sourceforge.net/lib/ROX-Lib2/' \
 			'latest'
@@ -21,7 +21,7 @@ def version(major, minor, micro):
 			vs = os.readlink(zpath).split('-')[-1]
 			v = map(int, vs.split('.'))
 			if v[0] < major or v[1] < minor or v[2] < micro:
-				if os.system('cd /uri/0install/rox.sourceforge.net; 0refresh'):
+				if os.system('0refresh rox.sourceforge.net'):
 					report_error('Using ROX-Lib in Zero Install, but cached version (%s) is too old (need %d.%d.%d) and updating failed (is zero-install running?)' % (vs, major, minor, micro))
 			sys.path.append(zpath + '/python')
 			return
@@ -40,13 +40,19 @@ def version(major, minor, micro):
 		if exists(p):
 			# TODO: check version is new enough
 			sys.path.append(os.path.join(p, 'python'))
-			break
-	else:
-		report_error("This program needs ROX-Lib2 to run.\n" + \
-			"I tried all of these places:\n\n" + \
-			string.join(paths, '\n') + '\n\n' + \
-			"ROX-Lib2 is available from:\n" + \
-			"http://rox.sourceforge.net")
+			import rox
+			if major == 1 and minor == 9 and micro < 10:
+				return	# Can't check version
+			if not hasattr(rox, 'roxlib_version'):
+				break
+			if (major, minor, micro) <= rox.roxlib_version:
+				return	# OK
+	report_error("This program needs ROX-Lib2 (version %d.%d.%d) " % \
+		(major, minor, micro) + "to run.\n" + \
+		"I tried all of these places:\n\n" + \
+		string.join(paths, '\n') + '\n\n' + \
+		"ROX-Lib2 is available from:\n" + \
+		"http://rox.sourceforge.net")
 
 def report_error(err):
 	"Write 'error' to stderr and, if possible, display a dialog box too."
@@ -60,7 +66,7 @@ def report_error(err):
 	except:
 		import gtk
 		win = gtk.GtkDialog()
-		message = gtk.GtkLabel(err + 
+		message = gtk.GtkLabel(err +
 				'\n\nAlso, pygtk2 needs to be present')
 		win.set_title('Missing ROX-Lib2')
 		win.set_position(gtk.WIN_POS_CENTER)
@@ -72,7 +78,7 @@ def report_error(err):
 		win.action_area.pack_start(ok)
 		ok.connect('clicked', gtk.mainquit)
 		ok.grab_default()
-		
+
 		win.connect('destroy', gtk.mainquit)
 		win.show_all()
 		gtk.mainloop()
