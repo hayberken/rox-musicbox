@@ -207,6 +207,7 @@ class playlist:
 			mymp3 = mp3infor.open_mp3(self.current_file())	
 			try:
 				mymp3.read_tag()
+#				mymp3.sync_read_header()
 
 				self.songname = ""
 				self.artist = ""
@@ -230,7 +231,7 @@ class playlist:
 						self.album = self.album + mymp3.album[i]
 				self.album = self.album.strip()
 
-				self.length = string.zfill(mymp3.get_length()[1], 2) + ':' + string.zfill(mymp3.get_length()[2], 2)
+#				self.length = string.zfill(int(mymp3.get_length()[1]), 2) + ':' + string.zfill(int(mymp3.get_length()[2]), 2)
 					
 				for i in range(len(mymp3.get_genre())):
 					if mymp3.get_genre()[i] in string.printable:

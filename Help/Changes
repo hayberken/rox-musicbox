@@ -1,8 +1,18 @@
-	MusicBox
-	MP3 Player (MPG123/MPG321 front-end)
-	by Ken Hayber
+MusicBox
+MP3 Player (MPG123/MPG321 front-end)
+by Ken Hayber
+
 
 19-Aug-2003
+0.0.4
+- Added error handling for missing library path and missing mp3 player.
+- Default mp3 player to none and show options dialog at first run.
+- Removed 'Time' column for now because a) it was broken and b) when I fixed it it took 
+	WAY too long to load even my measly 300 song library.
+- Fixed Shuffle to use time.time() as the Random() seed to that it is actually 
+	somewhat Random.
+- Don't load mp3 player until needed (first step to supporting ogg)
+
 0.0.3
 - Edited the Options.xml to have a big tooltip for the mp3 player explaining some things.
 - Edited the README a bit (put MY email address in there instead of Thomas') giving some
@@ -25,4 +35,5 @@
 
 17-Aug-2003
 -----------
+0.0.1
 First release!

@@ -49,6 +49,8 @@ rox.app_options.notify()
 class MusicBox(rox.Window):
 	def __init__(self):
 		rox.Window.__init__(self)
+
+		g.threads_init()
 				
 		self.set_title(APP_NAME)
 		self.set_border_width(1)
@@ -206,22 +208,18 @@ class MusicBox(rox.Window):
 		column.set_resizable(True)
 		column.set_reorderable(True)
 
-		cell = g.CellRendererText()
-		column = g.TreeViewColumn(_('Time'), cell, text = COL_LENGTH)
-		view.append_column(column)
-		column.set_sort_column_id(COL_LENGTH)
-		column.set_resizable(True)
-		column.set_reorderable(True)
+#		cell = g.CellRendererText()
+#		column = g.TreeViewColumn(_('Time'), cell, text = COL_LENGTH)
+#		view.append_column(column)
+#		column.set_sort_column_id(COL_LENGTH)
+#		column.set_resizable(True)
+#		column.set_reorderable(True)
 
 		self.vbox.pack_start(swin, True, True, 0)
 
 		view.connect('row-activated', self.activate)
-
 		self.selection = view.get_selection()
 		
-		self.rndm = Random(17) # for shuffle
-
-
 		####################################################################
 		# Statusbar
 		####################################################################
@@ -233,21 +231,15 @@ class MusicBox(rox.Window):
 		# Finish
 		####################################################################
 		self.vbox.show_all()
+		
+#		thd_update = Thread(name='update', target=self.update)
+#		thd_update.start()	
+		self.update()
 
-		#init the player instance and start the monitoring thread
-#TODO: add Ogg support
-		g.threads_init()
-		
-		if MP3_PLAYER.value == '':
-			self.player = None
-			rox.edit_options()
-		else:
-			self.player = pympg123.Player(MP3_PLAYER.value, self.status_update)
-			self.foo = Thread(name='test', target=self.player.handle_audio)
-			self.foo.start()
-		
+		self.player = None
 		self.current_song = ""
 		self.current_artist = ""
+		self.rndm = Random(time.time()) # for shuffle
 
 
 	####################################################################
@@ -258,6 +250,11 @@ class MusicBox(rox.Window):
 		g.gdk.flush()
 
 		self.song_list.clear()
+		
+		if not os.access(LIBRARY.value, os.R_OK):
+			rox.info("Cannot find your music libary - "+LIBRARY.value)
+			rox.edit_options()
+			return
 
 		foo = pyplaylist.playlist()
 		foo.compile_masterlist(LIBRARY.value)
@@ -271,8 +268,9 @@ class MusicBox(rox.Window):
 						 COL_ARTIST, foo.artist, 
 						 COL_TITLE,  foo.songname, 
 						 COL_ALBUM,  foo.album,
-						 COL_GENRE,  foo.genre,
-						 COL_LENGTH, foo.length)
+						 COL_GENRE,  foo.genre#,
+#this takes too long to read			 COL_LENGTH, foo.length
+						 )
 
 		#select the first song in the list as a starting point
 		self.view.set_cursor((0,))
@@ -280,16 +278,39 @@ class MusicBox(rox.Window):
 
 	
 	####################################################################
-	# double-click hander, plays the song
+	# double-click handler, plays the song
 	####################################################################
 	def activate(self, view, path, column):
 		self.play()
+		
+	####################################################################
+	# start/restart the player (mp3 or ogg)
+	####################################################################
+	def start_player(self, player_filename):
+		if player_filename == '':
+			rox.info("You need to configure your mp3 player.")
+			self.player = None
+			rox.edit_options()
+		else:
+			player_path = which(MP3_PLAYER.value)
+			if player_path == None:
+				rox.info("Can't find an executable ("+MP3_PLAYER.value+") in your PATH.")
+				self.player = None
+				rox.edit_options()
+			else:
+				if (self.player):
+					self.player.shutdown()
+					self.player = None
+					
+				self.player = pympg123.Player(MP3_PLAYER.value, self.status_update)
+				self.foo = Thread(name='test', target=self.player.handle_audio)
+				self.foo.start()	
 	
 	####################################################################
 	# Play button handler (toggle between play and pause)
 	####################################################################
 	def play_selected(self, button=None):
-		if self.player.state == 'play':
+		if (self.player) and (self.player.state == 'play'):
 			self.pause()
 		else:
 			self.play()
@@ -298,6 +319,9 @@ class MusicBox(rox.Window):
 	# play the current song
 	####################################################################
 	def play(self):
+		if (self.player == None) or (MP3_PLAYER.has_changed):
+			self.start_player(MP3_PLAYER.value)
+			
 		model, iter = self.selection.get_selected()
 		self.current_file = model.get_value(iter, COL_FILE)
 		self.current_artist = model.get_value(iter, COL_ARTIST)
@@ -345,7 +369,8 @@ class MusicBox(rox.Window):
 	# stop the current song (but don't kill the player)
 	####################################################################
 	def stop(self, button=None):
-		self.player.stop()
+		if (self.player) and (self.player.state != 'stop'):
+			self.player.stop()
 		self.image_play.set_from_file(BMP_PLAY)
 		self.status_bar.output("Stopped...",6000)	
 
@@ -353,7 +378,8 @@ class MusicBox(rox.Window):
 	# pause playing (toggle)
 	####################################################################
 	def pause(self, button=None):
-		self.player.pause()
+		if (self.player) and (self.player.state == 'play'):
+			self.player.pause()
 		self.image_play.set_from_file(BMP_PLAY)
 		self.status_bar.output("Paused...",6000)	
 
@@ -408,8 +434,8 @@ class MusicBox(rox.Window):
 	# stop playing, kill the player and exit
 	####################################################################
 	def close(self, button = None):
-		self.player.stop()
-		self.player.shutdown()
+		if (self.player):
+			self.player.shutdown()
 		self.destroy()
 		
 	####################################################################
@@ -504,3 +530,18 @@ class timedStatusbar(g.Statusbar):
         self.pop(1)
         self.push(1,"")
         return g.FALSE
+
+
+####################################################################
+# How come this isn't part of the standard library?
+####################################################################
+def which(filename):
+	if (filename == None) or (filename == ''):
+		return None
+		
+	env_path = os.getenv('PATH').split(':')
+	for p in env_path:
+		if os.access(p+'/'+filename, os.X_OK):
+			return p+'/'+filename
+	return None
+	

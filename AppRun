@@ -12,6 +12,5 @@ except ImportError:
 
 box = musicbox.MusicBox()
 box.show()
-box.update()
 
 rox.mainloop()
