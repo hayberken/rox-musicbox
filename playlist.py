@@ -1,8 +1,12 @@
 from __future__ import generators
 
-import rox, os, re, stat
+import rox, os, re, stat, time
+from urllib import quote, unquote
 from ID3 import *
 
+from random import Random
+
+from xml.dom.minidom import parse, parseString, Document
 
 try:
 	import ogg.vorbis
@@ -47,41 +51,152 @@ class Playlist:
 	####################################################################
 	def __init__(self):
 		self.the_filter = {}	#artist|album|genre: [list, of, filter, info]
+		self.rndm = Random(time.time()) # for shuffle
+
+		self.iter_curr = 0
+		self.shuffle_cache_size = 10
+		self.shuffle_cache = []
+
+
+	####################################################################
+	def shuffle(self, CacheSize=None):
+		"randomize the iterator index"
+
+		if CacheSize != None:
+			self.shuffle_cache_size = CacheSize
+
+		#shuffle the list?
+		num_songs = len(self.song_list)
+		while True:
+			n = self.rndm.randrange(0, num_songs)
+			if self.shuffle_cache_size >= num_songs:
+				break
+			if n not in self.shuffle_cache:
+				self.shuffle_cache.append(n)
+				if len(self.shuffle_cache) > self.shuffle_cache_size:
+					self.shuffle_cache.pop(0)
+				break
+		self.iter_curr = n
 
 
 	####################################################################
 	def __iter__(self):
-		self.iter_next = 0
+		self.iter_curr = 0
 		return self
+
+
+	####################################################################
+	def first(self):
+		self.iter_curr = 0
+		return self.song_list[0]
+
+
+	####################################################################
+	def last(self):
+		self.iter_curr = len(self.song_list)-1
+		return self.song_list[-1]
 
 
 	####################################################################
 	def next(self):
 		while 1:
 			try:
-				key = self.song_list.keys()[self.iter_next]
-				self.iter_next += 1
+				self.iter_curr += 1
+				the_song = self.song_list[self.iter_curr]
+			except:
+				self.iter_curr = len(self.song_list)-1
+				raise StopIteration
+
+			#filter the list if filter is set
+			found = 0
+			for n in self.the_filter.keys():
+				if getattr(the_song, n) in self.the_filter[n]:
+					found += 1
+			if found == len(self.the_filter):
+				return the_song
+
+
+	####################################################################
+	def prev(self):
+		while 1:
+			try:
+				self.iter_curr -= 1
+				if self.iter_curr < 0:
+					self.iter_curr = 0
+					raise StopIteration
+				the_song = self.song_list[self.iter_curr]
 			except:
 				raise StopIteration
 
 			#filter the list if filter is set
 			found = 0
 			for n in self.the_filter.keys():
-				if getattr(self.song_list[key], n) in self.the_filter[n]:
-					found += 1
+				if getattr(the_song, n) in self.the_filter[n]:
+					found -= 1
 			if found == len(self.the_filter):
-				return self.song_list[key]
+				return the_song
 
 
 	####################################################################
-	def load_tag_info(self):
+	def save(self, filename):
+		f = file(filename, 'w+')
+		f.write("<?xml version='1.0'?>\n<SongList>\n")
+
+		for song in self.song_list:
+			f.write("\t<Song>\n")
+			f.write("\t\t<Title>%s</Title>\n" % quote(song.title))
+			f.write("\t\t<Track>%s</Track>\n" % quote(song.track))
+			f.write("\t\t<Album>%s</Album>\n" % quote(song.album))
+			f.write("\t\t<Artist>%s</Artist>\n" % quote(song.artist))
+			f.write("\t\t<Genre>%s</Genre>\n" % quote(song.genre))
+			f.write("\t\t<Comment>%s</Comment>\n" % quote(song.comment))
+			f.write("\t\t<Type>%s</Type>\n" % quote(song.type))
+			f.write("\t\t<Location>%s</Location>\n" % quote(song.filename))
+			f.write("\t</Song>\n")
+		f.write("</SongList>")
+		f.close()
+
+
+	####################################################################
+	def load(self, filename):
+		try:
+			self.song_list = []
+			dom1 = parse(filename)
+			songs = dom1.getElementsByTagName("Song")
+			index = 0
+			for song in songs:
+				try:	title = unquote(song.getElementsByTagName("Title")[0].childNodes[0].data)
+				except: title = ''
+				try:	track = unquote(song.getElementsByTagName("Track")[0].childNodes[0].data)
+				except: track = ''
+				try:	artist = unquote(song.getElementsByTagName("Artist")[0].childNodes[0].data)
+				except: artist = ''
+				try:	album = unquote(song.getElementsByTagName("Album")[0].childNodes[0].data)
+				except: album = ''
+				try:	genre = unquote(song.getElementsByTagName("Genre")[0].childNodes[0].data)
+				except: genre = ''
+				try:	comment = unquote(song.getElementsByTagName("Comment")[0].childNodes[0].data)
+				except: comment = ''
+				try:	filename = unquote(song.getElementsByTagName("Location")[0].childNodes[0].data)
+				except: filename = ''
+				try:	type = unquote(song.getElementsByTagName("Type")[0].childNodes[0].data)
+				except: type = ''
+
+				self.song_list.append(PlaylistEntry(filename, title, track, album, artist, genre, 0, type, comment))
+			return True
+		except:
+			return False
+
+
+	####################################################################
+	def get_tag_info(self):
 		"Update the entire song_list with the tag info from each file"
 		for song in self.song_list:
-			self.song_list[song] = self.get_tag_info(self.song_list[song])
+			self.get_tag_info_from_file(song)
 
 
 	####################################################################
-	def get_tag_info(self, song):
+	def get_tag_info_from_file(self, song):
 		"Get the tag info from specified filename"
 		song.type = str(rox.mime.get_type(song.filename))
 
@@ -140,13 +255,13 @@ class Playlist:
 
 
 	####################################################################
-	def load(self, library, guess_re):
+	def get_songs(self, library, guess_re):
 		"load all songs found by iterating over library into song_list..."
 
 		library_path = library.split(":")
 		self.guess_re = guess_re
 
-		self.song_list = {}		#filename: PlaylistEntry
+		self.song_list = []		#index: PlaylistEntry
 		self.album_list = {}	#album: True
 		self.artist_list = {}	#artist: True
 		self.genre_list = {}	#genre: True
@@ -168,6 +283,8 @@ class Playlist:
 						#assume the element is a song file...
 						self.add_song(library_element)
 
+		self.get_tag_info()
+
 
 	####################################################################
 	def add_song(self, filename):
@@ -178,7 +295,7 @@ class Playlist:
 		if type in TYPE_LIST and os.access(filename, os.R_OK):
 			song = self.guess(filename, type)
 			if song != None:
-				self.song_list[filename] = song
+				self.song_list.append(song)
 				self.album_list[song.album] = True
 				self.artist_list[song.artist] = True
 				self.genre_list[song.genre] = True

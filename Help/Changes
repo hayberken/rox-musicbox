@@ -1,6 +1,27 @@
 MusicBox - an MP3/OGG Player for the ROX Desktop
 by Ken Hayber
 
+09-Dec-2003
+0.0.11
+- Preview Release of next version.  Looking for feedback.
+- UI redesign (main window is like Gnome CD player, playlist window is a popup)
+- Code refactoring.  Trying for a MVC design (UI->Playlist->Player->libraries(ID3/MAD/OGG)
+- Playlist main store is an array now instead of a dictionary.  The dict is what caused
+	the default 'sort order' to be other than your directory layout.
+- Take advantage of Python 2.3 (currently only ossaudiodev support to enable the volume control)
+- Fix: last version slowed down the playlist loading due to enabling the Artist column
+	for sorting before the list was filled.  Man does that slow things down!
+- New feature: Volume control if you are using Python 2.3 and OSS (or alsa oss emulation)
+- New feature: The current playlist can be saved with all the tag info in an XML file
+	called Library.xml in your Choices/MusicBox dir.  If this file exists then it will
+	be loaded by default when starting.  This greatly speeds up load times for large
+	collections.  I'm toying with the idea of making this file iTunes compatible. (I have
+	an iBook and and iPod so there is incentive there for me)
+
+	Note: the playlist in this version does very little now, but you can save the library
+	from there using the right-click menu.  The main window is mostly complete.
+
+
 30-Nov-2003
 0.0.10
 - Bugfixes for python 2.3 support and misc. (thanks Ulrich)

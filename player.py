@@ -25,8 +25,17 @@ try:
 	import ao
 	HAVE_AO = True
 except:
-	HAVE_AO=False
+	HAVE_AO = False
 	print 'No AO support!!'
+
+try:
+	import ossaudiodev
+	HAVE_OSS = True
+except:
+	HAVE_OSS = False
+	print 'No OSS support!!'
+
+if not HAVE_AO and not HAVE_OSS:
 	import linuxaudiodev
 
 
@@ -63,6 +72,9 @@ class Player:
 		bits=16
 		if HAVE_AO:
 			self.dev = ao.AudioDevice(self.id, bits, rate, channels)
+		elif HAVE_OSS:
+			self.dev = ossaudiodev.open('w')
+			self.dev.setparameters(ossaudiodev.AFMT_S16_NE, channels, rate)
 		else:
 			self.dev = linuxaudiodev.open('w')
 			self.dev.setparameters(rate, bits, channels, linuxaudiodev.AFMT_S16_NE)
@@ -72,6 +84,8 @@ class Player:
 	def write(self, buff, bytes):
 		if HAVE_AO:
 			self.dev.play(buff, bytes)
+		elif HAVE_OSS:
+			self.dev.writeall(buff)
 		else:
 			while self.dev.obuffree() < bytes:
 				time.sleep(0.2)
@@ -97,6 +111,7 @@ class Player:
 
 	def stop(self):
 		self.state = 'stop'
+		time.sleep(0.2)
 		del self.dev
 		time.sleep(0.2) # just to be sure that the device has time to shutdown
 
@@ -109,6 +124,23 @@ class Player:
 	def seek(self, percent):
 		self.seek_val = percent
 
+	def set_volume(self, volume):
+		vol = int(volume*100)
+		if HAVE_OSS:
+			mixer = ossaudiodev.openmixer()
+			if mixer != None:
+				mixer.set(ossaudiodev.SOUND_MIXER_PCM, (vol, vol))
+		else:
+			pass
+
+	def get_volume(self):
+		if HAVE_OSS:
+			mixer = ossaudiodev.openmixer()
+			if mixer != None:
+				vol = mixer.get(ossaudiodev.SOUND_MIXER_PCM)
+				return float(max(vol[0], vol[1]))/100
+		else:
+			return 0
 
 	#############################
 	# OGG-specific stuff
