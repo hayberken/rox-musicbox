@@ -28,20 +28,20 @@
 
 		<frame label='Play Settings' columns='2'>
 		<hbox>
-			<toggle name='repeat' label='Repeat'>
-			Keep playing forever.
-			</toggle>
-			<spacer/>
-
-			<toggle name='shuffle' label='Shuffle'>
-			Randomize play order.
-			</toggle>
-			<spacer/>
-
+			<toggle name='repeat' label='Repeat'>Keep playing forever.</toggle><spacer/>
+			<toggle name='shuffle' label='Shuffle'>Randomize play order.</toggle><spacer/>
 			<numentry name='shuffle_cache' label='Shuffle cache size' min='0' max='100'>
 			How many songs to remember in shuffle mode so we don't replay too often.
 			</numentry>
 		</hbox>
+		</frame>
+		<frame label='Time'>
+			<hbox>
+				<radio-group name='time_display' columns='2'>
+				<radio label='elapse' value='0'>Show elapsed time</radio>
+				<radio label='remain' value='1'>Show remaining time</radio>
+				</radio-group>
+			</hbox>
 		</frame>
 	</section>
 	<section title="Display">
@@ -52,6 +52,17 @@
 		<frame label='Colors'>
 			<colour name='fg_color' label='Text Color:'>Text color.</colour>
 			<colour name='bg_color' label='Background Color:'>The background color of the main display area.</colour>
+		</frame>
+		<frame label='Widgets'>
+			<hbox>
+				<label>Show/Hide: </label>
+				<toggle name='toolbar' label='Toolbar'>Show/Hide the Toolbar</toggle>
+				<toggle name='volume' label='Volume'>Show/Hide the Volume control</toggle>
+				<toggle name='seekbar' label='Seek'>Show/Hide the Seek control</toggle>
+			</hbox>
+			<toggle name='word_wrap' label='Word Wrap'>Word wrap display strings</toggle>
+		<label>Select the buttons you want on the toolbar:</label>
+		<tool_options name='toolbar_disable'/>
 		</frame>
 	</section>
 

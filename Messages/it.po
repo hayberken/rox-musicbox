@@ -1,23 +1,20 @@
-#: playlistui.py:45
+#: playlistui.py:44
 msgid "Album"
 msgstr "Album"
 
-#: musicbox.py:120
+#: musicbox.py:266
 msgid "Quit"
 msgstr "Esci"
 
-#: musicbox.py:130 playlistui.py:67
+#: musicbox.py:126 musicbox.py:289 playlistui.py:67
 msgid "Playlist"
 msgstr "Scaletta"
 
-# MusicBox Italian Translation.
-# Copyright @ 2004 Free Software Foundation, Inc.
-# Current translator: Yuri Bongiorno http://yuri.webhop.org, 2004.
-#: musicbox.py:108 musicbox.py:167
-msgid "Pause"
-msgstr "Pausa"
+#: musicbox.py:457
+msgid "Loading"
+msgstr "Caricamento"
 
-#: playlistui.py:46
+#: playlistui.py:45
 msgid "Title"
 msgstr "Titolo"
 
@@ -33,29 +30,53 @@ msgstr "Modello"
 msgid "oss"
 msgstr "oss"
 
-#: musicbox.py:112 musicbox.py:154
+#: tips:32
+#, fuzzy
+msgid "Time"
+msgstr "Titolo"
+
+#: tips:50
+msgid "Text color."
+msgstr ""
+
+#: tips:41
+msgid "Display"
+msgstr ""
+
+#: musicbox.py:123 musicbox.py:253 musicbox.py:284
 msgid "Next"
 msgstr "Successivo"
 
-#: musicbox.py:173
-msgid "Prev"
-msgstr "Precedente"
+#: tips:54
+msgid "Widgets"
+msgstr ""
 
-#: musicbox.py:275
-msgid "Loading"
-msgstr "Caricamento"
+# MusicBox Italian Translation.
+# Copyright @ 2004 Free Software Foundation, Inc.
+# Current translator: Yuri Bongiorno http://yuri.webhop.org, 2004.
+#: musicbox.py:248
+msgid "Pause"
+msgstr "Pausa"
+
+#: tips:63
+msgid "Word Wrap"
+msgstr ""
 
 #: tips:13
 msgid "Open Sound System driver"
 msgstr "Il driver Open Sound System"
 
-#: musicbox.py:114 playlistui.py:89
+#: tips:51
+msgid "Background Color:"
+msgstr ""
+
+#: musicbox.py:260 playlistui.py:90
 msgid "Save"
 msgstr "Salva"
 
-#: musicbox.py:293
-msgid " songs"
-msgstr " brani"
+#: musicbox.py:120 musicbox.py:281
+msgid "Prev"
+msgstr "Precedente"
 
 #: tips:6 tips:7
 msgid ""
@@ -67,50 +88,74 @@ msgstr ""
 "ciascun file l'artista, l'album, il titolo e la traccia. Viene usato se nel "
 "file non ci sono tag di informazione."
 
-#: musicbox.py:108 musicbox.py:167
+#: musicbox.py:121 musicbox.py:248 musicbox.py:282
 msgid "Play"
 msgstr "Suona"
 
-#: musicbox.py:146 tips:24
+#: musicbox.py:124 musicbox.py:257 musicbox.py:285 tips:24
 msgid "Repeat"
 msgstr "Ripeti"
+
+#: tips:49
+msgid "Text Color:"
+msgstr ""
 
 #: tips:11
 msgid "Gnome esound server"
 msgstr "Il server esound di Gnome"
 
-#: playlistui.py:47
+#: playlistui.py:46
 msgid "Track"
 msgstr "Traccia"
+
+#: musicbox.py:472
+msgid " songs"
+msgstr " brani"
 
 #: tips:1
 msgid "Settings"
 msgstr "Impostazioni"
 
-#: musicbox.py:109 musicbox.py:160
+#: musicbox.py:122 musicbox.py:249 musicbox.py:283
 msgid "Stop"
 msgstr "Ferma"
 
-#: player.py:130
+#: player.py:133
 msgid "You must have MAD support to play mp3 files (%s)."
 msgstr " necessario il supporto a MAD per riprodurre i file mp3 (%s)."
 
-#: musicbox.py:117 musicbox.py:128
+#: musicbox.py:127 musicbox.py:262 musicbox.py:290
 msgid "Options"
 msgstr "Opzioni"
+
+#: tips:58
+msgid "Volume"
+msgstr ""
+
+#: tips:55
+msgid "Show/Hide:"
+msgstr ""
 
 #: tips:10
 msgid "esd"
 msgstr "esd"
 
-#: tips:29 tips:30 tips:31 tips:32 tips:33
+#: tips:46 tips:47
+msgid "The font used for the Song Title"
+msgstr ""
+
+#: tips:35
+msgid "remain"
+msgstr ""
+
+#: tips:29 tips:30 tips:31
 msgid ""
 "How many songs to remember in shuffle mode so we don't replay too often."
 msgstr ""
 "Quanti brani memorizzare nella modalit A caso in modo da non riprodurli "
 "troppo spesso."
 
-#: playlistui.py:48
+#: playlistui.py:47
 msgid "Genre"
 msgstr "Genere"
 
@@ -118,9 +163,13 @@ msgstr "Genere"
 msgid "Path"
 msgstr "Percorso"
 
-#: musicbox.py:293
+#: musicbox.py:472
 msgid "loaded "
 msgstr "caricati "
+
+#: tips:61 tips:62
+msgid "Show/Hide the Seek control"
+msgstr ""
 
 #: tips:20
 msgid "Buffer Size"
@@ -130,31 +179,44 @@ msgstr "Dimensione del buffer"
 msgid "alsa"
 msgstr "alsa"
 
-#: musicbox.py:118
+#: musicbox.py:263
 msgid "Info"
 msgstr "Informazioni"
 
-#: playlistui.py:44
+#: tips:59
+msgid "Show/Hide the Volume control"
+msgstr ""
+
+#: tips:42
+msgid "Fonts"
+msgstr ""
+
+#: tips:43
+msgid "Base font:"
+msgstr ""
+
+#: playlistui.py:43
 msgid "Artist"
 msgstr "Artista"
-
-#: musicbox.py:412
-msgid "Time Remaining"
-msgstr "Tempo rimanente"
 
 #: tips:15
 msgid "current Alsa driver"
 msgstr "Il driver Alsa attuale"
 
-#: musicbox.py:115
-msgid "Refresh"
-msgstr "Aggiorna"
+#: tips:45
+#, fuzzy
+msgid "Title font:"
+msgstr "Titolo"
+
+#: tips:34
+msgid "Show elapsed time"
+msgstr ""
 
 #: tips:16
 msgid "alsa (old)"
 msgstr "alsa (old)"
 
-#: musicbox.py:346
+#: musicbox.py:527
 msgid "Failed to start playing %s"
 msgstr "Riproduzione di %s fallita"
 
@@ -162,13 +224,22 @@ msgstr "Riproduzione di %s fallita"
 msgid "Keep playing forever."
 msgstr "Continua a suonare per sempre."
 
-#: musicbox.py:423
+#: musicbox.py:616
 msgid "Stopped"
 msgstr "Fermato"
+
+#: musicbox.py:261
+#, fuzzy
+msgid "Playist"
+msgstr "Scaletta"
 
 #: tips:17 tips:18 tips:19
 msgid "older (obsolete?) Alsa driver"
 msgstr "Il vecchio driver Alsa (obsoleto?)"
+
+#: tips:64
+msgid "Word wrap display strings"
+msgstr ""
 
 #: tips:8
 msgid "Output"
@@ -186,7 +257,7 @@ msgstr ""
 "argomento.  un elenco di directory separate da : e/o di file .xml, .pls, ."
 "m3u, .mp3, .ogg."
 
-#: musicbox.py:411
+#: musicbox.py:609
 msgid "Playing"
 msgstr "In riproduzione"
 
@@ -194,11 +265,23 @@ msgstr "In riproduzione"
 msgid "Shuffle cache size"
 msgstr "Dimensioni cache"
 
-#: musicbox.py:139 tips:26
+#: tips:52 tips:53
+msgid "The background color of the main display area."
+msgstr ""
+
+#: tips:57
+msgid "Show/Hide the Toolbar"
+msgstr ""
+
+#: tips:33
+msgid "elapse"
+msgstr ""
+
+#: musicbox.py:125 musicbox.py:256 musicbox.py:287 tips:26
 msgid "Shuffle"
 msgstr "A caso"
 
-#: player.py:128
+#: player.py:131
 msgid "You must have OGG support to play ogg files (%s)."
 msgstr " necessario il supporto a OGG per riprodurre i file ogg (%s)."
 
@@ -210,7 +293,7 @@ msgstr ""
 "La dimensione del buffer usato per leggere e scrivere i file sonori. Un "
 "grande buffer pu diminuire le interruzioni nei sistemi pesantemente caricati."
 
-#: musicbox.py:111
+#: musicbox.py:252
 msgid "Back"
 msgstr "Precedente"
 
@@ -218,29 +301,59 @@ msgstr "Precedente"
 msgid "Library"
 msgstr "Libreria"
 
-#: musicbox.py:421
+#: tips:65
+msgid "Select the buttons you want on the toolbar:"
+msgstr ""
+
+#: musicbox.py:614
 msgid "Paused"
 msgstr "In pausa"
 
-#: musicbox.py:285
+#: tips:44
+msgid "The font used for Other text"
+msgstr ""
+
+#: musicbox.py:466
 msgid "Loading songs, please wait..."
 msgstr "Caricamento brani, attendere..."
+
+#: tips:56
+msgid "Toolbar"
+msgstr ""
 
 #: tips:9
 msgid "Driver"
 msgstr "Driver"
 
-#: musicbox.py:293
+#: musicbox.py:472
 msgid "Ready"
 msgstr "Pronto"
 
-#: playlistui.py:91
+#: playlistui.py:92
 msgid "Close"
 msgstr ""
 
 #: tips:23
 msgid "Play Settings"
 msgstr "Impostazioni di riproduzione"
+
+#: tips:60
+msgid "Seek"
+msgstr ""
+
+#: tips:48
+msgid "Colors"
+msgstr ""
+
+#: tips:36 tips:37 tips:38 tips:39 tips:40
+msgid "Show remaining time"
+msgstr ""
+
+#~ msgid "Time Remaining"
+#~ msgstr "Tempo rimanente"
+
+#~ msgid "Refresh"
+#~ msgstr "Aggiorna"
 
 #~ msgid "All songs"
 #~ msgstr "Tutti i brani"

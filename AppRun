@@ -1,42 +1,25 @@
 #!/usr/bin/env python
 import findrox; findrox.version(1, 9, 13)
-import sys, os, gobject, socket
-import rox
+import os, rox, sys
 
 __builtins__._ = rox.i18n.translation(os.path.join(rox.app_dir, 'Messages'))
 
-from rox import g
-import musicbox
+import gtk, musicbox, xsoap
 
-
-if g.pygtk_version < (1,99,17):
-	rox.croak('Need pygtk 1.99.17 or later:\n'
-		'http://www.daa.com.au/~james/software/pygtk/')
-
-try:
-	g.threads_init()
-except RuntimeError:
-	rox.croak('You must have threads compiled into your PyGTK!')
-
-
-#see if another instance is running and pass it our args (via xmlrpc)
-try:
-	import xmlrpclib
-	client = xmlrpclib.Server("http://localhost:8989", None, False)
-	client.load_songs(sys.argv[1:])
-
-#if not then start a new instance
-except socket.error:
+#see if another instance is running and pass it our args
+window = xsoap.get_server("_ROX_MUSICBOX")
+if window:
+	xsoap.send_message(window, "load_songs", sys.argv[1:])
+else:
+	#if not then start a new instance
 	try:
+		gtk.threads_init()
+		gtk.threads_enter()
 		box = musicbox.MusicBox()
 		box.show()
-		g.threads_enter()
 		rox.mainloop()
-		g.threads_leave()
+		gtk.threads_leave()
 	except:
 		rox.report_exception()
-#other errors here.
-except:
-	rox.report_exception()
 
 

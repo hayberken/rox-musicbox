@@ -20,8 +20,8 @@
 """
 from __future__ import generators
 
-import rox, os, re, stat, time, string, gobject
-from rox import g, saving
+import rox, os, re, stat, time, string, gtk, gobject
+from rox import saving
 from urllib import quote, unquote
 
 import genres
@@ -109,7 +109,7 @@ class Playlist(saving.Saveable):
 		self.guess_re = guess_re
 
 		#filename, title, track, album, artist, genre, length, type
-		self.song_list = g.ListStore(str, str, int, str, str, str, int, str)
+		self.song_list = gtk.ListStore(str, str, int, str, str, str, int, str)
 		self.song_list.set_sort_func(COL_TRACK, self.comparemethod, COL_TRACK)
 
 	def __len__(self):
@@ -217,8 +217,12 @@ class Playlist(saving.Saveable):
 		"""Read an xml file of Songs and tag info"""
 		dom1 = parse(filename)
 		songs = dom1.getElementsByTagName("Song")
-		index = 0
+
 		for song in songs:
+
+			while gtk.events_pending():
+				gtk.main_iteration()
+
 			try: title = unquote(song.getElementsByTagName("Title")[0].childNodes[0].data)
 			except: pass
 			try: track = int(unquote(song.getElementsByTagName("Track")[0].childNodes[0].data))
@@ -360,7 +364,8 @@ class Playlist(saving.Saveable):
 
 	def get_songs(self, library, callback, replace=True):
 		"""load all songs found by iterating over library into song_list..."""
-		self.iter_curr = -1 #reset cuz we don't know how many songs we're gonna load
+		if replace:
+			self.iter_curr = -1 #reset cuz we don't know how many songs we're gonna load
 
 		self.callback = callback
 
@@ -398,6 +403,10 @@ class Playlist(saving.Saveable):
 
 	def add_song(self, filename):
 		"""Add a file to the song_list if the mime_type is acceptable"""
+
+		while gtk.events_pending():
+			gtk.main_iteration()
+
 		type = str(rox.mime.get_type(filename))
 		if type in TYPE_LIST and os.access(filename, os.R_OK):
 			song = self.guess(filename, type)

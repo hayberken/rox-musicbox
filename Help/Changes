@@ -2,6 +2,23 @@ MusicBox - an MP3/OGG Player for the ROX Desktop
 by Ken Hayber
 
 22-May-2004
+019
+- Tried to stop using threads since many people seem to have problems there,
+but only managed to reduce thread use to one (the main player thread).  Without
+threads playback was too jumpy.
+- Add suggested/requested UI changes:
+	* Configurable toolbar like the Filer has (any buttons can be hidden)
+	* Show/Hide for toolbar, volume, seek-bar (for minimalists)
+	* Toggle for word wrap of text area (just in case you don't like word wrap)
+- Tried to fix seek bar (clicking in 'page' area always jumps backwards!) but it
+seems to be a Gtk issue (at least as of 2.4.9)
+- All new client server mechanism using xsoap.py that I wrote a while back.  This
+is based on ROX-Filer's client/server mechanism, but without the XML part.
+- Extras folder with tiny little AppDirs to remote control MusicBox
+(thanks whoever sent the originals of these.  I can't find the email, sorry)
+- Control for elapsed vs remaining time.
+
+
 018
 - More user feedback changes;
   * Text display (main window) font settings (Title and others)

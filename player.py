@@ -67,9 +67,13 @@ class Player:
 		linuxaudiodev and/or ossaudiodev
 	"""
 	state = 'stop'
+	remain = 0
+	elapse = 0
+	last_elapse = 0
+	total_time = 0
 	seek_val = 0
 
-	def __init__(self, callback, id=None, buffersize=4096):
+	def __init__(self, id=None, buffersize=4096):
 		"""Initialize the Player instance"""
 		if HAVE_AO:
 			if id is None:
@@ -77,7 +81,6 @@ class Player:
 			else:
 				self.id = id
 
-		self.callback = callback
 		self.buffersize = buffersize
 		self.dev = None
 		self.queue = Queue.Queue(5)
@@ -200,9 +203,9 @@ class Player:
 		"""Open the audio device and start playing an OGG file"""
 		self.state = 'play'
 
-		total_time = int(vf.time_total(0))
-		remain = total_time
-		elapse = 0
+		self.total_time = int(vf.time_total(0))
+		self.remain = self.total_time
+		self.elapse = 0
 		last_elapse = 0
 
 		try:
@@ -213,7 +216,7 @@ class Player:
 				if self.state == 'pause':
 					time.sleep(1)
 				elif self.seek_val:
-					vf.time_seek(float(total_time * self.seek_val))
+					vf.time_seek(float(self.total_time * self.seek_val))
 					self.seek_val = 0
 				else:
 					#for some reason with ossaudiodev a buffer greater
@@ -224,20 +227,18 @@ class Player:
 					(buff, bytes, bit) = vf.read(self.buffersize)
 					if bytes == 0:
 						self.state = 'eof'
-						elapse = total_time
+						self.elapse = self.total_time
 						last_elapse = 0
-						remain = 0
+						self.remain = 0
 					else:
-						elapse = int(vf.time_tell())
-						remain = max(0, total_time - elapse)
+						self.elapse = int(vf.time_tell())
+						self.remain = max(0, self.total_time - self.elapse)
 						self.write(buff, bytes)
-				if elapse != last_elapse or self.state == 'pause':
-					last_elapse = elapse
-					self.callback(self.state, remain, elapse)
+				if self.elapse != last_elapse or self.state == 'pause':
+					last_elapse = self.elapse
 		except:
 			self.state = 'stop'
 
-		self.callback(self.state, 0, 0)
 		self.close()
 
 
@@ -285,9 +286,9 @@ class Player:
 		"""Open the audio device and start playing an MP3 file"""
 		self.state = 'play'
 
-		total_time = mf.total_time()/1000
-		remain = total_time
-		elapse = 0
+		self.total_time = mf.total_time()/1000
+		self.remain = self.total_time
+		self.elapse = 0
 		last_elapse = 0
 
 		if mf.mode() == mad.MODE_SINGLE_CHANNEL:
@@ -302,24 +303,23 @@ class Player:
 				if self.state == 'pause':
 					time.sleep(1)
 				elif self.seek_val:
-					mf.seek_time(long(total_time * self.seek_val * 1000))
+					mf.seek_time(long(self.total_time * self.seek_val * 1000))
 					self.seek_val = 0
 				else:
 					buff = mf.read()
 					if buff is None:
 						self.state = 'eof'
-						elapse = total_time
+						self.elapse = self.total_time
 						last_elapse = 0
 						remain = 0
 					else:
-						elapse = mf.current_time() / 1000
-						remain = max(0, total_time - elapse)
+						self.elapse = mf.current_time() / 1000
+						self.remain = max(0, self.total_time - self.elapse)
 						self.write(buff, len(buff))
-				if elapse != last_elapse or self.state == 'pause':
-					last_elapse = elapse
-					self.callback(self.state, remain, elapse)
+				if self.elapse != last_elapse or self.state == 'pause':
+					last_elapse = self.elapse
 		except:
 			self.state = 'stop'
 
-		self.callback(self.state, 0, 0)
 		self.close()
+
