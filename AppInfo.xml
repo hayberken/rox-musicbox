@@ -1,37 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <AppInfo>
-  <Summary>MP3/Ogg Music Player</Summary>
-  <Summary xml:lang="it">Un riproduttore di MP3/Ogg</Summary>
-  <CanRun>
-	  <MimeType type="audio/x-mp3"/>
-	  <MimeType type="application/ogg"/>
-  </CanRun>
-  <About>
-    <Purpose>MP3/Ogg Music Player</Purpose>
-    <Authors>Ken Hayber</Authors>
-    <Version>019(16-Oct-2004)</Version>
-    <License>GNU General Public License</License>
-    <Homepage>http://khayber.dyndns.org/wiki/index.php/MusicBox</Homepage>
-  </About>
-  <About xml:lang="it">
-    <Purpose label="Scopo">riproduttore musicale</Purpose>
-    <Version label="Versione"/>
-    <Authors label="Autore"/>
-    <License label="Licenza"/>
-    <Homepage label="Sito web"/>
-   </About>
-   <About xml:lang="es">
-     <Purpose label="Propósito">reproductor de MP3/Ogg</Purpose>
-     <Version label="Versión"/>
-     <Authors label="Autor"/>
-     <License label="Licencia"/>
-     <Homepage label="Sitio web"/>
-   </About>
-   <About xml:lang="fr">
-     <Purpose label="A propos">lecteur de musique</Purpose>
-     <Version label="Version"/>
-     <Author label="Auteur"/>
-     <License label="Licence"/>
-     <Homepage label="Site web"/>
-    </About>
+	<AppMenu>
+		<Item option="--options">
+			<Label xml:lang="en">Options...</Label>
+			<Label xml:lang="it">Opzioni...</Label>
+			<Label xml:lang="de">Einstellungen...</Label>
+		</Item>
+	</AppMenu>
+	<Summary>MP3/Ogg Music Player</Summary>
+	<Summary xml:lang="it">Un riproduttore di MP3/Ogg</Summary>
+	<CanRun>
+		<MimeType type="audio/x-mp3"/>
+		<MimeType type="application/ogg"/>
+	</CanRun>
+	<About>
+		<Purpose>MP3/Ogg Music Player</Purpose>
+		<Authors>Ken Hayber</Authors>
+		<Version>020(26-Oct-2004)</Version>
+		<License>GNU General Public License</License>
+		<Homepage>http://khayber.dyndns.org/wiki/index.php/MusicBox</Homepage>
+	</About>
+	<About xml:lang="it">
+		<Purpose label="Scopo">riproduttore musicale</Purpose>
+		<Version label="Versione"/>
+		<Authors label="Autore"/>
+		<License label="Licenza"/>
+		<Homepage label="Sito web"/>
+	 </About>
+	 <About xml:lang="es">
+		 <Purpose label="Propósito">reproductor de MP3/Ogg</Purpose>
+		 <Version label="Versión"/>
+		 <Authors label="Autor"/>
+		 <License label="Licencia"/>
+		 <Homepage label="Sitio web"/>
+	 </About>
+	 <About xml:lang="fr">
+		 <Purpose label="A propos">lecteur de musique</Purpose>
+		 <Version label="Version"/>
+		 <Author label="Auteur"/>
+		 <License label="Licence"/>
+		 <Homepage label="Site web"/>
+		</About>
 </AppInfo>

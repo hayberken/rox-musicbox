@@ -1,16 +1,17 @@
-TODO items for MusicBox
-
-* Hide/disable volume control when Python 2.3 is not available?
-
-* How to update settings only when OK is pressed?
-(if enabled now it keeps trying to reload everything as you type the Library path)
+﻿TODO items for MusicBox
 
 * Add Edit id3 tags menu option? call out to Songer? Drag and drop to Songer?
 
 * Mutiple selection support
 
+* Filter the playlist (gtk 2.4?)
+
 * Delete songs from list
 
 * Save playlist UI settings (column width, order, window size, etc.)
 
+* Flac, Wav support
 
+* Shuffle by Album, Artist
+
+* Gtk 2.4 support (get rid of deprecation warnings)

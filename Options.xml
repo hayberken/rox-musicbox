@@ -61,6 +61,7 @@
 				<toggle name='seekbar' label='Seek'>Show/Hide the Seek control</toggle>
 			</hbox>
 			<toggle name='word_wrap' label='Word Wrap'>Word wrap display strings</toggle>
+			<toggle name='mini_toolbar' label='Mini Toolbar'>Use miniature size toolbar buttons</toggle>
 		<label>Select the buttons you want on the toolbar:</label>
 		<tool_options name='toolbar_disable'/>
 		</frame>

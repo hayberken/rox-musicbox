@@ -24,7 +24,7 @@ from __future__ import generators
 import gtk, gobject, os, sys, re
 
 import rox
-from rox import Menu, saving, loading, mime
+from rox import Menu, saving, loading, mime, filer
 
 import playlist
 from playlist import COL_FILE, COL_TITLE, COL_TRACK, COL_ALBUM, COL_ARTIST, COL_GENRE, COL_LENGTH, COL_TYPE
@@ -88,6 +88,7 @@ class PlaylistUI(rox.Window, loading.XDSLoader):
 #				]),
 #			Menu.Separator(),
 			Menu.Action(_("Save"), 'save', '', gtk.STOCK_SAVE),
+			Menu.Action(_("Open location"), 'show_dir', '', gtk.STOCK_GO_UP),
 			Menu.Separator(),
 			Menu.Action(_("Close"), 'close', '', gtk.STOCK_CLOSE),
 			])
@@ -195,6 +196,16 @@ class PlaylistUI(rox.Window, loading.XDSLoader):
 		"""Tell the playlist what we currently have selected"""
 		#print selection
 		pass
+
+	def show_dir(self, *dummy):
+		''' Pops up a filer window. '''
+		try:
+			(cursor, thing) = self.view.get_cursor()
+			index = cursor[0]
+			song = self.playlist.get(index)
+			filer.show_file(song.filename)
+		except:
+			rox.alert(_("No track selected."))
 
 	def delete_event(self, ev, e1):
 		"""Same as close, but called from the window manager"""

@@ -127,6 +127,8 @@ class Player:
 
 	def play(self, name, type):
 		"""Push the song info on the queue"""
+		if not os.path.isfile(name):
+			raise SyntaxError, _("File not found or not accessible (%s).") % name
 		if (type == TYPE_OGG and not HAVE_OGG):
 			raise TypeError, _('You must have OGG support to play ogg files (%s).') % name
 		if (type == TYPE_MP3 and not HAVE_MAD):
