@@ -1,6 +1,26 @@
 MusicBox - an MP3/OGG Player for the ROX Desktop
 by Ken Hayber
 
+20-Dec-2003
+0.0.12
+- PlaylistUI is nearing completion.  It is useable now and stays synced with the main
+	window.
+- Finally worked out how I wanted the library vs on-demand playing to work.  Now you can
+	easily just play a few songs, or you can save a large list for fast loading (in xml)
+- Added xmlrpc to prevent multiple instances and pass commands from the outside.  So now
+	if you are aready playing and you launch a new .mp3 file, it just replaces the list
+	and starts playing.  Could add XMMS-style remote control with this too.
+- Added savebox to the save menu so you can save full or filtered playlists to xml for
+	fast loading.
+- Added pyid3lib support (optional) for ID3v2 tag support.  Needs separate installation.
+	see http://pyid3lib.sourceforge.net and http://id3lib.sourceforge.net
+	(Note: due to these changes, loading a big list of songs takes considerably longer
+	it seems.  However, now you can at least see the song count as it is loading, you
+	can safely start playing while the list is still loading, and you can save the list
+	with tag info to xml for fast loading later.  Did I mention the fast loading part?)
+- New findrox.py for 0install support.
+
+
 09-Dec-2003
 0.0.11
 - Preview Release of next version.  Looking for feedback.

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: Wed Sep 10 18:15:00 2003\n"
+"PO-Revision-Date: Thu Dec 11 19:56:00 2003\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -14,153 +14,176 @@ msgstr ""
 "Generated-By: pygettext.py 1.1\n"
 
 
-#: musicbox.py:39
+#: playlistui.py:34
 msgid "Album"
 msgstr ""
 
-#: musicbox.py:113
-msgid "/Filter/All songs"
+#: musicbox.py:97 playlistui.py:87
+msgid "Quit"
 msgstr ""
 
-#: musicbox.py:116
-msgid "/Filter/This Genre"
+#: musicbox.py:109 playlistui.py:53
+msgid "Playlist"
 msgstr ""
 
-#: musicbox.py:111
-msgid "/Next"
+#: musicbox.py:89 musicbox.py:143 musicbox.py:143 playlistui.py:72
+#: playlistui.py:115 playlistui.py:115
+msgid "Pause"
 msgstr ""
 
-#: musicbox.py:38
+#: playlistui.py:84
+msgid "Save"
+msgstr ""
+
+#: playlistui.py:33
 msgid "Title"
-msgstr ""
-
-#: musicbox.py:120
-msgid "/Toggle View"
-msgstr ""
-
-#: musicbox.py:115
-msgid "/Filter/This Album"
 msgstr ""
 
 #: gtkexcepthook.py:15
 msgid "Bug Detected"
 msgstr ""
 
-#: musicbox.py:138
-msgid "Refresh"
-msgstr ""
-
-#: musicbox.py:171 musicbox.py:171 musicbox.py:446
+#: musicbox.py:93 musicbox.py:132 musicbox.py:132 playlistui.py:76
+#: playlistui.py:104 playlistui.py:104
 msgid "Next"
 msgstr ""
 
-#: musicbox.py:407
+#: playlistui.py:81
+msgid "This Genre"
+msgstr ""
+
+#: playlistui.py:78
+msgid "All songs"
+msgstr ""
+
+#: musicbox.py:148 musicbox.py:148 playlistui.py:120 playlistui.py:120
+msgid "Prev"
+msgstr ""
+
+#: musicbox.py:225
+msgid " songs"
+msgstr ""
+
+#: musicbox.py:89 musicbox.py:143 musicbox.py:143 playlistui.py:72
+#: playlistui.py:115 playlistui.py:115
+msgid "Play"
+msgstr ""
+
+#: musicbox.py:124 musicbox.py:124
+msgid "Repeat"
+msgstr ""
+
+#: playlistui.py:35
+msgid "Track"
+msgstr ""
+
+#: playlistui.py:38
+msgid "Type"
+msgstr ""
+
+#: musicbox.py:90 musicbox.py:137 musicbox.py:137 playlistui.py:73
+#: playlistui.py:109 playlistui.py:109
+msgid "Stop"
+msgstr ""
+
+#: player.py:67
+msgid "You must have MAD support to play mp3 files (%s)."
+msgstr ""
+
+#: musicbox.py:95 musicbox.py:107
+msgid "Options"
+msgstr ""
+
+#: playlistui.py:36
+msgid "Genre"
+msgstr ""
+
+#: musicbox.py:225
+msgid "loaded "
+msgstr ""
+
+#: playlistui.py:82
+msgid "New Filter..."
+msgstr ""
+
+#: musicbox.py:347
+msgid " of "
+msgstr ""
+
+#: playlistui.py:37
+msgid "Length"
+msgstr ""
+
+#: playlistui.py:32
+msgid "Artist"
+msgstr ""
+
+#: musicbox.py:368
+msgid "Time Remaining"
+msgstr ""
+
+#: playlistui.py:85 playlistui.py:97
+msgid "Refresh"
+msgstr ""
+
+#: playlistui.py:78 playlistui.py:79 playlistui.py:80 playlistui.py:81
+#: playlistui.py:82
+msgid "Filter"
+msgstr ""
+
+#: musicbox.py:277
 msgid "Failed to start playing %s"
 msgstr ""
 
-#: musicbox.py:465 musicbox.py:501
-msgid "Pause"
+#: playlistui.py:80
+msgid "This Album"
+msgstr ""
+
+#: musicbox.py:326 musicbox.py:377
+msgid "Stopped"
 msgstr ""
 
 #: gtkexcepthook.py:19
 msgid "Show Details"
 msgstr ""
 
-#: musicbox.py:121
-msgid "/Options"
-msgstr ""
-
-#: musicbox.py:490
-msgid " by "
-msgstr ""
-
-#: musicbox.py:108
-msgid "/Stop"
-msgstr ""
-
-#: musicbox.py:117
-msgid "/Filter/New Filter..."
-msgstr ""
-
-#: musicbox.py:187 musicbox.py:187 musicbox.py:418
-msgid "Prev"
-msgstr ""
-
-#: musicbox.py:136
-msgid "Options"
-msgstr ""
-
-#: musicbox.py:646 musicbox.py:655 musicbox.py:664
+#: playlistui.py:397 playlistui.py:409 playlistui.py:421
 msgid "Please make a selection first."
 msgstr ""
 
-#: musicbox.py:163 musicbox.py:163
-msgid "Repeat"
+#: musicbox.py:364
+msgid "Playing"
 msgstr ""
 
-#: musicbox.py:156 musicbox.py:156
+#: playlistui.py:39
+msgid "Comment"
+msgstr ""
+
+#: musicbox.py:117 musicbox.py:117
 msgid "Shuffle"
 msgstr ""
 
-#: musicbox.py:114
-msgid "/Filter/This Artist"
+#: player.py:64
+msgid "You must have OGG support to play ogg files (%s)."
 msgstr ""
 
-#: musicbox.py:149 musicbox.py:149
-msgid "Seek"
+#: musicbox.py:92 playlistui.py:75
+msgid "Back"
 msgstr ""
 
-#: player.py:84
-msgid "Play takes a filename."
+#: musicbox.py:375
+msgid "Paused"
 msgstr ""
 
-#: musicbox.py:37
-msgid "Artist"
+#: musicbox.py:213
+msgid "Loading songs, please wait..."
 msgstr ""
 
-#: musicbox.py:176 musicbox.py:176 musicbox.py:457 musicbox.py:503
-msgid "Stop"
+#: musicbox.py:225
+msgid "Ready"
 msgstr ""
 
-#: playlist.py:173 playlist.py:174 playlist.py:177
-msgid "unknown"
-msgstr ""
-
-#: player.py:82
-msgid "Unsupported file (%s)."
-msgstr ""
-
-#: musicbox.py:124
-msgid "/Quit"
-msgstr ""
-
-#: musicbox.py:342
-msgid " - Scanning, please wait..."
-msgstr ""
-
-#: musicbox.py:107
-msgid "/Play\\/Pause"
-msgstr ""
-
-#: musicbox.py:118
-msgid "/Save Selection"
-msgstr ""
-
-#: playlist.py:22
-msgid ""
-"You must have at least one of either Ogg Vorbis or\n"
-"MAD libraries installed with the python bindings."
-msgstr ""
-
-#: musicbox.py:182 musicbox.py:182
-msgid "Play/Pause"
-msgstr ""
-
-#: musicbox.py:40
-msgid "Genre"
-msgstr ""
-
-#: musicbox.py:191
+#: playlistui.py:124
 msgid "Close"
 msgstr ""
 
@@ -171,11 +194,7 @@ msgid ""
 "It probably isn't fatal, but should be reported to the developers nonetheless."
 msgstr ""
 
-#: musicbox.py:110
-msgid "/Back"
-msgstr ""
-
-#: musicbox.py:122
-msgid "/Refresh"
+#: playlistui.py:79
+msgid "This Artist"
 msgstr ""
 

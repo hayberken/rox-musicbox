@@ -3,10 +3,10 @@
 	<section title="Settings">
 		<frame label='Library'>
 			<entry name='library' label='Path'>
-			A ':' separated list of .mp3, .ogg files or directories.  You can also include .m3u and .pls playlist files.
+			The (optional) default location of your music.  This location will be scanned and loaded at startup when no command-line arguments are given.  It is a ':' separated list of directories, and/or .xml, .pls, .m3u, .mp3, .ogg files.
 			</entry>
 			<entry name='library_re' label='Pattern'>
-			A python regular expression to parse the full path of each file into 'artist', 'album', 'title' and 'track'.
+			A python regular expression to parse the full path of each file into 'artist', 'album', 'title' and 'track'.  Used when there is no tag info in the file.
 			</entry>
 		</frame>
 		<frame label='Output'>

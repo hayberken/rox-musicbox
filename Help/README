@@ -30,9 +30,8 @@ Tag Info and Filenames
 MusicBox will try to read tag info from your files, but this can take a long time
 and many files do not contain this information.  Therefore, MusicBox will first attempt
 to 'guess' the artist, album and title from the filename and path of each song.
-After loading all filenames by guessing it will look for tag info in the files as a
-background task.  You can start playing songs or even quit MusicBox while this is
-happening.
+However this loading process is a background task.  You can start playing songs or
+even quit MusicBox while this is happening.
 
 The default assumption is artist/album/title.ext, but you can change this if you
 need to.  In the Options dialog there is a Pattern field that provides a place to
@@ -58,6 +57,8 @@ Current versions as of this writing are:
     pyogg, pyvorbis, libvorbis, libogg 1.0 (http://www.vorbis.com/download.psp)
     libao 0.8.3 (http://www.vorbis.com/download.psp)
     pyao  0.8 (http://www.vorbis.com/download.psp)
+Optional:
+	pyid3lib, id3lib (for ID3v2 tags!)
 
 Hopefully your distro will provide packages for these, otherwise you will have to
 download and build them from sources.
@@ -76,7 +77,8 @@ Seek control bar to zip to specific parts of any song.
 Toggle between Normal and Mini views.
 Background Tag reading to speed up initial load times.
 Filter by Artist, Album, Genre
-Nifty UI!
+Volume Control
+Niftier UI!
 
 
 Conditions

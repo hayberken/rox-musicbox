@@ -1,6 +1,6 @@
 #!/usr/bin/env python
-import findrox
-import sys, os
+import findrox; findrox.version(1, 9, 8)
+import sys, os, gobject, socket
 import rox
 
 __builtins__._ = rox.i18n.translation(os.path.join(rox.app_dir, 'Messages'))
@@ -9,11 +9,6 @@ from rox import g
 import gtkexcepthook
 import musicbox
 
-try:
-	import rox.basedir
-except ImportError:
-	rox.croak('Need ROX-Lib 1.9.7 or later:\n'
-		'http://rox.sourceforge.net/rox_lib.html')
 
 if g.pygtk_version < (1,99,17):
 	rox.croak('Need pygtk 1.99.17 or later:\n'
@@ -25,9 +20,23 @@ except RuntimeError:
 	rox.croak('You must have threads compiled into your PyGTK!')
 
 
-box = musicbox.MusicBox()
-box.show()
+#see if another instance is running and pass it our args (via xmlrpc)
+try:
+	import xmlrpclib
+	client = xmlrpclib.Server("http://localhost:8989", None, False)
+	client.load_args(sys.argv[1:])
 
-g.threads_enter()
-rox.mainloop()
-g.threads_leave()
+#if not then start a new instance
+except socket.error:
+	box = musicbox.MusicBox()
+	box.show()
+
+	g.threads_enter()
+	rox.mainloop()
+	g.threads_leave()
+
+#other errors here.
+except:
+	rox.croak('Unknown error starting MusicBox')
+
+

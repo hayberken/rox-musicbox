@@ -1,9 +1,6 @@
 TODO items for MusicBox
 
-* Finish new playlistui code.
-
-* Move player control from the UI to the playlist (to allow mulitple UIs to share and
-control	a single playlist.
+* Finish new playlistui code. (Almost)
 
 * Hide/disable volume control when Python 2.3 is not available?
 
@@ -14,10 +11,10 @@ control	a single playlist.
 
 * Add Edit id3 tags menu option? call out to Songer? Drag and drop to Songer?
 
-* Support for large libraries (takes too long to load) - Done!
-
 * Mutiple selection support
 
 * Delete songs from list
 
-* Save list/selection as pls/m3u^H^H^H^H^H^H^HXML file - Done!
+* Save playlist UI settings (column width, order, window size, etc.)
+
+
