@@ -116,7 +116,6 @@ class Playlist(saving.Saveable, gobject.GObject):
 
 		#filename, title, track, album, artist, genre, length, type
 		self.model = gtk.ListStore(str, str, int, str, str, str, int, str, str)
-#		self.model.set_sort_func(COL_TRACK, self.comparemethod, COL_TRACK)
 		self.song_list_filter = self.model.filter_new()
 		self.song_list_filter.set_visible_func(self.the_filter)
 		self.song_list = gtk.TreeModelSort(self.song_list_filter)
@@ -136,10 +135,11 @@ class Playlist(saving.Saveable, gobject.GObject):
 			pass
 
 		num_songs = len(self)
+		if len(self.shuffle_cache) >= num_songs:
+			self.shuffle_cache = [] #we used them all up, so reset the cache
+
 		while True:
 			n = self.rndm.randrange(0, num_songs)
-			if self.shuffle_cache_size >= num_songs:
-				break
 			if n not in self.shuffle_cache:
 				break
 		self.set_index(n)
