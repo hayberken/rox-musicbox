@@ -1,18 +1,16 @@
-# MusicBox Italian Translation.
-# Copyright @ 2003 Free Software Foundation, Inc.
-# Current translator: Yuri Bongiorno http://yuri.webhop.org, 2003.
-# Traduttori Italiani GNU:   http://www.linux.it/tp
+# MusicBox French Translation.
+# Sebastien Person <personseb@yahoo.fr>, 2004.
+#
 msgid ""
 msgstr ""
-"Project-Id-Version: MusicBox 0.0.9\n"
-"POT-Creation-Date: 2003-08-20 16:40+0200\n"
-"PO-Revision-Date: 2003-08-20 16:40+0200\n"
-"Last-Translator: Yuri Bongiorno http://yuri.webhop.org\n"
-"Language-Team: Italian <tp@lists.linux.it>\n"
+"Project-Id-Version: MusicBox 0.0.12\n"
+"POT-Creation-Date: Tue Sep  2 12:18:32 2003\n"
+"PO-Revision-Date: 2003-09-02 12:23-0300\n"
+"Last-Translator: Sebastien Person <personseb@yahoo.fr>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Report-Msgid-Bugs-To: \n"
+"Generated-By: pygettext.py 1.4\n"
 
 #: playlistui.py:33
 msgid "Album"
@@ -21,7 +19,7 @@ msgstr "Album"
 #: musicbox.py:106 playlistui.py:76
 #, fuzzy
 msgid "Quit"
-msgstr "Esci"
+msgstr "Quitter"
 
 #: musicbox.py:118 playlistui.py:51
 msgid "Playlist"
@@ -29,23 +27,23 @@ msgstr ""
 
 #: musicbox.py:94 musicbox.py:155
 msgid "Pause"
-msgstr "Pausa"
+msgstr "Pause"
 
 #: playlistui.py:32
 msgid "Title"
-msgstr "Titolo"
+msgstr "Titre"
 
 #: gtkexcepthook.py:15
 msgid "Bug Detected"
-msgstr "Trovato bug"
+msgstr "Erreur Detectee"
 
 #: musicbox.py:98 musicbox.py:142
 msgid "Next"
-msgstr "Successivo"
+msgstr "Suivant"
 
 #: musicbox.py:161
 msgid "Prev"
-msgstr "Precedente"
+msgstr "Precedent"
 
 #: musicbox.py:449
 msgid "Loading"
@@ -53,32 +51,31 @@ msgstr ""
 
 #: playlistui.py:67
 msgid "All songs"
-msgstr "Tutte le canzoni"
+msgstr "Toutes les chansons"
 
 #: musicbox.py:100 playlistui.py:73
 msgid "Save"
-msgstr "Salva"
+msgstr "Sauver"
 
 #: musicbox.py:264
 msgid " songs"
-msgstr " canzoni"
+msgstr " chansons"
 
 #: musicbox.py:94 musicbox.py:155
-#, fuzzy
 msgid "Play"
-msgstr "In riproduzione"
+msgstr "Lecture"
 
 #: musicbox.py:134
 msgid "Repeat"
-msgstr "Ripetizione brano"
+msgstr "Repeter"
 
 #: playlistui.py:34
 msgid "Track"
-msgstr "Traccia"
+msgstr "Piste"
 
 #: playlistui.py:37
 msgid "Type"
-msgstr ""
+msgstr "Type"
 
 #: musicbox.py:95 musicbox.py:148
 msgid "Stop"
@@ -86,20 +83,19 @@ msgstr "Stop"
 
 #: player.py:68
 msgid "You must have MAD support to play mp3 files (%s)."
-msgstr ""
+msgstr "Vous devez avoir le support MAD pour jouer les fichiers mp3 (%s)."
 
 #: musicbox.py:439
-#, fuzzy
 msgid "Playing"
-msgstr "In riproduzione"
+msgstr "Lecture en cours"
 
 #: playlistui.py:35
 msgid "Genre"
-msgstr "Genere"
+msgstr "Genre"
 
 #: musicbox.py:264
 msgid "loaded "
-msgstr ""
+msgstr "charge"
 
 #: musicbox.py:104
 msgid "Info"
@@ -107,90 +103,90 @@ msgstr ""
 
 #: playlistui.py:71
 msgid "New Filter..."
-msgstr "Nuovo filtro..."
+msgstr "Nouveau filtre..."
 
 #: musicbox.py:422
 msgid " of "
-msgstr ""
+msgstr " de "
 
 #: playlistui.py:36
 msgid "Length"
-msgstr ""
+msgstr "Longueur"
 
 #: playlistui.py:31
 msgid "Artist"
-msgstr "Artista"
+msgstr "Artiste"
 
 #: musicbox.py:443
 msgid "Time Remaining"
-msgstr ""
+msgstr "Temps restant"
 
 #: musicbox.py:101 playlistui.py:74
 msgid "Refresh"
-msgstr "Aggiorna"
+msgstr "Raffraichir"
 
 #: playlistui.py:67 playlistui.py:68 playlistui.py:69 playlistui.py:70
 #: playlistui.py:71
 msgid "Filter"
-msgstr "Filtro"
+msgstr "Filtre"
 
 #: musicbox.py:339
 msgid "Failed to start playing %s"
-msgstr "Riproduzione di %s fallita"
+msgstr "Impossible de lire %s"
 
 #: playlistui.py:69
 #, fuzzy
 msgid "This Album"
-msgstr "Questo album"
+msgstr "Cet Album"
 
 #: musicbox.py:399 musicbox.py:453
 #, fuzzy
 msgid "Stopped"
-msgstr "Fermato"
+msgstr "Arrete"
 
 #: gtkexcepthook.py:19
 msgid "Show Details"
-msgstr "Mostra dettagli"
+msgstr "Plus de details"
 
 #: playlistui.py:271 playlistui.py:283 playlistui.py:295
 msgid "Please make a selection first."
-msgstr "Si deve fare prima una selezione."
+msgstr "Veuillez faire prealablement une selection"
 
 #: musicbox.py:103 musicbox.py:116
 msgid "Options"
-msgstr "Opzioni"
+msgstr "Options"
 
 #: musicbox.py:127
 msgid "Shuffle"
-msgstr "Riproduzione casuale"
+msgstr "Mode Aleatoire"
 
 #: player.py:65
 msgid "You must have OGG support to play ogg files (%s)."
-msgstr "È necessario il supporto a OGG per riprodurre i file ogg (%s)."
+msgstr "Vous devez avoir le support OGG pour jouer les fichiers OGG (%s)."
 
 #: musicbox.py:97
 #, fuzzy
 msgid "Back"
-msgstr "Indietro"
+msgstr "Retour"
 
 #: musicbox.py:451
 #, fuzzy
 msgid "Paused"
-msgstr "In pausa"
+msgstr "En pause"
 
 #: musicbox.py:258
 #, fuzzy
 msgid "Loading songs, please wait..."
-msgstr "Scansione in corso..."
+msgstr "chargement des chansons, veuillez patienter..."
 
 #: playlistui.py:70
 #, fuzzy
 msgid "This Genre"
-msgstr "Questo genere"
+msgstr "Ce Genre"
 
 #: musicbox.py:264
 msgid "Ready"
-msgstr ""
+msgstr "Pret"
 
 #: gtkexcepthook.py:12
 msgid ""
@@ -200,11 +196,44 @@ msgid ""
 "It probably isn't fatal, but should be reported to the developers "
 "nonetheless."
 msgstr ""
-"<big><b>È stato trovato un errore di programmazione durantel'esecuzione di "
-"questo programma.</b></big>\n"
-"\n"
-"Probabilmente non è un errore fatale, ma bisogna segnalarlo aglisviluppatori."
 
 #: playlistui.py:68
+#, fuzzy
 msgid "This Artist"
-msgstr "Questo artista"
+msgstr "Cet Artiste"
+
+#~ msgid "Comment"
+#~ msgstr "Commentaire"
+
+#~ msgid "Close"
+#~ msgstr "Fermer"
+
+#~ msgid "Play/Pause"
+#~ msgstr "Lecture/Pause"
+
+#~ msgid "/Next"
+#~ msgstr "/Suivant"
+
+#~ msgid "/Toggle View"
+#~ msgstr "/Changer la vue"
+
+#~ msgid "/Options"
+#~ msgstr "/Options"
+
+#~ msgid " by "
+#~ msgstr " par "
+
+#~ msgid "/Stop"
+#~ msgstr "/Stop"
+
+#~ msgid "Seek"
+#~ msgstr "Parcourir"
+
+#~ msgid "unknown"
+#~ msgstr "inconnu"
+
+#~ msgid "/Play\\/Pause"
+#~ msgstr "/Lecture\\/Pause"
+
+#~ msgid "/Refresh"
+#~ msgstr "/Raffraichir"

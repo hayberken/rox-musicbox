@@ -1,7 +1,7 @@
 from __future__ import generators
 
 import rox
-from rox import g, Menu, app_options, loading, saving, mime
+from rox import g, Menu, app_options, loading, saving, mime, InfoWin
 from rox.options import Option
 
 import os, sys, re, string, threading
@@ -101,6 +101,7 @@ class MusicBox(rox.Window, loading.XDSLoader):
 			('/'+_("Refresh"), 'update_thd', '<StockItem>', '', g.STOCK_REFRESH),
 			('/','','<Separator>','', 0),
 			('/'+_("Options"), 'show_options', '<StockItem>', '', g.STOCK_PREFERENCES),
+			('/'+_('Info'),	'get_info',    '<StockItem>', '', g.STOCK_DIALOG_INFO),
 			('/','','<Separator>','', 0),
 			('/'+_("Quit"), 'close', '<StockItem>', '', g.STOCK_CLOSE),
 			])
@@ -114,8 +115,9 @@ class MusicBox(rox.Window, loading.XDSLoader):
 
 		self.toolbar.insert_stock(g.STOCK_PREFERENCES, _("Options"),
 					None, self.show_options, None, 0)
-		self.toolbar.insert_stock(g.STOCK_INDEX, _("Playlist"),
+		self.list_btn = self.toolbar.insert_stock(g.STOCK_INDEX, _("Playlist"),
 					None, self.show_playlist, None, 0)
+		self.list_btn.set_sensitive(False)
 
 		self.toolbar.insert_space(0)
 
@@ -137,24 +139,28 @@ class MusicBox(rox.Window, loading.XDSLoader):
 
 		image_next = g.Image()
 		image_next.set_from_file(APP_DIR+'/pixmaps/media-next.png')
-		self.toolbar.insert_item(_("Next"), _("Next"),
+		self.next_btn = self.toolbar.insert_item(_("Next"), _("Next"),
 					None, image_next, self.next, None, 0)
+		self.next_btn.set_sensitive(False)
 
 		image_stop = g.Image()
 		image_stop.set_from_file(APP_DIR+'/pixmaps/media-stop.png')
-		self.toolbar.insert_item(_("Stop"), _("Stop"),
+		self.stop_btn = self.toolbar.insert_item(_("Stop"), _("Stop"),
 					None, image_stop, self.stop, None, 0, )
+		self.stop_btn.set_sensitive(False)
 
 		image_play = g.Image()
 		self.image_play = image_play
 		image_play.set_from_file(BMP_PLAY)
-		self.toolbar.insert_item(_("Play")+'/'+_("Pause"), _("Play")+'/'+_("Pause"),
+		self.play_btn = self.toolbar.insert_item(_("Play")+'/'+_("Pause"), _("Play")+'/'+_("Pause"),
 					None, image_play, self.play_pause, None, 0)
+		self.play_btn.set_sensitive(False)
 
 		image_prev = g.Image()
 		image_prev.set_from_file(APP_DIR+'/pixmaps/media-prev.png')
-		self.toolbar.insert_item(_("Prev"), _("Prev"),
+		self.prev_btn = self.toolbar.insert_item(_("Prev"), _("Prev"),
 					None, image_prev, self.prev, None, 0)
+		self.prev_btn.set_sensitive(False)
 
 
 		# Create layout, and text display(s)
@@ -214,6 +220,15 @@ class MusicBox(rox.Window, loading.XDSLoader):
 
 
 	####################################################################
+	def set_sensitive(self, state):
+		self.list_btn.set_sensitive(state)
+		self.play_btn.set_sensitive(state)
+		self.prev_btn.set_sensitive(state)
+		self.next_btn.set_sensitive(state)
+		self.stop_btn.set_sensitive(state)
+
+
+	####################################################################
 	def server(self):
 		"""Run an XMLRPC server to process external/remote commands"""
 		server = SimpleXMLRPCServer(('localhost', 8989))
@@ -247,6 +262,12 @@ class MusicBox(rox.Window, loading.XDSLoader):
 
 		g.threads_enter()
 		self.display_status.set_text(_("Ready")+': '+_("loaded ")+str(len(self.playlist))+_(" songs"))
+
+		if len(self.playlist):
+			self.set_sensitive(True)
+		else:
+			self.set_sensitive(False)
+
 		if LIBRARY.has_changed and len(self.playlist):
 			self.play()
 		g.threads_leave()
@@ -426,6 +447,10 @@ class MusicBox(rox.Window, loading.XDSLoader):
 
 		elif state == 'loading':
 			self.display_status.set_text(_("Loading")+': '+str(len(self.playlist)))
+			if len(self.playlist):
+				self.set_sensitive(True)
+			else:
+				self.set_sensitive(False)
 		elif state == 'pause':
 			self.display_status.set_text(_("Paused")+': '+song_string)
 		elif state == 'stop':
@@ -492,6 +517,10 @@ class MusicBox(rox.Window, loading.XDSLoader):
 			return 0
 		self.menu.popup(self, event)
 		return 1
+
+	####################################################################
+	def get_info(self):
+		InfoWin.infowin(APP_NAME)
 
 
 	####################################################################

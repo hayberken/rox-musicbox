@@ -13,28 +13,24 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: pygettext.py 1.4\n"
 
-#: playlistui.py:34
+#: playlistui.py:33
 msgid "Album"
 msgstr "Album"
 
-#: musicbox.py:97 playlistui.py:87
+#: musicbox.py:106 playlistui.py:76
 #, fuzzy
 msgid "Quit"
-msgstr "/Salir"
+msgstr "Salir"
 
-#: musicbox.py:109 playlistui.py:53
+#: musicbox.py:118 playlistui.py:51
 msgid "Playlist"
 msgstr ""
 
-#: musicbox.py:89 musicbox.py:143 playlistui.py:72 playlistui.py:115
+#: musicbox.py:94 musicbox.py:155
 msgid "Pause"
 msgstr "Pausa"
 
-#: playlistui.py:84
-msgid "Save"
-msgstr ""
-
-#: playlistui.py:33
+#: playlistui.py:32
 msgid "Title"
 msgstr "Titulo"
 
@@ -42,102 +38,109 @@ msgstr "Titulo"
 msgid "Bug Detected"
 msgstr "Error Detectado"
 
-#: musicbox.py:93 musicbox.py:132 playlistui.py:76 playlistui.py:104
+#: musicbox.py:98 musicbox.py:142
 msgid "Next"
 msgstr "Siguiente"
 
-#: playlistui.py:81
-#, fuzzy
-msgid "This Genre"
-msgstr "Genero"
-
-#: playlistui.py:78
-msgid "All songs"
-msgstr ""
-
-#: musicbox.py:148 playlistui.py:120
+#: musicbox.py:161
 msgid "Prev"
 msgstr "Anterior"
 
-#: musicbox.py:225
+#: musicbox.py:449
+msgid "Loading"
+msgstr ""
+
+#: playlistui.py:67
+msgid "All songs"
+msgstr ""
+
+#: musicbox.py:100 playlistui.py:73
+msgid "Save"
+msgstr ""
+
+#: musicbox.py:264
 msgid " songs"
 msgstr ""
 
-#: musicbox.py:89 musicbox.py:143 playlistui.py:72 playlistui.py:115
+#: musicbox.py:94 musicbox.py:155
 msgid "Play"
 msgstr ""
 
-#: musicbox.py:124
+#: musicbox.py:134
 msgid "Repeat"
 msgstr "Repetir"
 
-#: playlistui.py:35
+#: playlistui.py:34
 msgid "Track"
 msgstr ""
 
-#: playlistui.py:38
+#: playlistui.py:37
 msgid "Type"
 msgstr ""
 
-#: musicbox.py:90 musicbox.py:137 playlistui.py:73 playlistui.py:109
+#: musicbox.py:95 musicbox.py:148
 msgid "Stop"
 msgstr "Detener"
 
-#: player.py:67
+#: player.py:68
 msgid "You must have MAD support to play mp3 files (%s)."
 msgstr ""
 
-#: musicbox.py:95 musicbox.py:107
-msgid "Options"
-msgstr "Options"
+#: musicbox.py:439
+msgid "Playing"
+msgstr ""
 
-#: playlistui.py:36
+#: playlistui.py:35
 msgid "Genre"
 msgstr "Genero"
 
-#: musicbox.py:225
+#: musicbox.py:264
 msgid "loaded "
 msgstr ""
 
-#: playlistui.py:82
+#: musicbox.py:104
+msgid "Info"
+msgstr ""
+
+#: playlistui.py:71
 msgid "New Filter..."
 msgstr ""
 
-#: musicbox.py:347
+#: musicbox.py:422
 msgid " of "
-msgstr ""
+msgstr " de "
 
-#: playlistui.py:37
+#: playlistui.py:36
 msgid "Length"
 msgstr ""
 
-#: playlistui.py:32
+#: playlistui.py:31
 msgid "Artist"
 msgstr "Artista"
 
-#: musicbox.py:368
+#: musicbox.py:443
 msgid "Time Remaining"
 msgstr ""
 
-#: playlistui.py:85 playlistui.py:97
+#: musicbox.py:101 playlistui.py:74
 msgid "Refresh"
 msgstr "Refrescar"
 
-#: playlistui.py:78 playlistui.py:79 playlistui.py:80 playlistui.py:81
-#: playlistui.py:82
+#: playlistui.py:67 playlistui.py:68 playlistui.py:69 playlistui.py:70
+#: playlistui.py:71
 msgid "Filter"
 msgstr ""
 
-#: musicbox.py:277
+#: musicbox.py:339
 msgid "Failed to start playing %s"
 msgstr ""
 
-#: playlistui.py:80
+#: playlistui.py:69
 #, fuzzy
 msgid "This Album"
-msgstr "Album"
+msgstr "Este Album"
 
-#: musicbox.py:326 musicbox.py:377
+#: musicbox.py:399 musicbox.py:453
 #, fuzzy
 msgid "Stopped"
 msgstr "Detener"
@@ -146,48 +149,45 @@ msgstr "Detener"
 msgid "Show Details"
 msgstr "Mostrar Detalles"
 
-#: playlistui.py:397 playlistui.py:409 playlistui.py:421
+#: playlistui.py:271 playlistui.py:283 playlistui.py:295
 msgid "Please make a selection first."
 msgstr ""
 
-#: musicbox.py:364
-msgid "Playing"
-msgstr ""
+#: musicbox.py:103 musicbox.py:116
+msgid "Options"
+msgstr "Options"
 
-#: playlistui.py:39
-msgid "Comment"
-msgstr ""
-
-#: musicbox.py:117
+#: musicbox.py:127
 msgid "Shuffle"
 msgstr "Aleatorio"
 
-#: player.py:64
+#: player.py:65
 msgid "You must have OGG support to play ogg files (%s)."
 msgstr ""
 
-#: musicbox.py:92 playlistui.py:75
+#: musicbox.py:97
 #, fuzzy
 msgid "Back"
-msgstr "/Atras"
+msgstr "Atras"
 
-#: musicbox.py:375
+#: musicbox.py:451
 #, fuzzy
 msgid "Paused"
 msgstr "Pausa"
 
-#: musicbox.py:213
+#: musicbox.py:258
 #, fuzzy
 msgid "Loading songs, please wait..."
-msgstr " - Examinando, por favor espere..."
+msgstr "Examinando, por favor espere..."
 
-#: musicbox.py:225
+#: playlistui.py:70
+#, fuzzy
+msgid "This Genre"
+msgstr "Genero"
+
+#: musicbox.py:264
 msgid "Ready"
 msgstr ""
-
-#: playlistui.py:124
-msgid "Close"
-msgstr "Cerrar"
 
 #: gtkexcepthook.py:12
 msgid ""
@@ -198,37 +198,7 @@ msgid ""
 "nonetheless."
 msgstr ""
 
-#: playlistui.py:79
+#: playlistui.py:68
 #, fuzzy
 msgid "This Artist"
-msgstr "Artista"
-
-#~ msgid "Play/Pause"
-#~ msgstr "Reproducir/Pausa"
-
-#~ msgid "/Next"
-#~ msgstr "/Siguiente"
-
-#~ msgid "/Toggle View"
-#~ msgstr "/Cambiar vista"
-
-#~ msgid "/Options"
-#~ msgstr "/Opciones"
-
-#~ msgid " by "
-#~ msgstr " por "
-
-#~ msgid "/Stop"
-#~ msgstr "/Detener"
-
-#~ msgid "Seek"
-#~ msgstr "Buscar"
-
-#~ msgid "unknown"
-#~ msgstr "desconocido"
-
-#~ msgid "/Play\\/Pause"
-#~ msgstr "/Reproducir\\/Pausa"
-
-#~ msgid "/Refresh"
-#~ msgstr "/Refrescar"
+msgstr "Este Artista"

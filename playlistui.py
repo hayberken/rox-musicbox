@@ -170,7 +170,7 @@ class PlaylistUI(rox.Window):
 		self.selection.handler_block(self.handler)
 
 		#save where we were, iterating destroys this info
-		c = self.playlist.get_index()
+		save_index = self.playlist.get_index()
 
 		self.store.clear()
 		g.threads_leave()
@@ -182,21 +182,29 @@ class PlaylistUI(rox.Window):
 				self.set_song_info(iter, song, len(self.store)-1)
 				g.threads_leave()
 
-		#restore everything nicely
 		g.threads_enter()
-		self.playlist.set(c)
-		self.view.set_cursor((c,))
-		self.view.scroll_to_cell((c,))
+		self.playlist.set(save_index)
+		self.sync()
 		self.selection.handler_unblock(self.handler)
 		g.threads_leave()
 
 
 	####################################################################
 	def sync(self):
-		"""Scroll the playlistUI to the current song"""
-		c = self.playlist.get_index()
-		self.view.set_cursor((c,))
-		self.view.scroll_to_cell((c,))
+		"""Scroll the playlistUI to the currently selected song"""
+		#realizing that the index and the current view's sort order will not
+		#always match...
+		song = self.playlist.get()
+		iter = self.store.get_iter_root()
+		index = 0
+		while iter != None:
+			if self.store.get_value(iter, COL_FILE) == song.filename:
+				break
+			index +=1
+			iter = self.store.iter_next(iter)
+
+		self.view.set_cursor((index,))
+		self.view.scroll_to_cell((index,))
 
 
 	####################################################################
