@@ -2,6 +2,25 @@ MusicBox
 MP3 Player (MPG123/MPG321 front-end)
 by Ken Hayber
 
+23-Aug-2003
+0.0.5
+- Added support for multiple Music folders using ':' as separator (e.g. like PATH).
+- Added support for drag and drop of folders into main window.  Dropped folder list
+	replaces current library and is saved as the default.
+- Loading library is now in a thread so window comes up faster and you can start playing
+	before library is completely loaded (for those with large libraries).
+- MAY have fixed the bug that some are seeing with mpg321/123 locking up when Stop or
+	other buttons are pressed (I fixed a gtk threads issue, but since I have not
+	seen the reported problem it may not be the same problem)
+- Display song and remaining time on title bar so that minimized player still shows status.
+	(This needs some work and should be optional I think)
+- I received an Italian translation (thanks yuri), but it is not working.  Someone tell
+	me what I'm doing wrong, please.
+	
+I've noticed that only ogg123 allows other sounds to be played when using esd.  This
+kinda sucks.  I'm looking at doing all the playing in python (pyogg, pyao, pymad) to
+see if that works any better.
+
 
 19-Aug-2003
 0.0.4

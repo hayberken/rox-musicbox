@@ -1,7 +1,7 @@
 import rox
-from rox import g, filer, Menu, app_options, i18n
+from rox import g, filer, Menu, app_options, i18n, loading, saving
 from rox.options import Option
-import os, sys, re, string, threading, time
+import os, sys, re, string, threading, time, stat
 from threading import *
 from random import Random
 import pympg123
@@ -46,11 +46,10 @@ REPEAT = Option('repeat', 0)
 rox.app_options.notify()
 
 
-class MusicBox(rox.Window):
+class MusicBox(rox.Window, loading.XDSLoader, saving.Saveable):
 	def __init__(self):
 		rox.Window.__init__(self)
-
-		g.threads_init()
+		loading.XDSLoader.__init__(self, ['audio/mp3' 'inode/directory'])
 				
 		self.set_title(APP_NAME)
 		self.set_border_width(1)
@@ -87,7 +86,7 @@ class MusicBox(rox.Window):
 			('/','','<Separator>','', 0),
 			(_('/Toggle View'),  'toggle_view', '', '<Ctrl>T', 0),
 			(_('/Options'), 'show_options', '<StockItem>', '<Ctrl>O', g.STOCK_PREFERENCES),
-			(_('/Refresh'), 'update', '<StockItem>', '<Ctrl>O', g.STOCK_REFRESH),
+			(_('/Refresh'), 'update_thd', '<StockItem>', '<Ctrl>O', g.STOCK_REFRESH),
 			('/','','<Separator>','', 0),
 			(_('/Quit'), 'close', '<StockItem>', '<Ctrl>Q', g.STOCK_CLOSE),
 			])
@@ -104,7 +103,7 @@ class MusicBox(rox.Window):
 		self.toolbar.insert_stock(g.STOCK_PREFERENCES, _('Options'), 
 					None, self.show_options, None, 0)
 		self.toolbar.insert_stock(g.STOCK_REFRESH, _('Refresh'), 
-					None, self.update, None, 0)
+					None, self.update_thd, None, 0)
 
 		self.toolbar.insert_space(0)
 
@@ -178,7 +177,9 @@ class MusicBox(rox.Window):
 		swin.add(view)
 		view.set_search_column(COL_TITLE)
 		view.set_enable_search(True)
-		view.set_reorderable(False)
+#		view.set_reorderable(True)
+		view.set_rules_hint(True)
+#		view.enable_model_drag_source(('text/plain', 2, 3), 1, g.gdk.ACTION_DEFAULT)
 
 		cell = g.CellRendererText()
 		column = g.TreeViewColumn(_('Artist'), cell, text = COL_ARTIST)
@@ -232,9 +233,9 @@ class MusicBox(rox.Window):
 		####################################################################
 		self.vbox.show_all()
 		
-#		thd_update = Thread(name='update', target=self.update)
-#		thd_update.start()	
-		self.update()
+		self.show()
+		
+		self.update_thd()
 
 		self.player = None
 		self.current_song = ""
@@ -243,40 +244,49 @@ class MusicBox(rox.Window):
 
 
 	####################################################################
+	#
+	####################################################################
+	def update_thd(self, button=None):
+		thd_update = Thread(name='update', target=self.update)
+		thd_update.start()
+
+	####################################################################
 	# (re)load the playlist
 	####################################################################
 	def update(self, button=None):
 		self.set_title(APP_NAME+_(' - Scanning, please wait...'))
-		g.gdk.flush()
 
 		self.song_list.clear()
 		
-		if not os.access(LIBRARY.value, os.R_OK):
-			rox.info("Cannot find your music libary - "+LIBRARY.value)
-			rox.edit_options()
-			return
-
-		foo = pyplaylist.playlist()
-		foo.compile_masterlist(LIBRARY.value)
-		foo.set_playlist_as_list()
-
-		foo.first()
-		for t in foo.playlist:
-			iter = self.song_list.append(None)
-			foo.next()
-			self.song_list.set(iter, COL_FILE,   foo.current_file(),
-						 COL_ARTIST, foo.artist, 
-						 COL_TITLE,  foo.songname, 
-						 COL_ALBUM,  foo.album,
-						 COL_GENRE,  foo.genre#,
-#this takes too long to read			 COL_LENGTH, foo.length
-						 )
-
+		#LIBRARY can be a ':' separated path 
+		library_path = LIBRARY.value.split(":")
+		
+		for library_element in library_path:
+			#make sure each element is a folder and we can read it
+			if os.access(library_element, os.R_OK) and \
+			stat.S_ISDIR(os.stat(library_element)[stat.ST_MODE]):
+				foo = pyplaylist.playlist()
+				foo.compile_masterlist(library_element)
+				foo.set_playlist_as_list()
+				foo.first()
+				for t in foo.list:
+					iter = self.song_list.append(None)
+					foo.next()
+					g.threads_enter()
+					self.song_list.set(iter, COL_FILE,   foo.current_file(),
+							 COL_ARTIST, foo.artist, 
+							 COL_TITLE,  foo.songname, 
+							 COL_ALBUM,  foo.album,
+							 COL_GENRE,  foo.genre#,
+			#this takes too long to read	 COL_LENGTH, foo.length
+							 )
+					g.threads_leave()
+							 
 		#select the first song in the list as a starting point
 		self.view.set_cursor((0,))
 		self.set_title(APP_NAME)
 
-	
+
 	####################################################################
 	# double-click handler, plays the song
 	####################################################################
@@ -292,7 +302,7 @@ class MusicBox(rox.Window):
 			self.player = None
 			rox.edit_options()
 		else:
-			player_path = which(MP3_PLAYER.value)
+			player_path = which(MP3_PLAYER.value.split(' ')[0])
 			if player_path == None:
 				rox.info("Can't find an executable ("+MP3_PLAYER.value+") in your PATH.")
 				self.player = None
@@ -340,8 +350,8 @@ class MusicBox(rox.Window):
 	####################################################################
 	def prev(self, button=None):
 		path, column = self.view.get_cursor()
-		nth = path[0]-1
-		path = (nth,)
+		n = path[0]-1
+		path = (n,)
 		self.view.set_cursor(path)
 		self.play()
 		self.status_bar.output("Prev...",6000)	
@@ -351,16 +361,16 @@ class MusicBox(rox.Window):
 	####################################################################
 	def next(self, button=None):
 		if self.shuffle.get_active():
-			nth = self.rndm.randrange(0, len(self.song_list))
+			n = self.rndm.randrange(0, len(self.song_list))
 		else:
 			path, column = self.view.get_cursor()
-			nth = path[0]
-			if nth >= len(self.song_list)-1:
+			n = path[0]
+			if n >= len(self.song_list)-1:
 				if self.repeat.get_active():
-					nth = 0
+					n = 0
 			else:
-				nth = nth+1
-		path = (nth,)
+				n = n+1
+		path = (n,)
 		self.view.set_cursor(path)
 		self.play()
 		self.status_bar.output("Next...",6000)	
@@ -392,11 +402,11 @@ class MusicBox(rox.Window):
 		if state == 'play':
 			duration = int(remain + progress)
 			
-			hour = string.zfill(str(int(progress)/3600),2)
+#			hour = string.zfill(str(int(progress)/3600),2)
 			min = string.zfill(str(int(progress)%3600/60),2)
 			sec = string.zfill(str(int(progress)%3600%60),2)
 		
-			hourremain = string.zfill(str(remain/3600),2)
+#			hourremain = string.zfill(str(remain/3600),2)
 			minremain = string.zfill(str(remain%3600/60),2)
 			secremain = string.zfill(str(remain%3600%60),2)
 
@@ -409,10 +419,13 @@ class MusicBox(rox.Window):
 			if (self.view_state == VIEW_LARGE):
 				self.status_bar.output(_('Playing: ')+self.current_song+\
 						_(' by ')+self.current_artist+\
-						' ('+hourremain+':'+minremain+':'+secremain+')', 0)
+						' ('+minremain+':'+secremain+')', 0)
 			else:
 				self.status_bar.output(_('Playing: ')+self.current_song+\
-						' ('+hourremain+':'+minremain+':'+secremain+')', 0)
+						' ('+minremain+':'+secremain+')', 0)
+			self.set_title(APP_NAME+' - '+self.current_song+\
+					' ('+minremain+':'+secremain+')')
+						
 			
 		elif state == 'pause':
 			self.status_bar.output(_('Paused... '), 0)
@@ -497,6 +510,23 @@ class MusicBox(rox.Window):
 			self.resize(self.old_width, self.old_height)
 			self.view_state = VIEW_LARGE
 			self.set_resizable(True)
+			
+			
+	####################################################################
+	# accept one or more folders dropped on us as new Library directorys
+	####################################################################
+	def xds_load_uris(self, uris):
+		path = ''
+		for s in uris:
+			x = re.match('^file://(.*)', s)
+			if x and stat.S_ISDIR(os.stat(x.group(1))[stat.ST_MODE]):
+				if path == '':
+					path = x.group(1)
+				else:
+					path = path+':'+x.group(1)
+		LIBRARY.value = path
+		rox.app_options.save()
+		self.update_thd()
 			
 
 ####################################################################

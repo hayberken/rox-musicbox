@@ -76,6 +76,7 @@ import string
 import random
 import mp3infor
 
+
 class playlist:
 	debug_on = 0
 	list = []
@@ -95,7 +96,7 @@ class playlist:
 		self.list = []		# clear the playlist
 		self.playlist = []
 		self.index = 0
-      		self.israndom = 0
+		self.israndom = 0
 
 	def findfiles(self, list, directory):
 		self.debug("Finding Files")
@@ -117,16 +118,18 @@ class playlist:
 			
 	def compile_masterlist(self,path):
 		self.findfiles(self.list, path)
-                self.list.sort()
+#		self.list.sort()
 
 
 	def set_playlist_as_list(self):
 		self.debug("found files --> " +str(len(self.list)))
+
 		for i in range(len(self.list)):
 			self.playlist.append(i)
 
 		self.debug("plist files --> " +str(len(self.playlist)))
-		self.get_current_tag()		
+		self.get_current_tag()	
+		
 
 
 	def current_index(self):
@@ -150,11 +153,11 @@ class playlist:
 
 		# if we are random, then move ahead RANDOMLY!
 		if (self.israndom == 1):
-                        self.debug("moving NEXT (randomly)")
+			self.debug("moving NEXT (randomly)")
 			random.seed()
 			self.index = random.randint(0,len(self.playlist)-1)
 		else:
-                        self.debug("moving NEXT")
+			self.debug("moving NEXT")
 			if (self.index==len(self.playlist)-1):		
 				self.index=0
 			else:
@@ -168,11 +171,11 @@ class playlist:
 
 		# if we are random, then move previously RANDOM!
 		if (self.israndom == 1):
-                        self.debug("moving PREVIOUS (randomly)")
+			self.debug("moving PREVIOUS (randomly)")
 			random.seed()
 			self.index = random.randint(0,len(self.playlist)-1)
 		else:
-                        self.debug("moving PREVIOUS")
+			self.debug("moving PREVIOUS")
 			if (self.index == 0):		
 				self.index = len(self.playlist) - 1
 			else:
@@ -189,7 +192,7 @@ class playlist:
 	def randomize(self):
 		# set the israndom bit to true or false (it's a toggle!)
 		if (self.israndom == 1):				
-                        self.debug("NON-RANDOM set")
+			self.debug("NON-RANDOM set")
 			self.israndom = 0			
 		else:
 			self.debug("RANDOM set")
