@@ -27,30 +27,84 @@ try:
 except:
 	HAVE_AO=False
 	print 'No AO support!!'
+	import linuxaudiodev
 
 
 class Player:
 	state = 'stop'
 	seek_val = 0
 
+	def __init__(self, name, m_type, callback, id=None, buffersize=4096):
+		if HAVE_AO:
+			if id is None:
+				self.id = ao.driver_id('esd') #also can be 'oss', 'alsa', 'alsa09', etc.
+			else:
+				self.id = id
+
+		self.name = name
+		self.m_type = m_type
+		self.callback = callback
+		self.buffersize = buffersize
+
+	# Open and configure the audio device driver
+	def open(self, rate=44100, channels=2):
+		bits=16
+		if HAVE_AO:
+			self.dev = ao.AudioDevice(self.id, bits, rate, channels)
+		else:
+			self.dev = linuxaudiodev.open('w')
+			self.dev.setparameters(rate, bits, channels, linuxaudiodev.AFMT_S16_NE)
+
+
+	# Write data to the audio device
+	def write(self, buff, bytes):
+		if HAVE_AO:
+			self.dev.play(buff, bytes)
+		else:
+			while self.dev.obuffree() < bytes:
+				time.sleep(0.2)
+			self.dev.write(buff[:bytes])
+
+	# Figure out what type the file is and start playing it.
 	def play(self):
-		#TODO: use mime_type? to determine file type?
-		#print self.name
 		if os.path.isfile(self.name):
-			(root, ext) = os.path.splitext(self.name)
-			if ext == '.ogg':
+			if (self.m_type == 'application/ogg' and HAVE_OGG):
 				vf = ogg.vorbis.VorbisFile(self.name)
 				#self.info_ogg(vf)
 				self.start_ogg(vf)
-			elif ext == '.mp3':
-				mf = mad.MadFile(self.name)
+
+			elif (self.m_type == 'audio/x-mp3' and HAVE_MAD):
+				mf = mad.MadFile(self.name, self.buffersize)
 				#self.info_mad(mf)
 				self.start_mad(mf)
-			else:
-				raise ValueError, "Unrecognized file ext."
-		else:
-			raise ValueError, "Play takes a filename."
 
+			else:
+				raise ValueError, _('Unsupported file (%s).') % self.name
+		else:
+			raise ValueError, _('Play takes a filename.')
+
+	def stop(self):
+		self.state = 'stop'
+		del self.dev
+		time.sleep(0.2) # just to be sure that the device has time to shutdown
+
+	def pause(self):
+		if self.state == 'play':
+			self.state = 'pause'
+		elif self.state == 'pause':
+			self.state = 'play'
+
+	def seek(self, percent):
+		self.seek_val = percent
+
+
+	#############################
+	# OGG-specific stuff
+	#############################
+	def info_ogg(self, vf):
+		print vf.comment().as_dict()
+
+	# OGG playback loop
 	def start_ogg(self, vf):
 		self.state = 'play'
 
@@ -59,6 +113,9 @@ class Player:
 		elapse = 0
 		last_elapse = 0
 
+		vi = vf.info()
+		self.open(vi.rate, vi.channels)
+
 		while self.state == 'play' or self.state == 'pause':
 			if self.state == 'pause':
 				time.sleep(1)
@@ -66,7 +123,7 @@ class Player:
 				vf.time_seek(float(total_time * self.seek_val))
 				self.seek_val = 0
 			else:
-				(buff, bytes, bit) = vf.read(4096)
+				(buff, bytes, bit) = vf.read(self.buffersize)
 				if bytes == 0:
 					self.state = 'eof'
 					elapse = total_time
@@ -80,52 +137,10 @@ class Player:
 				last_elapse = elapse
 				self.callback(self.state, remain, elapse)
 
-	def start_mad(self, mf):
-		self.state = 'play'
 
-		total_time = mf.total_time()/1000
-		remain = total_time
-		elapse = 0
-		last_elapse = 0
-
-		while self.state == 'play' or self.state == 'pause':
-			if self.state == 'pause':
-				time.sleep(1)
-			elif self.seek_val:
-				mf.seek_time(long(total_time * self.seek_val * 1000))
-				self.seek_val = 0
-			else:
-				buff = mf.read()
-				if buff is None:
-					self.state = 'eof'
-					elapse = total_time
-					last_elapse = 0
-					remain = 0
-				else:
-					elapse = mf.current_time() / 1000
-					remain = total_time - elapse
-					self.write(buff, len(buff))
-			if elapse != last_elapse:
-				last_elapse = elapse
-				self.callback(self.state, remain, elapse)
-
-	def stop(self):
-		self.state = 'stop'
-		self.dev = None
-		time.sleep(0.2) # just to be sure that the device has time to shutdown
-
-	def pause(self):
-		if self.state == 'play':
-			self.state = 'pause'
-		elif self.state == 'pause':
-			self.state = 'play'
-
-	def seek(self, percent):
-		self.seek_val = percent
-
-	def info_ogg(self, vf):
-		print vf.comment().as_dict()
-
+	#############################
+	# MAD/MP3-specific stuff
+	#############################
 	def info_mad(self, mf):
 		if mf.layer() == mad.LAYER_I:
 			print "MPEG Layer I"
@@ -163,32 +178,38 @@ class Player:
 		print "total time %d ms (%dm%2ds)" % (millis, secs / 60, secs % 60)
 
 
-class AOPlayer(Player):
-	'''A player which uses the ao module.'''
-	def __init__(self, name, callback, id=None):
-		if id is None:
-			id = ao.driver_id('esd') #also can be 'oss', 'alsa', 'alsa09', etc.
-		self.dev = ao.AudioDevice(id)
-		self.name = name
-		self.callback = callback
+	# MP3 playback loop
+	def start_mad(self, mf):
+		self.state = 'play'
 
-	def write(self, buff, bytes):
-		self.dev.play(buff, bytes)
+		total_time = mf.total_time()/1000
+		remain = total_time
+		elapse = 0
+		last_elapse = 0
 
+		if mf.mode() == mad.MODE_SINGLE_CHANNEL:
+			channels = 1
+		else:
+			channels = 2
+		self.open(mf.samplerate(), channels)
 
-class LADPlayer(Player):
-	'''A player which uses the linuxaudiodev module.'''
-	def __init__(self, name):
-		import linuxaudiodev
-		self.lad = linuxaudiodev
-		self.dev = linuxaudiodev.open('w')
-		self.dev.setparameters(44100, 16, 2, linuxaudiodev.AFMT_S16_NE)
-		self.name = name
-
-	def write(self, buff, bytes):
-		while self.dev.obuffree() < bytes:
-			time.sleep(0.2)
-		self.dev.write(buff[:bytes])
-
-
-
+		while self.state == 'play' or self.state == 'pause':
+			if self.state == 'pause':
+				time.sleep(1)
+			elif self.seek_val:
+				mf.seek_time(long(total_time * self.seek_val * 1000))
+				self.seek_val = 0
+			else:
+				buff = mf.read()
+				if buff is None:
+					self.state = 'eof'
+					elapse = total_time
+					last_elapse = 0
+					remain = 0
+				else:
+					elapse = mf.current_time() / 1000
+					remain = total_time - elapse
+					self.write(buff, len(buff))
+			if elapse != last_elapse:
+				last_elapse = elapse
+				self.callback(self.state, remain, elapse)

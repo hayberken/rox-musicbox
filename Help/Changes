@@ -1,6 +1,20 @@
 MusicBox - an MP3/OGG Player for the ROX Desktop
 by Ken Hayber
 
+10-Sept-2003
+0.0.9
+- Split out the playlist code to allow easier addition of stuff like filtering.
+- Rudimentary filtering: single Artist, Album or Genre only for now.
+- Added regex pattern for splitting the path/filename into artist/album/title.  This
+	is used on initial load and when there is no tag information.  You can edit this
+	pattern to match your preference for storing and naming your music.
+- Added Spanish translation (thanks Nicolas)
+- Refactored player.py to allow song-specific parameters to be passed into the ouput
+	driver (fixed problems with mp3 sampled at 22050 instead of the more typical 44100)
+- Automatically try linuxaudiodevice if ao fails to import. (not tested)
+- Allow menu from right-click on song list (preparing for selection-specific menu)
+- Fixed shuffle cache code (int_value not value)
+
 1-Sept-2003
 0.0.8
 

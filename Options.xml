@@ -2,35 +2,46 @@
 <options>
 	<section title="Settings">
 		<frame label='Library'>
-			<entry name='library' label=''>
-			The location of your MP3 files.
+			<entry name='library' label='Path'>
+			A ':' separated list of .mp3, .ogg files or directories.  You can also include .m3u and .pls playlist files.
+			</entry>
+			<entry name='library_re' label='Pattern'>
+			A python regular expression to parse the full path of each file into 'artist', 'album' and 'title'.
 			</entry>
 		</frame>
-		<frame label='Driver'>
+		<frame label='Output'>
 			<hbox>
+			<label>Driver</label>
+			<spacer/>
 			<radio-group name='driver_id' columns='2'>
 				<radio label='esd' value='esd'>Gnome esound server</radio>
 				<radio label='oss' value='oss'>Open Sound System driver</radio>
-				<radio label='alsa09' value='alsa09'>New Alsa driver</radio>
-				<radio label='alsa' value='alsa'>Old Alsa driver</radio>
+				<radio label='alsa' value='alsa09'>current Alsa driver</radio>
+				<radio label='alsa (old)' value='alsa'>older (obsolete?) Alsa driver</radio>
 			</radio-group>
 			</hbox>
+			<spacer/>
+			<numentry name='audio_buffer' label='Buffer Size' min='512' max='65535' step='128'>
+			The size of the buffer used to read/write sound data.  A larger buffer may reduce skipping under heavy load.
+			</numentry>
 		</frame>
 
 		<frame label='Play Settings' columns='2'>
 		<hbox>
+			<toggle name='repeat' label='Repeat'>
+			Keep playing forever.
+			</toggle>
+			<spacer/>
+
 			<toggle name='shuffle' label='Shuffle'>
 			Randomize play order.
 			</toggle>
 			<spacer/>
-			<spacer/>
-			<toggle name='repeat' label='Repeat'>
-			Keep playing forever.
-			</toggle>
-		</hbox>
+
 			<numentry name='shuffle_cache' label='Shuffle cache size' min='0' max='100'>
 			How many songs to remember in shuffle mode so we don't replay too often.
 			</numentry>
+		</hbox>
 		</frame>
 	</section>
 

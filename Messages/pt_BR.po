@@ -1,9 +1,9 @@
-# Brazilian Translation of MusicBox 
+# Brazilian Translation of MusicBox
 # Copyright (C) 2003 Leandro Pereira <leandro@linuxmag.com.br>
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: MusicBox 0.05\n"
+"Project-Id-Version: MusicBox 0.0.9\n"
 "PO-Revision-Date: Sun Aug 17 18:52:30 2003\n"
 "Last-Translator: Leandro Pereira <leandro@linuxmag.com.br>\n"
 "Language-Team: Leandro Pereira <leandro@linuxmag.com.br>\n"
@@ -11,20 +11,23 @@ msgstr ""
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: musicbox.py:52
+#: musicbox.py:39
 msgid "Album"
 msgstr "Álbum"
 
-#: musicbox.py:522 musicbox.py:565
-#, fuzzy
-msgid "Pause"
-msgstr "Em pausa... "
+#: musicbox.py:113
+msgid "/Filter/All songs"
+msgstr ""
 
-#: musicbox.py:118
+#: musicbox.py:116
+msgid "/Filter/This Genre"
+msgstr ""
+
+#: musicbox.py:111
 msgid "/Next"
 msgstr "/Próximo"
 
-#: musicbox.py:51
+#: musicbox.py:38
 #, fuzzy
 msgid "Title"
 msgstr "Tempo"
@@ -32,6 +35,10 @@ msgstr "Tempo"
 #: musicbox.py:120
 msgid "/Toggle View"
 msgstr "/Alterar modo de exibição"
+
+#: musicbox.py:115
+msgid "/Filter/This Album"
+msgstr ""
 
 #: gtkexcepthook.py:15
 msgid "Bug Detected"
@@ -41,9 +48,18 @@ msgstr ""
 msgid "Refresh"
 msgstr "Atualizar"
 
-#: musicbox.py:172 musicbox.py:503
+#: musicbox.py:171 musicbox.py:446
 msgid "Next"
 msgstr "Próxima"
+
+#: musicbox.py:407
+msgid "Failed to start playing %s"
+msgstr ""
+
+#: musicbox.py:465 musicbox.py:501
+#, fuzzy
+msgid "Pause"
+msgstr "Em pausa... "
 
 #: gtkexcepthook.py:19
 msgid "Show Details"
@@ -53,15 +69,19 @@ msgstr ""
 msgid "/Options"
 msgstr "/Opções"
 
-#: musicbox.py:552
+#: musicbox.py:490
 msgid " by "
 msgstr " por "
 
-#: musicbox.py:115
+#: musicbox.py:108
 msgid "/Stop"
 msgstr "/Parar"
 
-#: musicbox.py:188 musicbox.py:475
+#: musicbox.py:117
+msgid "/Filter/New Filter..."
+msgstr ""
+
+#: musicbox.py:187 musicbox.py:418
 msgid "Prev"
 msgstr "Anterior"
 
@@ -69,51 +89,77 @@ msgstr "Anterior"
 msgid "Options"
 msgstr "Opções"
 
-#: musicbox.py:164
+#: musicbox.py:646 musicbox.py:655 musicbox.py:664
+msgid "Please make a selection first."
+msgstr ""
+
+#: musicbox.py:163
 msgid "Repeat"
 msgstr "Repetir"
 
-#: musicbox.py:157
+#: musicbox.py:156
 msgid "Shuffle"
 msgstr "Embaralhar"
 
-#: musicbox.py:122
-msgid "/Refresh"
-msgstr "/Atualizar"
+#: musicbox.py:114
+msgid "/Filter/This Artist"
+msgstr ""
 
-#: musicbox.py:50
+#: musicbox.py:149
+msgid "Seek"
+msgstr ""
+
+#: player.py:84
+msgid "Play takes a filename."
+msgstr ""
+
+#: musicbox.py:37
 msgid "Artist"
 msgstr "Artista"
 
-#: musicbox.py:177 musicbox.py:514 musicbox.py:567
+#: musicbox.py:176 musicbox.py:457 musicbox.py:503
 msgid "Stop"
 msgstr "Parar"
 
-#: musicbox.py:397
+#: playlist.py:173 playlist.py:174 playlist.py:177
 msgid "unknown"
+msgstr ""
+
+#: player.py:82
+msgid "Unsupported file (%s)."
 msgstr ""
 
 #: musicbox.py:124
 msgid "/Quit"
 msgstr "/Sair"
 
-#: musicbox.py:344
+#: musicbox.py:342
 msgid " - Scanning, please wait..."
 msgstr " - Procurando, favor aguardar..."
 
-#: musicbox.py:114
+#: musicbox.py:107
 msgid "/Play\\/Pause"
 msgstr "/Reproduzir\\/Pausar"
 
-#: musicbox.py:183
+#: musicbox.py:118
+msgid "/Save Selection"
+msgstr ""
+
+#: playlist.py:22
+msgid ""
+"You must have at least one of either Ogg Vorbis or\n"
+"MAD libraries installed with the python bindings."
+msgstr ""
+
+#: musicbox.py:182
 msgid "Play/Pause"
 msgstr "Reproduzir/Pausar"
 
-#: musicbox.py:53
+#: musicbox.py:40
 msgid "Genre"
 msgstr "Gênero"
 
-#: musicbox.py:192
+#: musicbox.py:191
 msgid "Close"
 msgstr "Fechar"
 
@@ -126,13 +172,13 @@ msgid ""
 "nonetheless."
 msgstr ""
 
-#: musicbox.py:117
+#: musicbox.py:110
 msgid "/Back"
 msgstr "/Voltar"
 
-#: musicbox.py:150
-msgid "Seek"
-msgstr ""
+#: musicbox.py:122
+msgid "/Refresh"
+msgstr "/Atualizar"
 
 #~ msgid "Song"
 #~ msgstr "Canção"
