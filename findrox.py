@@ -11,7 +11,25 @@ import string
 def version(major, minor, micro):
 	"""Find ROX-Lib2, with a version >= (major, minor, micro), and
 	add it to sys.path. If version is missing or too old, either
-	prompt the user, or (if possible) upgrade it automatically."""
+	prompt the user, or (if possible) upgrade it automatically.
+	If 'rox' is already in PYTHONPATH, just use that (assume the injector
+	is being used)."""
+	try:
+		import rox
+	except ImportError:
+		pass
+	else:
+		#print "Using ROX-Lib in PYTHONPATH"
+		if (major, minor, micro) > rox.roxlib_version:
+			print >>sys.stderr, "WARNING: ROX-Lib version " \
+				"%d.%d.%d requested, but using version " \
+				"%d.%d.%d from %s" % \
+				(major, minor, micro,
+				 rox.roxlib_version[0],
+				 rox.roxlib_version[1],
+				 rox.roxlib_version[2],
+				 rox.__file__)
+		return
 
 	if not os.getenv('ROXLIB_DISABLE_ZEROINSTALL') and os.path.exists('/uri/0install/rox.sourceforge.net'):
 		# We're using ZeroInstall. Good :-)
@@ -66,7 +84,7 @@ def report_error(err):
 	except:
 		import gtk
 		win = gtk.GtkDialog()
-		message = gtk.GtkLabel(err +
+		message = gtk.GtkLabel(err + 
 				'\n\nAlso, pygtk2 needs to be present')
 		win.set_title('Missing ROX-Lib2')
 		win.set_position(gtk.WIN_POS_CENTER)
@@ -78,7 +96,7 @@ def report_error(err):
 		win.action_area.pack_start(ok)
 		ok.connect('clicked', gtk.mainquit)
 		ok.grab_default()
-
+		
 		win.connect('destroy', gtk.mainquit)
 		win.show_all()
 		gtk.mainloop()
