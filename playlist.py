@@ -20,7 +20,7 @@
 """
 from __future__ import generators
 
-import rox, os, sys, re, stat, time, string, gtk, gobject
+import rox, os, sys, re, time, string, gtk, gobject
 from rox import saving
 from urllib import quote, unquote
 
@@ -396,12 +396,12 @@ class Playlist(saving.Saveable, gobject.GObject):
 	def get_xattr_info(self, song):
 		if (HAVE_XATTR):
 			try:
-				song.title = xattr.getxattr(song.filename, 'user.Title')
-				song.track = int(xattr.getxattr(song.filename, 'user.Track'))
-				song.album = xattr.getxattr(song.filename, 'user.Album')
-				song.artist = xattr.getxattr(song.filename, 'user.Artist')
-				song.genre = xattr.getxattr(song.filename, 'user.Genre')
-#				song.length = xattr.getxattr(song.filename, 'user.Time')
+				song.title = xattr.getxattr(song.filename, 'user.title')
+				song.track = int(xattr.getxattr(song.filename, 'user.track'))
+				song.album = xattr.getxattr(song.filename, 'user.album')
+				song.artist = xattr.getxattr(song.filename, 'user.artist')
+				song.genre = xattr.getxattr(song.filename, 'user.genre')
+#				song.length = xattr.getxattr(song.filename, 'user.time')
 #				print song.title, song.album, song.artist, song.genre
 				return True
 			except:
@@ -425,7 +425,7 @@ class Playlist(saving.Saveable, gobject.GObject):
 			library_element = os.path.expanduser(library_element)
 			if os.access(library_element, os.R_OK):
 				#check if the element is a folder
-				if stat.S_ISDIR(os.stat(library_element)[stat.ST_MODE]):
+				if os.path.isdir(library_element):
 					self.process_dir(library_element)
 				else:
 					#check for playlist files...
@@ -445,7 +445,7 @@ class Playlist(saving.Saveable, gobject.GObject):
 
 		while gtk.events_pending():
 			gtk.main_iteration()
-
+			
 		type = str(rox.mime.get_type(filename))
 		if type in mbtypes.TYPE_LIST and os.access(filename, os.R_OK):
 			song = self.guess(filename, type)
