@@ -1,6 +1,12 @@
 ﻿MusicBox - an MP3/OGG Player for the ROX Desktop
 by Ken Hayber
 
+24-Sep-2005
+- Fixes for changed mime-types in shared-mime-info version 0.16
+- Fixes for flac support for version 1.1.2
+- Misc fixes for ppc/ppc64
+- New Chinese translation
+
 23-Feb-2005
 - Fix bug when adding songs via DnD or command line, does not play.  Index is set wrong.  (reported by Cyrille Mars)
 

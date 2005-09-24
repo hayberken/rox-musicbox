@@ -100,10 +100,10 @@ Current versions that I am developing with as of this writing are listed below.
 However older versions probably work fine except as noted.
 
 Basics
-	ROX-Lib2 1.9.16 (http://rox.sourceforge.net)
-	GTK+ 2.4.14 [req >= 2.4]
-	GLib 2.6.0 (http://www.gtk.org)
-	PyGtk 2.4.1 [req >= 2.4]
+	ROX-Lib2 2.0.0 (http://rox.sourceforge.net)
+	GTK+ 2.6.7 [req >= 2.4]
+	GLib 2.6.3 (http://www.gtk.org)
+	PyGtk 2.6.1 [req >= 2.4]
 
 Audio output (optional if your python supports ossaudiodev
               or linuxaudiodev, but highly recommended)
@@ -125,7 +125,7 @@ OGG (optional)
 	libogg 1.1.2 (http://www.vorbis.com)
 
 FLAC (optional)
-	libflac 1.1.0 (http://flac.sourceforge.net)
+	libflac 1.1.2 (http://flac.sourceforge.net)
 	pyflac 0.0.1 (included, but must be built)
 
 WAV (standard)
@@ -135,13 +135,17 @@ Hopefully your distro will provide packages for these, otherwise you will have t
 download and build them from sources.
 
 NOTE: I have discovered that pygtk before version 1.99.17 doesn't support threads all
-that well, so you must have 1.99.17 or higher.  Sorry.
+that well, so you must have 1.99.17 or higher.
 
 NOTE: The pyflac module is 0.0.1 and does not seem to be supported by anyone, although
 I seem to see support for it in Debian (sarge?).  I included a copy with a very slightly
 modified Makefile so that you should just have to type make in the 'flac' folder.  If
 you already have a copy installed (e.g. in your normal python modules directory) just
 delete or rename this folder.
+
+NOTE: The above has changed a bit.  Debian now has version 0.0.3 and seems to have a 
+maintainer.  However, my version is now patched to support flac version 1.1.2.  I'll 
+try to push the simple patch to the debian maintainer.
 
 
 Features:

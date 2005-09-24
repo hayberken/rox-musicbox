@@ -5,10 +5,14 @@
 			<Label xml:lang="en">Options...</Label>
 			<Label xml:lang="it">Opzioni...</Label>
 			<Label xml:lang="de">Einstellungen...</Label>
+			<Label xml:lang="zh_CN">选项...</Label>
+			<Label xml:lang="zh_TW">選項...</Label>
 		</Item>
 	</AppMenu>
 	<Summary>Music Player</Summary>
 	<Summary xml:lang="it">Un riproduttore di MP3/Ogg</Summary>
+	<Summary xml:lang="zh_CN">音乐播放器</Summary>
+	<Summary xml:lang="zh_TW">音樂播放器</Summary>
 	<CanRun>
 		<MimeType type="audio/x-mp3"/>
 		<MimeType type="audio/x-wav"/>
