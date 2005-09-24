@@ -146,25 +146,28 @@ class Player:
 		while True:
 			(name, type) = self.queue.get()
 			if os.path.isfile(name):
-				if (type == mbtypes.TYPE_OGG and HAVE_OGG):
-					#for some reason with ossaudiodev a buffer greater
-					#than 512 bytes causes problems with ogg, smaller seems better
-					# but I'm afraid performance will suck.
-					if not HAVE_AO and HAVE_OSS:
-						self.buffersize = 256
-					self.decoder = OGGDecoder(name, self.buffersize)
-
-				elif (type == mbtypes.TYPE_MP3 and HAVE_MAD):
-					self.decoder = MP3Decoder(name, self.buffersize)
-
-				elif (type == mbtypes.TYPE_FLAC and HAVE_FLAC):
-					self.decoder = FLACDecoder(name, self.buffersize)
-
-				elif (type == mbtypes.TYPE_WAV):
-					self.decoder = WAVDecoder(name, self.buffersize)
-
-				else:
-					raise ValueError, 'Unsupported file (%s).' % name
+				try:
+					if (type == mbtypes.TYPE_OGG and HAVE_OGG):
+						#for some reason with ossaudiodev a buffer greater
+						#than 512 bytes causes problems with ogg, smaller seems better
+						# but I'm afraid performance will suck.
+						if not HAVE_AO and HAVE_OSS:
+							self.buffersize = 256
+						self.decoder = OGGDecoder(name, self.buffersize)
+	
+					elif (type == mbtypes.TYPE_MP3 and HAVE_MAD):
+						self.decoder = MP3Decoder(name, self.buffersize)
+	
+					elif (type == mbtypes.TYPE_FLAC and HAVE_FLAC):
+						self.decoder = FLACDecoder(name, self.buffersize)
+	
+					elif (type == mbtypes.TYPE_WAV):
+						self.decoder = WAVDecoder(name, self.buffersize)
+	
+					else:
+						raise ValueError, 'Unsupported file (%s).' % name
+				except:
+					rox.report_exception()
 			else:
 				raise SyntaxError, 'play takes a filename.'
 
@@ -264,7 +267,7 @@ class MP3Decoder:
 
 	def open(self):
 		"""Open the file and prepare for decoding"""
-		self.mf = mad.MadFile(self.filename, self.buffersize)
+		self.mf = mad.MadFile(self.filename) #, self.buffersize)
 
 	def close(self):
 		"""Close the file and do any needed cleanup"""
@@ -381,7 +384,8 @@ class OGGDecoder:
 		Read data from the file and decode to PCM data. Return a buffer
 		of data and length, or (None, 0) at EOF
 		"""
-		(buff, bytes, bit) = self.vf.read(self.buffersize)
+		#recent versions don't want buffersize? (buff, bytes, bit) = self.vf.read(self.buffersize)
+		(buff, bytes, bit) = self.vf.read()
 		if bytes == 0:
 			return (None, 0)
 		return (buff, bytes)
@@ -632,4 +636,3 @@ class WAVDecoder:
 	def info(self):
 		"""Print some info about this WAV file"""
 		print "no info for WAV files"
-
