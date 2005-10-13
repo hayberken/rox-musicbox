@@ -60,7 +60,7 @@
 		</frame>
 		<frame label='Widgets'>
 			<hbox>
-				<label>Show/Hide: </label>
+				<label>Show/Hide:</label>
 				<toggle name='toolbar' label='Toolbar'>Show/Hide the Toolbar</toggle>
 				<toggle name='volume' label='Volume'>Show/Hide the Volume control</toggle>
 				<toggle name='seekbar' label='Seek'>Show/Hide the Seek control</toggle>
