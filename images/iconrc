@@ -1,0 +1,27 @@
+#pixmap_path "path/to/musicbox/images"
+
+style "icons"
+{
+
+#	stock["gtk-close"] = {{ "stock_close.svg", *, *, * }}
+#	stock["gtk-preferences"] = {{ "stock_preferences.svg", *, *, * }}
+
+#used as the playlist icon
+#	stock["gtk-index"] = {{ "stock_index.svg", *, *, * }} #playlist icon
+
+	stock["gtk-media-forward"] = {{ "media-ffwd.svg", *, *, * }}
+	stock["gtk-media-play"] = {{ "media-play.svg", *, *, * }}
+	stock["gtk-media-stop"] = {{ "media-stop.svg", *, *, * }}
+	stock["gtk-media-next"] = {{ "media-next.svg", *, *, * }}
+	stock["gtk-media-previous"] = {{ "media-prev.svg", *, *, * }}
+	stock["gtk-media-pause"] = {{ "media-pause.svg", *, *, * }}
+	stock["gtk-media-record"] = {{ "media-record.svg", *, *, * }}
+	stock["gtk-media-rewind"] = {{ "media-rewind.svg", *, *, * }}
+
+#not official gtk names (yet?)
+	stock["gtk-media-repeat"] = {{ "media-repeat.svg", *, *, * }}
+	stock["gtk-media-shuffle"] = {{ "media-shuffle.svg", *, *, * }}
+}
+class "GtkWidget" style "icons"
+
+

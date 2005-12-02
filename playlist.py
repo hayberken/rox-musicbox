@@ -28,7 +28,8 @@ import genres
 from random import Random
 from xml.dom.minidom import parse, parseString, Document
 
-import mbtypes
+import plugins
+
 
 try:
 	import xattr
@@ -36,36 +37,6 @@ try:
 except:
 	HAVE_XATTR = False
 	print 'No xattr support'
-
-try:
-	from pyid3lib import *
-	HAVE_ID3V2 = True
-except:
-	from ID3 import *
-	HAVE_ID3V2 = False
-	print 'No id3v2 support'
-
-try:
-	import ogg.vorbis
-	HAVE_OGG = True
-except:
-	HAVE_OGG = False
-	print 'No OGG support!'
-
-try:
-	import mad
-	HAVE_MAD = True
-except:
-	HAVE_MAD = False
-	print 'No MP3 support!'
-
-try:
-	import flac
-	HAVE_FLAC = True
-except:
-	HAVE_FLAC = False
-	print "No FLAC support!"
-
 
 def strip_padding(s):
 	while len(s) > 0 and s[-1] in string.whitespace + "\0":
@@ -307,36 +278,22 @@ class Playlist(saving.Saveable, gobject.GObject):
 	def get_tag_info_from_file(self, song):
 		"""Get the tag info from specified filename"""
 		song.type = str(rox.mime.get_type(song.filename))
-
+		
 		if not self.get_xattr_info(song):
-			if song.type == mbtypes.TYPE_MP3 and HAVE_MAD:
-				#print 'using mp3 tags'
-				self.get_id3_tag_info(song)
-			elif song.type == mbtypes.TYPE_OGG and HAVE_OGG:
-				#print 'using ogg info'
-				self.get_ogg_info(song)
-#TODO		elif song.type == mbtypes.TYPE_FLAC:
-#				#print 'using flac info'
-#				self.get_flac_info(song)
-			else:
-				print song.filename
+			plugins.get_info(song)
 
 		try:
-			song.title = unicode(song.title,'latin-1')
 			song.title = song.title.encode('utf8')
-		except: pass
+		except: rox.report_exception()
 		try:
-			song.artist = unicode(song.artist,'latin-1')
 			song.artist = song.artist.encode('utf8')
-		except: pass
+		except: rox.report_exception()
 		try:
-			song.album = unicode(song.album,'latin-1')
 			song.album = song.album.encode('utf8')
-		except: pass
+		except: rox.report_exception()
 		try:
-			song.genre = unicode(song.genre,'latin-1')
 			song.genre = song.genre.encode('utf8')
-		except: pass
+		except: rox.report_exception()
 
 		song.title = strip_padding(song.title)
 		song.artist = strip_padding(song.artist)
@@ -346,52 +303,6 @@ class Playlist(saving.Saveable, gobject.GObject):
 
 		return song
 
-	def get_id3_tag_info(self, song):
-		if (HAVE_ID3V2):
-			try: tag_info = tag(song.filename)
-			except: pass
-			try: song.title = tag_info.title
-			except: pass
-			try: song.track = int(tag_info.track[0]) #it is a tuple (x of y)
-			except: pass
-			try: song.album = tag_info.album
-			except: pass
-			try: song.artist = tag_info.artist
-			except: pass
-			try:
-				#ID3v2 genres are either a string/tuple index e.g. '(17)'
-				#or the actual genre string.
-				x = re.match('\(([0-9]+)\)', tag_info.contenttype)
-				if x:
-					genre = genres.genre_list[int(x.group(1))]
-				else:
-					genre = tag_info.contenttype
-				song.genre = genre
-			except: pass
-			try: song.length = tag_info.songlen
-			except: pass
-		else: #ID3V1
-			try:
-				tag_info = ID3(song.filename)
-			except: pass
-			if tag_info.has_key('TITLE'): song.title = tag_info['TITLE']
-			if tag_info.has_key('TRACKNUMBER'): song.track = int(tag_info['TRACKNUMBER'])
-			if tag_info.has_key('ALBUM'): song.album = tag_info['ALBUM']
-			if tag_info.has_key('ARTIST'): song.artist = tag_info['ARTIST']
-			if tag_info.has_key('GENRE'): song.genre = tag_info['GENRE']
-			song.length = 0
-
-	def get_ogg_info(self, song):
-		try:
-			tag_info = ogg.vorbis.VorbisFile(song.filename).comment().as_dict()
-			if tag_info.has_key('TITLE'): song.title = tag_info['TITLE'][0]
-			if tag_info.has_key('TRACKNUMBER'): song.track = int(tag_info['TRACKNUMBER'][0])
-			if tag_info.has_key('ALBUM'): song.album = tag_info['ALBUM'][0]
-			if tag_info.has_key('ARTIST'): song.artist = tag_info['ARTIST'][0]
-			if tag_info.has_key('GENRE'): song.genre = tag_info['GENRE'][0]
-			song.length = 0
-		except:
-			pass
 
 	def get_xattr_info(self, song):
 		if (HAVE_XATTR):
@@ -447,7 +358,7 @@ class Playlist(saving.Saveable, gobject.GObject):
 			gtk.main_iteration()
 			
 		type = str(rox.mime.get_type(filename))
-		if type in mbtypes.TYPE_LIST and os.access(filename, os.R_OK):
+		if type in plugins.TYPE_LIST and os.access(filename, os.R_OK):
 			song = self.guess(filename, type)
 			if song != None:
 				self.get_tag_info_from_file(song)

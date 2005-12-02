@@ -12,186 +12,158 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: musicbox.py:133 musicbox.py:326 playlistui.py:96
-msgid "Close"
-msgstr "关闭"
-
-#: musicbox.py:134 musicbox.py:327
-msgid "Prev"
-msgstr "上一曲"
-
-#: musicbox.py:135 musicbox.py:289 musicbox.py:328 musicbox.py:342
-#: playlistui.py:82
-msgid "Play"
-msgstr "播放"
-
-#: musicbox.py:136 musicbox.py:290 musicbox.py:329
-msgid "Stop"
-msgstr "停止"
-
-#: musicbox.py:137 musicbox.py:294 musicbox.py:330
-msgid "Next"
-msgstr "下一曲"
-
-#: musicbox.py:138 musicbox.py:302 musicbox.py:331 tips:28
-msgid "Repeat"
-msgstr "重覆"
-
-#: musicbox.py:139 musicbox.py:301 musicbox.py:332 tips:30
-msgid "Shuffle"
-msgstr "随机播放"
-
-#: musicbox.py:140 musicbox.py:297 musicbox.py:333 playlistui.py:69
-msgid "Playlist"
-msgstr "播放列表"
-
-#: musicbox.py:141 musicbox.py:306 musicbox.py:334
-msgid "Options"
-msgstr "选项"
-
-#: musicbox.py:289
-msgid "Pause"
-msgstr "暂停"
-
-#: musicbox.py:293
-msgid "Back"
-msgstr "往后"
-
-#: musicbox.py:298
-msgid "Show"
-msgstr "显示"
-
-#: musicbox.py:299 playlistui.py:94
-msgid "Open location"
-msgstr "开启目录"
-
-#: musicbox.py:300 playlistui.py:93
-msgid "Save"
-msgstr "储存"
-
-#: musicbox.py:307
-msgid "Info"
-msgstr "讯息"
-
-#: musicbox.py:310
-msgid "Quit"
-msgstr "退出"
-
 #: musicbox.py:528
 msgid "Loading"
 msgstr "载入"
 
-#: musicbox.py:537
-msgid "Loading songs, please wait..."
-msgstr "载入歌曲中，请稍候..."
-
-#: musicbox.py:539
-msgid " songs"
-msgstr " 歌曲"
-
-#: musicbox.py:539
-msgid "Ready"
-msgstr "准备"
-
-#: musicbox.py:539
-msgid "loaded "
-msgstr "已载入"
-
-#: musicbox.py:600
-msgid "Failed to start playing %s"
-msgstr "未能播放 %s"
-
-#: musicbox.py:705
-msgid "Playing"
-msgstr "播放中"
-
-#: musicbox.py:710
-msgid "Paused"
-msgstr "已暂停"
-
-#: musicbox.py:712
-msgid "Stopped"
-msgstr "已停止"
-
-#: player.py:135
-msgid "File not found or not accessible (%s)."
-msgstr "找不到或未能存取文件 (%s)"
-
-#: player.py:137
-msgid "You must have OGG support to play ogg files (%s)."
-msgstr "必须要 OGG 支援才可播放 ogg 文件 (%s)"
-
-#: player.py:139
-msgid "You must have MAD support to play mp3 files (%s)."
-msgstr "必须要 MAD 支援才可播放 mp3 文件 (%s)"
-
-#: player.py:141
-msgid "You must have FLAC support to play flac files (%s)."
-msgstr "必须要 FLAC 支援才可播放 flac 文件 (%s)"
-
-#: playlistui.py:45
-msgid "Artist"
-msgstr "歌者"
-
-#: playlistui.py:46
-msgid "Album"
-msgstr "歌集"
+#: tips:17 tips:18 tips:19
+msgid "older (obsolete?) Alsa driver"
+msgstr ""
 
 #: playlistui.py:47
 msgid "Title"
 msgstr "歌名"
 
-#: playlistui.py:48
-msgid "Track"
-msgstr "音轨"
+#: tips:27
+msgid "Play Settings"
+msgstr "播效模式"
 
-#: playlistui.py:49
-msgid "Genre"
-msgstr "风格"
+#: tips:12
+msgid "oss"
+msgstr ""
 
-#: playlistui.py:83
-msgid "Delete"
-msgstr "删除"
+#: tips:55
+msgid "Background Color:"
+msgstr "背景颜色："
 
-#: playlistui.py:85
-msgid "Filter"
-msgstr "筛选"
-
-#: playlistui.py:86
-msgid "All songs"
-msgstr "全部歌曲"
-
-#: playlistui.py:87
-msgid "This Artist"
-msgstr "歌者"
-
-#: playlistui.py:88
-msgid "This Album"
-msgstr "歌集"
-
-#: playlistui.py:89
-msgid "This Genre"
-msgstr "风格"
-
-#: playlistui.py:162
-msgid "Please select a song first."
-msgstr "请先选择歌曲"
+#: tips:50 tips:51
+msgid "The font used for the Song Title"
+msgstr "用以显示歌名标题的文字"
 
 #: playlistui.py:206 playlistui.py:231
 msgid "No track selected."
 msgstr "尚未选择音轨"
 
+#: tips:3 tips:24
+msgid "Path"
+msgstr "路径"
+
+#: tips:20
+msgid "Buffer Size"
+msgstr "缓冲区大小"
+
+#: tips:45
+msgid "Display"
+msgstr "外观"
+
+#: tips:37
+msgid "elapse"
+msgstr "已过去"
+
+#: player.py:137
+msgid "You must have OGG support to play ogg files (%s)."
+msgstr "必须要 OGG 支援才可播放 ogg 文件 (%s)"
+
+#: musicbox.py:298
+msgid "Show"
+msgstr "显示"
+
+#: player.py:135
+msgid "File not found or not accessible (%s)."
+msgstr "找不到或未能存取文件 (%s)"
+
+#: tips:48
+msgid "The font used for Other text"
+msgstr "用以显示一般的文字讯息"
+
+#: musicbox.py:539
+msgid "Ready"
+msgstr "准备"
+
+#: tips:72
+msgid "Use miniature size toolbar buttons"
+msgstr "以最小型的工具栏按钮显示"
+
+#: tips:66
+msgid "Album Art"
+msgstr "歌集 资讯"
+
+#: playlistui.py:87
+msgid "This Artist"
+msgstr "歌者"
+
+#: tips:40 tips:41 tips:42 tips:43 tips:44
+msgid "Show remaining time"
+msgstr "显示剩余时间模式"
+
+#: musicbox.py:310
+msgid "Quit"
+msgstr "退出"
+
+#: musicbox.py:140 musicbox.py:297 musicbox.py:333 playlistui.py:69
+msgid "Playlist"
+msgstr "播放列表"
+
+#: tips:5
+msgid "Pattern"
+msgstr "表达模式"
+
+#: musicbox.py:137 musicbox.py:294 musicbox.py:330
+msgid "Next"
+msgstr "下一曲"
+
+#: tips:69
+msgid "Word Wrap"
+msgstr "文字换行"
+
+#: musicbox.py:300 playlistui.py:93
+msgid "Save"
+msgstr "储存"
+
+#: tips:6 tips:7
+msgid ""
+"A python regular expression to parse the full path of each file into "
+"'artist', 'album', 'title' and 'track'.  Used when there is no tag info in "
+"the file."
+msgstr ""
+"一种以 python 的正则表达法来分析歌曲的 '歌者'， '歌集'， '歌名' 及 '音轨' 的"
+"模式。为当歌曲没有内部标签时才会被应用。"
+
+#: player.py:141
+msgid "You must have FLAC support to play flac files (%s)."
+msgstr "必须要 FLAC 支援才可播放 flac 文件 (%s)"
+
+#: tips:52
+msgid "Colors"
+msgstr "颜色"
+
+#: tips:10
+msgid "esd"
+msgstr ""
+
+#: tips:25 tips:26
+msgid "The /dev entry for your mixer.  Typically /dev/mixer."
+msgstr "在 /dev 下的混音装置，一般为 /dev/mixer。"
+
+#: musicbox.py:307
+msgid "Info"
+msgstr "讯息"
+
 #: tips:1
 msgid "Settings"
 msgstr "设定"
 
-#: tips:2
-msgid "Library"
-msgstr "资料"
+#: tips:29
+msgid "Keep playing forever."
+msgstr "不停的播放"
 
-#: tips:3 tips:24
-msgid "Path"
-msgstr "路径"
+#: tips:11
+msgid "Gnome esound server"
+msgstr ""
+
+#: tips:38
+msgid "Show elapsed time"
+msgstr "显示已过去时间模式"
 
 #: tips:4
 msgid ""
@@ -200,226 +172,249 @@ msgid ""
 "is a ':' separated list of directories, and/or .xml, .pls, .m3u, .mp3, .ogg "
 "files."
 msgstr ""
-"放置音乐歌曲的默认目录。当程式启动时"
-"会自动检查及载入目录内的音效媒体，"
-"包括 .xml, .pls, .m3u, .mp3, .ogg 文件"
-"当超过一个目录时，请用  ':'  来分隔。"
+"放置音乐歌曲的默认目录。当程式启动时会自动检查及载入目录内的音效媒体，包括 ."
+"xml, .pls, .m3u, .mp3, .ogg 文件当超过一个目录时，请用  ':'  来分隔。"
 
-#: tips:5
-msgid "Pattern"
-msgstr "表达模式"
+#: musicbox.py:705
+msgid "Playing"
+msgstr "播放中"
 
-#: tips:6 tips:7
-msgid ""
-"A python regular expression to parse the full path of each file into "
-"'artist', 'album', 'title' and 'track'.  Used when there is no tag info in "
-"the file."
-msgstr ""
-"一种以 python 的正则表达法来分析歌曲的 "
-"'歌者'， '歌集'， '歌名' 及 '音轨' 的模式。"
-"为当歌曲没有内部标签时才会被应用。"
+#: tips:32
+msgid "Shuffle cache size"
+msgstr "随机播放的缓存区大小"
 
-#: tips:8
-msgid "Output"
-msgstr "输出"
+#: playlistui.py:83
+msgid "Delete"
+msgstr "删除"
 
-#: tips:9
-msgid "Driver"
-msgstr "音效驱动"
+#: musicbox.py:139 musicbox.py:301 musicbox.py:332 tips:30
+msgid "Shuffle"
+msgstr "随机播放"
 
-#: tips:10
-msgid "esd"
-msgstr ""
+#: musicbox.py:293
+msgid "Back"
+msgstr "往后"
 
-#: tips:11
-msgid "Gnome esound server"
-msgstr ""
+#: musicbox.py:710
+msgid "Paused"
+msgstr "已暂停"
 
-#: tips:12
-msgid "oss"
-msgstr ""
-
-#: tips:13
-msgid "Open Sound System driver"
-msgstr ""
-
-#: tips:14
-msgid "alsa"
-msgstr ""
-
-#: tips:15
-msgid "current Alsa driver"
-msgstr ""
-
-#: tips:16
-msgid "alsa (old)"
-msgstr ""
-
-#: tips:17 tips:18 tips:19
-msgid "older (obsolete?) Alsa driver"
-msgstr ""
-
-#: tips:20
-msgid "Buffer Size"
-msgstr "缓冲区大小"
-
-#: tips:21 tips:22
-msgid ""
-"The size of the buffer used to read/write sound data.  A larger buffer may "
-"reduce skipping under heavy load."
-msgstr ""
-"写读音效资料的缓冲区大小。较大的"
-"缓冲可减低载入音效时的资料遗失"
+#: musicbox.py:537
+msgid "Loading songs, please wait..."
+msgstr "载入歌曲中，请稍候..."
 
 #: tips:23
 msgid "Mixer Device"
 msgstr "混音装置"
 
-#: tips:25 tips:26
-msgid "The /dev entry for your mixer.  Typically /dev/mixer."
-msgstr "在 /dev 下的混音装置，一般为 /dev/mixer。"
+#: tips:64
+msgid "Seek"
+msgstr "找寻"
 
-#: tips:27
-msgid "Play Settings"
-msgstr "播效模式"
-
-#: tips:29
-msgid "Keep playing forever."
-msgstr "不停的播放"
-
-#: tips:31
-msgid "Randomize play order."
-msgstr "随机的播放"
-
-#: tips:32
-msgid "Shuffle cache size"
-msgstr "随机播放的缓存区大小"
+#: musicbox.py:289
+msgid "Pause"
+msgstr "暂停"
 
 #: tips:33 tips:34 tips:35
 msgid ""
 "How many songs to remember in shuffle mode so we don't replay too often."
 msgstr "选择在缓存区内可记忆多少首歌曲"
 
-#: tips:36
-msgid "Time"
-msgstr "时间模式"
+#: playlistui.py:89
+msgid "This Genre"
+msgstr "风格"
 
-#: tips:37
-msgid "elapse"
-msgstr "已过去"
-
-#: tips:38
-msgid "Show elapsed time"
-msgstr "显示已过去时间模式"
-
-#: tips:39
-msgid "remain"
-msgstr "剩余"
-
-#: tips:40 tips:41 tips:42 tips:43 tips:44
-msgid "Show remaining time"
-msgstr "显示剩余时间模式"
-
-#: tips:45
-msgid "Display"
-msgstr "外观"
-
-#: tips:46
-msgid "Fonts"
-msgstr "字体"
-
-#: tips:47
-msgid "Base font:"
-msgstr "一般字体"
-
-#: tips:48
-msgid "The font used for Other text"
-msgstr "用以显示一般的文字讯息"
-
-#: tips:49
-msgid "Title font:"
-msgstr "标题"
-
-#: tips:50 tips:51
-msgid "The font used for the Song Title"
-msgstr "用以显示歌名标题的文字"
-
-#: tips:52
-msgid "Colors"
-msgstr "颜色"
-
-#: tips:53
-msgid "Text Color:"
-msgstr "文字颜色："
-
-#: tips:54
-msgid "Text color."
-msgstr "文字颜色."
-
-#: tips:55
-msgid "Background Color:"
-msgstr "背景颜色："
-
-#: tips:56 tips:57
-msgid "The background color of the main display area."
-msgstr "显示区的背景颜色"
+#: tips:13
+msgid "Open Sound System driver"
+msgstr ""
 
 #: tips:58
 msgid "Widgets"
 msgstr "工能介面"
 
-#: tips:59
-msgid "Show/Hide:"
-msgstr "隐藏 / 显示："
-
-#: tips:60
-msgid "Toolbar"
-msgstr "工具栏"
+#: playlistui.py:86
+msgid "All songs"
+msgstr "全部歌曲"
 
 #: tips:61
 msgid "Show/Hide the Toolbar"
 msgstr "隐藏或显示工具栏"
 
-#: tips:62
-msgid "Volume"
-msgstr "音量"
+#: musicbox.py:539
+msgid " songs"
+msgstr " 歌曲"
 
-#: tips:63
-msgid "Show/Hide the Volume control"
-msgstr "隐藏或显示音量控制"
+#: musicbox.py:135 musicbox.py:289 musicbox.py:328 musicbox.py:342
+#: playlistui.py:82
+msgid "Play"
+msgstr "播放"
 
-#: tips:64
-msgid "Seek"
-msgstr "找寻"
+#: musicbox.py:138 musicbox.py:302 musicbox.py:331 tips:28
+msgid "Repeat"
+msgstr "重覆"
 
-#: tips:65
-msgid "Show/Hide the Seek control"
-msgstr "隐藏或显示找寻控制"
+#: tips:9
+msgid "Driver"
+msgstr "音效驱动"
 
-#: tips:66
-msgid "Album Art"
-msgstr "歌集 资讯"
+#: musicbox.py:141 musicbox.py:306 musicbox.py:334
+msgid "Options"
+msgstr "选项"
 
-#: tips:67 tips:68
-msgid "Show/Hide Album Cover display"
-msgstr "隐藏或显示歌集项目"
+#: tips:53
+msgid "Text Color:"
+msgstr "文字颜色："
 
-#: tips:69
-msgid "Word Wrap"
-msgstr "文字换行"
+#: musicbox.py:539
+msgid "loaded "
+msgstr "已载入"
 
-#: tips:70
-msgid "Word wrap display strings"
-msgstr "以自动换行方式显示字串"
+#: tips:46
+msgid "Fonts"
+msgstr "字体"
 
 #: tips:71
 msgid "Mini Toolbar"
 msgstr "小型工具栏"
 
-#: tips:72
-msgid "Use miniature size toolbar buttons"
-msgstr "以最小型的工具栏按钮显示"
+#: playlistui.py:85
+msgid "Filter"
+msgstr "筛选"
+
+#: tips:16
+msgid "alsa (old)"
+msgstr ""
+
+#: playlistui.py:88
+msgid "This Album"
+msgstr "歌集"
+
+#: musicbox.py:712
+msgid "Stopped"
+msgstr "已停止"
+
+#: tips:36
+msgid "Time"
+msgstr "时间模式"
+
+#: tips:63
+msgid "Show/Hide the Volume control"
+msgstr "隐藏或显示音量控制"
+
+#: tips:21 tips:22
+msgid ""
+"The size of the buffer used to read/write sound data.  A larger buffer may "
+"reduce skipping under heavy load."
+msgstr "写读音效资料的缓冲区大小。较大的缓冲可减低载入音效时的资料遗失"
+
+#: tips:2
+msgid "Library"
+msgstr "资料"
 
 #: tips:73
 msgid "Select the buttons you want on the toolbar:"
 msgstr "选择工具栏上的按钮"
+
+#: tips:39
+msgid "remain"
+msgstr "剩余"
+
+#: tips:67 tips:68
+msgid "Show/Hide Album Cover display"
+msgstr "隐藏或显示歌集项目"
+
+#: musicbox.py:299 playlistui.py:94
+msgid "Open location"
+msgstr "开启目录"
+
+#: musicbox.py:133 musicbox.py:326 playlistui.py:96
+msgid "Close"
+msgstr "关闭"
+
+#: playlistui.py:46
+msgid "Album"
+msgstr "歌集"
+
+#: tips:31
+msgid "Randomize play order."
+msgstr "随机的播放"
+
+#: tips:54
+msgid "Text color."
+msgstr "文字颜色."
+
+#: musicbox.py:134 musicbox.py:327
+msgid "Prev"
+msgstr "上一曲"
+
+#: playlistui.py:48
+msgid "Track"
+msgstr "音轨"
+
+#: musicbox.py:136 musicbox.py:290 musicbox.py:329
+msgid "Stop"
+msgstr "停止"
+
+#: player.py:139
+msgid "You must have MAD support to play mp3 files (%s)."
+msgstr "必须要 MAD 支援才可播放 mp3 文件 (%s)"
+
+#: tips:62
+msgid "Volume"
+msgstr "音量"
+
+#: tips:59
+msgid "Show/Hide:"
+msgstr "隐藏 / 显示："
+
+#: tips:47
+msgid "Base font:"
+msgstr "一般字体"
+
+#: playlistui.py:49
+msgid "Genre"
+msgstr "风格"
+
+#: tips:65
+msgid "Show/Hide the Seek control"
+msgstr "隐藏或显示找寻控制"
+
+#: tips:60
+msgid "Toolbar"
+msgstr "工具栏"
+
+#: tips:14
+msgid "alsa"
+msgstr ""
+
+#: playlistui.py:45
+msgid "Artist"
+msgstr "歌者"
+
+#: musicbox.py:600
+msgid "Failed to start playing %s"
+msgstr "未能播放 %s"
+
+#: tips:70
+msgid "Word wrap display strings"
+msgstr "以自动换行方式显示字串"
+
+#: tips:8
+msgid "Output"
+msgstr "输出"
+
+#: tips:56 tips:57
+msgid "The background color of the main display area."
+msgstr "显示区的背景颜色"
+
+#: tips:49
+msgid "Title font:"
+msgstr "标题"
+
+#: playlistui.py:162
+msgid "Please select a song first."
+msgstr "请先选择歌曲"
+
+#: tips:15
+msgid "current Alsa driver"
+msgstr ""

@@ -29,7 +29,7 @@ from rox.options import Option
 
 
 try:
-	import player, playlist, playlistui, xsoap, mbtypes
+	import player, playlist, playlistui, xsoap, plugins
 except:
 	rox.report_exception()
 
@@ -56,11 +56,13 @@ BTN_OPTIONS = 8
 #Bitmaps (potentially) used in this application
 factory = gtk.IconFactory()
 for name in [
-			'media-next', 'media-pause', 'media-play', 'media-prev', 'media-repeat',
-			'media-shuffle', 'media-eject', 'media-ffwd', 'media-rewind',
-			'media-stop', 'media_track', 'media-record', 'stock_playlist',
-			'stock_volume-max', 'stock_volume-med', 'stock_volume-min',
-			'stock_volume-mute', 'stock_volume-0']:
+	'gtk-media-stop', 'gtk-media-pause', 'gtk-media-play', 
+	'gtk-media-next', 'gtk-media-previous', 'gtk-media-forward', 'gtk-media-rewind', 
+	'gtk-media-eject', 'gtk-media-repeat', 'gtk-media-shuffle',
+#	'gtk-media_track', 'gtk-media-record', 'stock_playlist',
+#	'stock_volume-max', 'stock_volume-med', 'stock_volume-min',
+#	'stock_volume-mute', 'stock_volume-0'
+	]:
 	path = os.path.join(rox.app_dir, "images", name + ".svg")
 	pixbuf = gtk.gdk.pixbuf_new_from_file(path)
 	if not pixbuf:
@@ -131,13 +133,13 @@ def build_tool_options(box, node, label, option):
 	buttons = [
 		#(type, text, icon, callback)
 		(type1, _("Close"), gtk.STOCK_CLOSE, item_changed),
-		(type1, _("Prev"), 'media-prev', item_changed),
-		(type1, _("Play"), 'media-play', item_changed),
-		(type1, _("Stop"), 'media-stop', item_changed),
-		(type1, _("Next"), 'media-next', item_changed),
-		(type1, _("Repeat"), 'media-repeat', item_changed),
-		(type1, _("Shuffle"), 'media-shuffle', item_changed),
-		(type1, _("Playlist"), 'stock_playlist', item_changed), #gtk.STOCK_INDEX, item_changed),
+		(type1, _("Prev"), gtk.STOCK_MEDIA_PREVIOUS, item_changed),
+		(type1, _("Play"), gtk.STOCK_MEDIA_PLAY, item_changed),
+		(type1, _("Stop"), gtk.STOCK_MEDIA_STOP, item_changed),
+		(type1, _("Next"), gtk.STOCK_MEDIA_NEXT, item_changed),
+		(type1, _("Repeat"), 'gtk-media-repeat', item_changed),
+		(type1, _("Shuffle"), 'gtk-media-shuffle', item_changed),
+		(type1, _("Playlist"), gtk.STOCK_INDEX, item_changed),
 		(type1, _("Options"), gtk.STOCK_PREFERENCES, item_changed),
 	]
 
@@ -182,7 +184,7 @@ class MusicBox(rox.Window, loading.XDSLoader):
 	def __init__(self):
 		"""Constructor for MusicBox"""
 		rox.Window.__init__(self)
-		loading.XDSLoader.__init__(self, mbtypes.TYPE_LIST)
+		loading.XDSLoader.__init__(self, plugins.TYPE_LIST)
 
 		# Main window settings
 		self.set_title(APP_NAME)
@@ -290,16 +292,16 @@ class MusicBox(rox.Window, loading.XDSLoader):
 		self.connect('button-press-event', self.button_press)
 		self.connect('popup-menu', self.menukey_press)
 		self.menu = Menu.Menu('main', [
-			Menu.Action(_("Play")+'\/'+_("Pause"), 'play_pause', '', 'media-play'),
-			Menu.Action(_("Stop"), 'stop', '', 'media-stop'),
+			Menu.Action(_("Play")+'\/'+_("Pause"), 'play_pause', '', gtk.STOCK_MEDIA_PLAY),
+			Menu.Action(_("Stop"), 'stop', '', gtk.STOCK_MEDIA_STOP),
 			Menu.Separator(),
 
-			Menu.Action(_("Back"), 'prev', '', 'media-prev'),
-			Menu.Action(_("Next"), 'next', '', 'media-next'),
+			Menu.Action(_("Back"), 'prev', '', gtk.STOCK_MEDIA_PREVIOUS),
+			Menu.Action(_("Next"), 'next', '', gtk.STOCK_MEDIA_NEXT),
 			Menu.Separator(),
 
 			Menu.SubMenu(_('Playlist'), [
-				Menu.Action(_("Show"), 'show_playlist', '', 'stock_playlist'), #gtk.STOCK_INDEX),
+				Menu.Action(_("Show"), 'show_playlist', '', gtk.STOCK_INDEX),
 				Menu.Action(_("Open location"), 'show_dir', '', gtk.STOCK_GO_UP),
 				Menu.Action(_("Save"), 'save', '', gtk.STOCK_SAVE),
 				Menu.ToggleItem(_("Shuffle"), 'shuffle'),
@@ -330,14 +332,13 @@ class MusicBox(rox.Window, loading.XDSLoader):
 		items = [
 			#(type, text, icon, callback)
 			(type1, _("Close"), gtk.STOCK_CLOSE, self.close),
-			(type1, _("Prev"), 'media-prev', self.prev),
-			(type1, _("Play"), 'media-play', self.play_pause),
-			(type1, _("Stop"), 'media-stop', self.stop),
-			(type1, _("Next"), 'media-next', self.next),
-			(type2, _("Repeat"), 'media-repeat', lambda b: self.set_repeat(b.get_active())),
-			(type2, _("Shuffle"), 'media-shuffle', lambda b: self.set_shuffle(b.get_active())),
-			(type1, _("Playlist"), 'stock_playlist', self.show_playlist),
-#			(type1, _("Playlist"), gtk.STOCK_INDEX, self.show_playlist),
+			(type1, _("Prev"), gtk.STOCK_MEDIA_PREVIOUS, self.prev),
+			(type1, _("Play"), gtk.STOCK_MEDIA_PLAY, self.play_pause),
+			(type1, _("Stop"), gtk.STOCK_MEDIA_STOP, self.stop),
+			(type1, _("Next"), gtk.STOCK_MEDIA_NEXT, self.next),
+			(type2, _("Repeat"), 'gtk-media-repeat', lambda b: self.set_repeat(b.get_active())),
+			(type2, _("Shuffle"), 'gtk-media-shuffle', lambda b: self.set_shuffle(b.get_active())),
+			(type1, _("Playlist"), gtk.STOCK_INDEX, self.show_playlist),
 			(type1, _("Options"), gtk.STOCK_PREFERENCES, self.show_options),
 		]
 
@@ -593,7 +594,7 @@ class MusicBox(rox.Window, loading.XDSLoader):
 			self.player.stop()
 			self.current_song = self.playlist.get()
 			self.player.play(self.current_song.filename, self.current_song.type)
-			self.image_play.set_from_stock('media-pause', size)
+			self.image_play.set_from_stock(gtk.STOCK_MEDIA_PAUSE, size)
 			self.buttons[BTN_PREV].set_sensitive(self.playlist.get_previous())
 			self.display_song.set_text(self.current_song.title)
 			self.display_artist.set_text(self.current_song.artist)
@@ -668,7 +669,7 @@ class MusicBox(rox.Window, loading.XDSLoader):
 		size = self.toolbar.get_icon_size()
 		self.player.stop()
 		self.current_song = None
-		self.image_play.set_from_stock('media-play', size)
+		self.image_play.set_from_stock(gtk.STOCK_MEDIA_PLAY, size)
 		self.seek_bar.set_value(0.0)
 
 
@@ -677,9 +678,9 @@ class MusicBox(rox.Window, loading.XDSLoader):
 		size = self.toolbar.get_icon_size()
 		self.player.pause()
 		if (self.player.state == 'play'):
-			self.image_play.set_from_stock('media-pause', size)
+			self.image_play.set_from_stock(gtk.STOCK_MEDIA_PAUSE, size)
 		else:
-			self.image_play.set_from_stock('media-play', size)
+			self.image_play.set_from_stock(gtk.STOCK_MEDIA_PLAY, size)
 
 
 	def display_update(self):

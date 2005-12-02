@@ -28,8 +28,9 @@ from rox import Menu, saving, loading, mime, filer
 
 import playlist
 from playlist import COL_FILE, COL_TITLE, COL_TRACK, COL_ALBUM, COL_ARTIST
-from playlist import COL_GENRE, COL_LENGTH, COL_TYPE , COL_ICON
+from playlist import COL_GENRE, COL_LENGTH, COL_TYPE, COL_ICON
 
+import plugins
 
 #Who am I and how did I get here?
 APP_NAME = "MusicBox"
@@ -51,7 +52,6 @@ COLUMNS = [
 #	(_("Type"), COL_TYPE, str, 60),
 ]
 
-import mbtypes
 
 class PlaylistUI(rox.Window, loading.XDSLoader):
 	"""the playlist UI for MusicBox"""
@@ -59,7 +59,7 @@ class PlaylistUI(rox.Window, loading.XDSLoader):
 	def __init__(self, the_playlist, musicbox):
 		"""Constructor"""
 		rox.Window.__init__(self)
-		loading.XDSLoader.__init__(self, mbtypes.TYPE_LIST)
+		loading.XDSLoader.__init__(self, plugins.TYPE_LIST)
 
 		self.playlist = the_playlist  #this is a reference to the main playlist
 		self.library = []
