@@ -24,6 +24,13 @@ import os, time, string, sys, Queue
 import plugins
 
 try:
+	import alsaaudio
+	HAVE_ALSA = True
+except:
+	print 'No ALSA support'
+	HAVE_ALSA = False
+
+try:
 	import ossaudiodev
 	HAVE_OSS = True
 except:
@@ -40,6 +47,7 @@ if not HAVE_AO and not HAVE_OSS:
 	print 'No OSS and no AO support Falling back to linuxaudiodev which sucks!!'
 	import linuxaudiodev
 
+USING_DEV = None
 
 class Player:
 	"""A class to playback sound files to an audio device."""
@@ -50,47 +58,69 @@ class Player:
 	total_time = 0
 	seek_val = 0
 
-	def __init__(self, id='esd', buffersize=4096):
+	def __init__(self, id='esd', buffersize=4096, device='/dev/dsp',):
 		"""Initialize the Player instance"""
 		self.id = id
 		self.buffersize = buffersize
 		self.dev = None
+		self.device = device
 		self.queue = Queue.Queue(5)
 
 	def open(self, rate=44100, channels=2):
 		"""Open and configure the audio device driver"""
+		global USING_DEV
 		bits=16
 		#try 3 times to open the device, then give up.
 		for x in range(3):
 			try:
 				if HAVE_AO:
 					self.dev = ao.AudioDevice(self.id, bits, rate, channels)
+					USING_DEV = 'ao'
+				elif HAVE_ALSA and self.id in ('alsa09',):
+					self.dev = alsaaudio.PCM(cardname=self.device)
+					self.dev.setchannels(channels)
+					self.dev.setrate(rate)
+					if sys.byteorder == 'big':
+						format = alsaaudio.PCM_FORMAT_S16_BE
+					else:
+						format = alsaaudio.PCM_FORMAT_S16_LE
+					self.dev.setformat(format)
+					USING_DEV = 'alsa'
 				elif HAVE_OSS:
-					self.dev = ossaudiodev.open('w')
-					self.dev.setparameters(ossaudiodev.AFMT_S16_LE, channels, rate)
+					self.dev = ossaudiodev.open(self.device, 'w')
+					if sys.byteorder == 'big':
+						format = ossaudiodev.AFMT_S16_BE
+					else:
+						format = ossaudiodev.AFMT_S16_LE
+					self.dev.setparameters(format, channels, rate)
+					USING_DEV = 'oss'
 				else:
 					self.dev = linuxaudiodev.open('w')
-					self.dev.setparameters(rate, bits, channels, linuxaudiodev.AFMT_S16_NE)
+					if sys.byteorder == 'big':
+						format = linuxaudiodev.AFMT_S16_BE
+					else:
+						format = linuxaudiodev.AFMT_S16_LE
+					self.dev.setparameters(rate, bits, channels, format)
+					USING_DEV = 'other'
 				break
 			except:
 				time.sleep(1)
+				
 
 	def close(self):
 		"""Close the current device if open and delete it"""
 		if self.dev:
-			if HAVE_AO:
+			if USING_DEV in ('ao', 'alsa', 'other'):
 				self.dev = None
-			elif HAVE_OSS:
+			elif USING_DEV in ('oss',):
 				self.dev.close()
-			else:
-				self.dev = None
 
 
 	def write(self, buff, bytes):
 		"""Write data to the audio device"""
-		if HAVE_AO:
+		if USING_DEV in ('ao',):
 			self.dev.play(buff, bytes)
-		elif HAVE_OSS:
+		elif USING_DEV in ('oss', 'alsa'):
 			self.dev.write(buff)
 		else:
 			while self.dev.obuffree() < bytes:
@@ -171,11 +201,17 @@ class Player:
 	def set_volume(self, volume, device=None):
 		"""Set the PCM volume to a new value"""
 		vol = int(volume)
-		if HAVE_OSS:
+		if HAVE_ALSA:
+			try:
+				mixer = alsaaudio.Mixer('PCM', 0, device)
+				mixer.setvolume(vol)				
+			except:
+				print >>sys.stderr, "Failed to open mixer device %s" % device
+				
+		elif HAVE_OSS:
 			try:
 				mixer = ossaudiodev.openmixer(device)
-				if mixer != None:
-					mixer.set(ossaudiodev.SOUND_MIXER_PCM, (vol, vol))
+				mixer.set(ossaudiodev.SOUND_MIXER_PCM, (vol, vol))
 			except:
 				print >>sys.stderr, "Failed to open mixer device %s" % device
 		else:
@@ -183,12 +219,20 @@ class Player:
 
 	def get_volume(self, device=None):
 		"""Return the current volume setting"""
-		if HAVE_OSS:
+		if HAVE_ALSA:
+			try:
+				mixer = alsaaudio.Mixer('PCM', 0, device)
+				vol = mixer.getvolume()
+				return float(max(vol[0], vol[1]))
+			except:
+				print >>sys.stderr, "Failed to open mixer device %s" % device
+				return 0
+				
+		elif HAVE_OSS:
 			try:
 				mixer = ossaudiodev.openmixer(device)
-				if mixer != None:
-					vol = mixer.get(ossaudiodev.SOUND_MIXER_PCM)
-					return float(max(vol[0], vol[1]))
+				vol = mixer.get(ossaudiodev.SOUND_MIXER_PCM)
+				return float(max(vol[0], vol[1]))
 			except:
 				print >>sys.stderr, "Failed to open mixer device %s" % device
 				return 0

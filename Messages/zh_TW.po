@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: musicbox.py:528
+#: musicbox.py:535
 msgid "Loading"
 msgstr "載入"
 
@@ -20,7 +20,7 @@ msgstr "載入"
 msgid "older (obsolete?) Alsa driver"
 msgstr ""
 
-#: playlistui.py:47
+#: playlistui.py:48
 msgid "Title"
 msgstr "歌名"
 
@@ -60,29 +60,21 @@ msgstr "外觀"
 msgid "elapse"
 msgstr "已過去"
 
-#: player.py:137
-msgid "You must have OGG support to play ogg files (%s)."
-msgstr "必須要 OGG 支援才可播放 ogg 檔案 (%s)"
-
-#: musicbox.py:298
+#: musicbox.py:302
 msgid "Show"
 msgstr "顯示"
 
-#: player.py:135
-msgid "File not found or not accessible (%s)."
-msgstr "找不到或未能存取檔案 (%s)"
+#: tips:72
+msgid "Use miniature size toolbar buttons"
+msgstr "以最小型的工具欄按鈕顯示"
 
 #: tips:48
 msgid "The font used for Other text"
 msgstr "用以顯示一般的文字訊息"
 
-#: musicbox.py:539
+#: musicbox.py:546
 msgid "Ready"
 msgstr "準備"
-
-#: tips:72
-msgid "Use miniature size toolbar buttons"
-msgstr "以最小型的工具欄按鈕顯示"
 
 #: tips:66
 msgid "Album Art"
@@ -96,11 +88,11 @@ msgstr "歌者"
 msgid "Show remaining time"
 msgstr "顯示剩餘時間模式"
 
-#: musicbox.py:310
+#: musicbox.py:314
 msgid "Quit"
 msgstr "退出"
 
-#: musicbox.py:140 musicbox.py:297 musicbox.py:333 playlistui.py:69
+#: musicbox.py:140 musicbox.py:301 musicbox.py:339 playlistui.py:69
 msgid "Playlist"
 msgstr "播放列表"
 
@@ -108,7 +100,7 @@ msgstr "播放列表"
 msgid "Pattern"
 msgstr "表達模式"
 
-#: musicbox.py:137 musicbox.py:294 musicbox.py:330
+#: musicbox.py:137 musicbox.py:298 musicbox.py:336
 msgid "Next"
 msgstr "下一曲"
 
@@ -116,7 +108,7 @@ msgstr "下一曲"
 msgid "Word Wrap"
 msgstr "文字換行"
 
-#: musicbox.py:300 playlistui.py:93
+#: musicbox.py:304 playlistui.py:93
 msgid "Save"
 msgstr "儲存"
 
@@ -128,10 +120,6 @@ msgid ""
 msgstr ""
 "一種以 python 的正則表達法來分析歌曲的 '歌者'， '歌集'， '歌名' 及 '音軌' 的"
 "模式。為當歌曲沒有內部標簽時才會被應用。"
-
-#: player.py:141
-msgid "You must have FLAC support to play flac files (%s)."
-msgstr "必須要 FLAC 支援才可播放 flac 檔案 (%s)"
 
 #: tips:52
 msgid "Colors"
@@ -145,7 +133,7 @@ msgstr ""
 msgid "The /dev entry for your mixer.  Typically /dev/mixer."
 msgstr "在 /dev 下的混音裝置，一般為 /dev/mixer。"
 
-#: musicbox.py:307
+#: musicbox.py:311
 msgid "Info"
 msgstr "訊息"
 
@@ -175,7 +163,7 @@ msgstr ""
 "放置音樂歌曲的預設目錄。當程式啟動時會自動檢查及載入目錄內的音效媒體，包括 ."
 "xml, .pls, .m3u, .mp3, .ogg 檔案當超過一個目錄時，請用  ':'  來分隔。"
 
-#: musicbox.py:705
+#: musicbox.py:712
 msgid "Playing"
 msgstr "播放中"
 
@@ -187,19 +175,19 @@ msgstr "隨機播放的緩存區大小"
 msgid "Delete"
 msgstr "刪除"
 
-#: musicbox.py:139 musicbox.py:301 musicbox.py:332 tips:30
+#: musicbox.py:139 musicbox.py:305 musicbox.py:338 tips:30
 msgid "Shuffle"
 msgstr "隨機播放"
 
-#: musicbox.py:293
+#: musicbox.py:297
 msgid "Back"
 msgstr "往後"
 
-#: musicbox.py:710
+#: musicbox.py:717
 msgid "Paused"
 msgstr "已暫停"
 
-#: musicbox.py:537
+#: musicbox.py:544
 msgid "Loading songs, please wait..."
 msgstr "載入歌曲中，請稍候..."
 
@@ -211,7 +199,7 @@ msgstr "混音裝置"
 msgid "Seek"
 msgstr "找尋"
 
-#: musicbox.py:289
+#: musicbox.py:293
 msgid "Pause"
 msgstr "暫停"
 
@@ -240,16 +228,16 @@ msgstr "全部歌曲"
 msgid "Show/Hide the Toolbar"
 msgstr "隱藏或顯示工具欄"
 
-#: musicbox.py:539
+#: musicbox.py:546
 msgid " songs"
 msgstr " 歌曲"
 
-#: musicbox.py:135 musicbox.py:289 musicbox.py:328 musicbox.py:342
+#: musicbox.py:135 musicbox.py:293 musicbox.py:334 musicbox.py:349
 #: playlistui.py:82
 msgid "Play"
 msgstr "播放"
 
-#: musicbox.py:138 musicbox.py:302 musicbox.py:331 tips:28
+#: musicbox.py:138 musicbox.py:306 musicbox.py:337 tips:28
 msgid "Repeat"
 msgstr "重覆"
 
@@ -257,7 +245,7 @@ msgstr "重覆"
 msgid "Driver"
 msgstr "音效驅動"
 
-#: musicbox.py:141 musicbox.py:306 musicbox.py:334
+#: musicbox.py:141 musicbox.py:310 musicbox.py:341
 msgid "Options"
 msgstr "選項"
 
@@ -265,7 +253,7 @@ msgstr "選項"
 msgid "Text Color:"
 msgstr "文字顏色："
 
-#: musicbox.py:539
+#: musicbox.py:546
 msgid "loaded "
 msgstr "已載入"
 
@@ -289,7 +277,7 @@ msgstr ""
 msgid "This Album"
 msgstr "歌集"
 
-#: musicbox.py:712
+#: musicbox.py:719
 msgid "Stopped"
 msgstr "已停止"
 
@@ -323,15 +311,15 @@ msgstr "剩餘"
 msgid "Show/Hide Album Cover display"
 msgstr "隱藏或顯示歌集項目"
 
-#: musicbox.py:299 playlistui.py:94
+#: musicbox.py:303 playlistui.py:94
 msgid "Open location"
 msgstr "開啟目錄"
 
-#: musicbox.py:133 musicbox.py:326 playlistui.py:96
+#: musicbox.py:133 musicbox.py:332 playlistui.py:96
 msgid "Close"
 msgstr "關閉"
 
-#: playlistui.py:46
+#: playlistui.py:47
 msgid "Album"
 msgstr "歌集"
 
@@ -343,21 +331,17 @@ msgstr "隨機的播放"
 msgid "Text color."
 msgstr "文字顏色."
 
-#: musicbox.py:134 musicbox.py:327
+#: musicbox.py:134 musicbox.py:333
 msgid "Prev"
 msgstr "上一曲"
 
-#: playlistui.py:48
+#: playlistui.py:49
 msgid "Track"
 msgstr "音軌"
 
-#: musicbox.py:136 musicbox.py:290 musicbox.py:329
+#: musicbox.py:136 musicbox.py:294 musicbox.py:335
 msgid "Stop"
 msgstr "停止"
-
-#: player.py:139
-msgid "You must have MAD support to play mp3 files (%s)."
-msgstr "必須要 MAD 支援才可播放 mp3 檔案 (%s)"
 
 #: tips:62
 msgid "Volume"
@@ -371,7 +355,7 @@ msgstr "隱藏 / 顯示："
 msgid "Base font:"
 msgstr "一般字體"
 
-#: playlistui.py:49
+#: playlistui.py:50
 msgid "Genre"
 msgstr "風格"
 
@@ -387,11 +371,11 @@ msgstr "工具欄"
 msgid "alsa"
 msgstr ""
 
-#: playlistui.py:45
+#: playlistui.py:46
 msgid "Artist"
 msgstr "歌者"
 
-#: musicbox.py:600
+#: musicbox.py:607
 msgid "Failed to start playing %s"
 msgstr "未能播放 %s"
 
@@ -418,3 +402,15 @@ msgstr "請先選擇歌曲"
 #: tips:15
 msgid "current Alsa driver"
 msgstr ""
+
+#~ msgid "You must have OGG support to play ogg files (%s)."
+#~ msgstr "必須要 OGG 支援才可播放 ogg 檔案 (%s)"
+
+#~ msgid "File not found or not accessible (%s)."
+#~ msgstr "找不到或未能存取檔案 (%s)"
+
+#~ msgid "You must have FLAC support to play flac files (%s)."
+#~ msgstr "必須要 FLAC 支援才可播放 flac 檔案 (%s)"
+
+#~ msgid "You must have MAD support to play mp3 files (%s)."
+#~ msgstr "必須要 MAD 支援才可播放 mp3 檔案 (%s)"

@@ -4,16 +4,17 @@ an MP3/OGG Player for the ROX Desktop
 
 Brief
 ~~~~~
-MusicBox plays your mp3, wav, flac and ogg files.  It requires several external python
-modules and libraries to support its featurs.  These modules are listed below.  Typically
-these modules are detected at runtime and features are gracefully degraded if things are
-not found (where possible).
+MusicBox plays your mp3, wav, flac and ogg files.  It requires several external
+python modules and libraries to support its featurs.  These modules are listed
+below.  Typically these modules are detected at runtime and features are 
+gracefully degraded if things are not found (where possible).
 
-I have attempted to keep the interface simple, yet flexible and featureful.  There are
-many features that other players have that MusicBox will likely never have.  Such is life.
+I have attempted to keep the interface simple, yet flexible and featureful.  
+There are many features that other players have that MusicBox will likely never
+have.  Such is life.
 
 The latest version of MusicBox is at:
-	http://www.hayber.us/wiki/index.php/ROX/MusicBox
+	http://www.hayber.us/rox/MusicBox
 
 Share and Enjoy!
 
@@ -27,18 +28,28 @@ If these are not correct you must edit the Options to suit your setup. If there
 are any errors at startup, you can run the Options dialog without launching the
 application using ROX Filer's menu (right click on the AppDir icon).
 
-For library changes just hit the refresh menu item, unless you used Drag and Drop
-in which case the display will update automatically.  If you have a lot of files
-it will take considerable time to read them all - see below on how to speed things up.
-However, don't let that stop you from hitting the play button - we got threads!
+NOTE: If you have libao/pyao installed, this will be the default output driver,
+regardless of whether you have any of the other supported output drivers
+installed or not (see below).  It just works better in my experience.  Some of 
+the output driver choices will not work if you don't have the proper driver 
+installed; I need to add better feedback to indicate what is working.  The 
+device setting may have to be changed depending on which driver is selected. For
+oss and esd then /dev/dsp or /dev/sound/dsp are probably right.  For alsa
+'default' is usually what you want. 
+
+For library changes just hit the refresh menu item, unless you used Drag and 
+Drop in which case the display will update automatically.  If you have a lot of 
+files it will take considerable time to read them all - see below on how to 
+speed things up. However, don't let that stop you from hitting the play button -
+we got threads!
 
 In place of the ~/Music default library location you may enter:
 	* one or more directories separated by ':' like a path
 	* one or more *.pls or *.m3u files
 	* one or more *.xml files (saved from MusicBox)
 	* any combination of the above.
-You can also leave it blank and just load files dynamically.  This can be done in the
-following ways:
+You can also leave it blank and just load files dynamically.  This can be done 
+in the following ways:
 	* Drag and Drop files or folders on the MusicBox main or Playlist windows
 	* Pass files or folders or playlists on the MusicBox command line.
 	* Use remote control functions (see below)
@@ -59,45 +70,49 @@ We also support a similar set of command line options. (try: rox MusicBox -h)
 
 Tag Info and Filenames
 ~~~~~~~~~~~~~~~~~~~~~~
-MusicBox will try to read tag info from your files, but this can take a long time
-and many files do not contain this information.  Therefore, MusicBox will first attempt
-to 'guess' the artist, album and title from the filename and path of each song.
-However this loading process is a background task.  You can start playing songs or
-even quit MusicBox while this is happening.
+MusicBox will try to read tag info from your files, but this can take a long 
+time and many files do not contain this information.  Therefore, MusicBox will 
+first attempt to 'guess' the artist, album and title from the filename and path 
+of each song. However this loading process is a background task.  You can start 
+playing songs or even quit MusicBox while this is happening.
 
 The default assumption is artist/album/title.ext, but you can change this if you
-need to.  In the Options dialog there is a Pattern field that provides a place to
-edit the default pattern to be used. (Note: this is easy to get wrong and if you
-create a pattern that fails to match properly the default will be used)  Currently
-MusicBox only supports artist, album and title.
+need to.  In the Options dialog there is a Pattern field that provides a place 
+to edit the default pattern to be used. (Note: this is easy to get wrong and if 
+you create a pattern that fails to match properly the default will be used)  
+Currently MusicBox only supports artist, album and title.
 
 The default pattern looks like this:
 	^.*/(?P<artist>.*)/(?P<album>.*)/(?P<title>.*)
-This pattern throws away any leading path, and separates the rest as artist/album/title.
-The <track> option is also available if you have track numbers as part of your file
-naming scheme.
+This pattern throws away any leading path, and separates the rest as 
+artist/album/title. 
+
+The <track> option is also available if you have track numbers as part of your 
+file naming scheme.
 
 After loading a large list of songs, you can save these in a Library to speed up
-reloading the next time.  To do this, right click on either the Main or Playlist windows
-and select Save.  A ROX savebox will appear with Library.xml showing defaulted to the
-Choices folder for MusicBox.  You may drag this file anywhere you want to save it and
-rename it if you wish. Be sure not to change the .xml extension or MusicBox will not
-know how to reload it. (FIXME)  This file may now be dragged into either MusicBox window
-to reload those songs. MusicBox will not need to examine each file again to get the tag
-info - that was saved in the xml file.  Loading times are much quicker this way.  You
-can also set one of these files in the Options dialog as your default library instead of
-the path to the actual song files.
+reloading the next time.  To do this, right click on either the Main or Playlist
+windows and select Save.  A ROX savebox will appear with Library.xml showing 
+defaulted to the Choices folder for MusicBox.  You may drag this file anywhere 
+you want to save it and rename it if you wish. Be sure not to change the .xml 
+extension or MusicBox will not know how to reload it. (FIXME)  This file may now
+be dragged into either MusicBox window to reload those songs. MusicBox will not 
+need to examine each file again to get the tag info - that was saved in the xml 
+file.  Loading times are much quicker this way.  You can also set one of these 
+files in the Options dialog as your default library instead of the path to the 
+actual song files.
 
-MusicBox will also use Extended Attributes for tag info if available.  These tags are
-my own creation and only are supported by my CD ripping application Ripper.  Xattrs are
-not widely supported yet, but I believe these will be the future of metadata.  Stay tuned.
+MusicBox will also use Extended Attributes for tag info if available.  These 
+tags are my own creation and only are supported by my CD ripping application 
+Ripper.  Xattrs are not widely supported yet, but I believe these will be the 
+future of metadata.  Stay tuned.
 
 
 Dependencies
 ~~~~~~~~~~~~
-MusicBox depends on the following external modules/libraries for various features.
-Current versions that I am developing with as of this writing are listed below.
-However older versions probably work fine except as noted.
+MusicBox depends on the following external modules/libraries for various 
+features.  Current versions that I am developing with as of this writing are 
+listed below.  However older versions probably work fine except as noted.
 
 Basics
 	ROX-Lib2 2.0.0 (http://rox.sourceforge.net)
@@ -109,6 +124,7 @@ Audio output (optional if your python supports ossaudiodev
               or linuxaudiodev, but highly recommended)
     libao 0.8.5
     pyao  0.82 (http://www.vorbis.com)
+    pyalsaaudio 0.2 (http://www.wilstrup.net/pyalsaaudio/)
 
 MP3 (optional, but you need at least one format supported)
     pymad 0.4.1 (http://spacepants.org/src/pymad/)
@@ -126,26 +142,26 @@ OGG (optional)
 
 FLAC (optional)
 	libflac 1.1.2 (http://flac.sourceforge.net)
-	pyflac 0.0.1 (included, but must be built)
+	pyflac 0.0.1 (included, but must be built, or you can get it from debian)
 
 WAV (standard)
 	python's built in wave module
 
-Hopefully your distro will provide packages for these, otherwise you will have to
-download and build them from sources.
+Hopefully your distro will provide packages for these, otherwise you will have 
+to download and build them from sources.
 
-NOTE: I have discovered that pygtk before version 1.99.17 doesn't support threads all
-that well, so you must have 1.99.17 or higher.
+NOTE: I have discovered that pygtk before version 1.99.17 doesn't support 
+threads all that well, so you must have 1.99.17 or higher.
 
-NOTE: The pyflac module is 0.0.1 and does not seem to be supported by anyone, although
-I seem to see support for it in Debian (sarge?).  I included a copy with a very slightly
-modified Makefile so that you should just have to type make in the 'flac' folder.  If
-you already have a copy installed (e.g. in your normal python modules directory) just
-delete or rename this folder.
+NOTE: The pyflac module is 0.0.1 and does not seem to be supported by anyone, 
+although I seem to see support for it in Debian (sarge?).  I included a copy 
+with a very slightly modified Makefile so that you should just have to type make
+in the 'flac' folder.  If you already have a copy installed (e.g. in your normal
+python modules directory) just delete or rename this folder.
 
-NOTE: The above has changed a bit.  Debian now has version 0.0.3 and seems to have a 
-maintainer.  However, my version is now patched to support flac version 1.1.2.  I'll 
-try to push the simple patch to the debian maintainer.
+NOTE: The above has changed a bit.  Debian now has version 0.0.3 and seems to 
+have a maintainer.  However, my version is now patched to support flac version 
+1.1.2.  I'll try to push the simple patch to the debian maintainer.
 
 
 Features:
@@ -155,7 +171,7 @@ Esd, Alsa, OSS support.
 Drag and Drop adding of Songs, Directories of songs, and Playlists (m3u and pls)
 Shuffle play (with cache so you don't replay songs too frequently).
 Seek control bar to zip to specific parts of any song.
-Volume Control (OSS mixer only)
+Volume Control (OSS and Alsa mixers)
 Compact UI
 
 

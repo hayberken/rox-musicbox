@@ -250,7 +250,7 @@ class MusicBox(rox.Window, loading.XDSLoader):
 		self.server()
 
 		self.playlist = playlist.Playlist(SHUFFLE_CACHE_SIZE.int_value, LIBRARY_RE.value)
-		self.player = player.Player(DRIVER_ID.value, AUDIO_BUFFER_SIZE.int_value)
+		self.player = player.Player(DRIVER_ID.value, AUDIO_BUFFER_SIZE.int_value, MIXER_DEVICE.value)
 		self.foo = Thread(name='player', target=self.player.run)
 		self.foo.setDaemon(True)
 		self.foo.start()

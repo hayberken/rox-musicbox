@@ -1,12 +1,28 @@
 ﻿MusicBox - an MP3/OGG Player for the ROX Desktop
 by Ken Hayber
 
+026
+4-Dec-2005
+- Add native(?) alsa support via pyalsaaudio module
+- Realize that pyalsaaudio doesn't play as well as libao and primarily use it for volume
+control if pyao is installed :( (at least we don't depend on oss anymore)
+- Fix for endian issues with ossaudiodevice, pyalsaaudio and linuxaudiodevice
+- Refactor all decoders and output drivers in preparation for AAC support.
+- Fix for not specifying device parameter to Player init method.
+
+025
+16-Oct-2005
+- Fix (?) for string translation (Chinese, etc) for ID3 tags that were not latin1.
+- Included Chinese translations properly (missing .gmo files)
+
+024
 24-Sep-2005
 - Fixes for changed mime-types in shared-mime-info version 0.16
 - Fixes for flac support for version 1.1.2
 - Misc fixes for ppc/ppc64
 - New Chinese translation
 
+023
 23-Feb-2005
 - Fix bug when adding songs via DnD or command line, does not play.  Index is set wrong.  (reported by Cyrille Mars)
 

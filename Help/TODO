@@ -1,16 +1,21 @@
 ﻿TODO items for MusicBox
 
 * Add Edit id3 tags menu option? call out to Songer? Drag and drop to Songer?
-
 * Multiple selection support
-
-* Delete songs from list (Done)
-
 * Save playlist UI settings (column width, order, window size, etc.)
-
 * Shuffle by Album, Artist
-
 * Gtk 2.4 support (get rid of deprecation warnings)
   - Menu and Toolbars change to new UIManager spec.
-   (Really need to wait for (and help with?) porting ROX-Lib2's Menu.py to the new spec)
-  - Use new TreeModelFilter to add playlist filtering (Done)
+
+* Native Alsa Mixer support (Done!)
+
+* AAC (m4a, not iTunes m4p) playback support
+ - This looks difficult!
+
+* Separate Player/Playlist from UI so that player can keep playing if UI is 
+closed. Essentially, I want a daemon process that just plays music from the
+playlist, with an API for various UI.  I want to have the music keep playing
+even if X dies.  I want to use dbus.
+
+* Gtk 2.6 support
+- use gtk.STOCK_ constants for Media buttons, but have it backward compatible.

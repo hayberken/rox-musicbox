@@ -1,4 +1,4 @@
-#: musicbox.py:528
+#: musicbox.py:535
 msgid "Loading"
 msgstr "Caricamento"
 
@@ -6,7 +6,7 @@ msgstr "Caricamento"
 msgid "older (obsolete?) Alsa driver"
 msgstr "Il vecchio driver Alsa (obsoleto?)"
 
-#: playlistui.py:47
+#: playlistui.py:48
 msgid "Title"
 msgstr "Titolo"
 
@@ -46,29 +46,21 @@ msgstr ""
 msgid "elapse"
 msgstr ""
 
-#: player.py:137
-msgid "You must have OGG support to play ogg files (%s)."
-msgstr " necessario il supporto a OGG per riprodurre i file ogg (%s)."
-
-#: musicbox.py:298
+#: musicbox.py:302
 msgid "Show"
 msgstr ""
 
-#: player.py:135
-msgid "File not found or not accessible (%s)."
+#: tips:72
+msgid "Use miniature size toolbar buttons"
 msgstr ""
 
 #: tips:48
 msgid "The font used for Other text"
 msgstr ""
 
-#: musicbox.py:539
+#: musicbox.py:546
 msgid "Ready"
 msgstr "Pronto"
-
-#: tips:72
-msgid "Use miniature size toolbar buttons"
-msgstr ""
 
 #: tips:66
 #, fuzzy
@@ -83,11 +75,11 @@ msgstr "Questo artista"
 msgid "Show remaining time"
 msgstr ""
 
-#: musicbox.py:310
+#: musicbox.py:314
 msgid "Quit"
 msgstr "Esci"
 
-#: musicbox.py:140 musicbox.py:297 musicbox.py:333 playlistui.py:69
+#: musicbox.py:140 musicbox.py:301 musicbox.py:339 playlistui.py:69
 msgid "Playlist"
 msgstr "Scaletta"
 
@@ -95,7 +87,7 @@ msgstr "Scaletta"
 msgid "Pattern"
 msgstr "Modello"
 
-#: musicbox.py:137 musicbox.py:294 musicbox.py:330
+#: musicbox.py:137 musicbox.py:298 musicbox.py:336
 msgid "Next"
 msgstr "Successivo"
 
@@ -103,7 +95,7 @@ msgstr "Successivo"
 msgid "Word Wrap"
 msgstr ""
 
-#: musicbox.py:300 playlistui.py:93
+#: musicbox.py:304 playlistui.py:93
 msgid "Save"
 msgstr "Salva"
 
@@ -117,11 +109,6 @@ msgstr ""
 "ciascun file l'artista, l'album, il titolo e la traccia. Viene usato se nel "
 "file non ci sono tag di informazione."
 
-#: player.py:141
-#, fuzzy
-msgid "You must have FLAC support to play flac files (%s)."
-msgstr " necessario il supporto a MAD per riprodurre i file mp3 (%s)."
-
 #: tips:52
 msgid "Colors"
 msgstr ""
@@ -134,7 +121,7 @@ msgstr "esd"
 msgid "The /dev entry for your mixer.  Typically /dev/mixer."
 msgstr ""
 
-#: musicbox.py:307
+#: musicbox.py:311
 msgid "Info"
 msgstr "Informazioni"
 
@@ -166,7 +153,7 @@ msgstr ""
 "argomento.  un elenco di directory separate da : e/o di file .xml, .pls, ."
 "m3u, .mp3, .ogg."
 
-#: musicbox.py:705
+#: musicbox.py:712
 msgid "Playing"
 msgstr "In riproduzione"
 
@@ -178,19 +165,19 @@ msgstr "Dimensioni cache"
 msgid "Delete"
 msgstr ""
 
-#: musicbox.py:139 musicbox.py:301 musicbox.py:332 tips:30
+#: musicbox.py:139 musicbox.py:305 musicbox.py:338 tips:30
 msgid "Shuffle"
 msgstr "A caso"
 
-#: musicbox.py:293
+#: musicbox.py:297
 msgid "Back"
 msgstr "Precedente"
 
-#: musicbox.py:710
+#: musicbox.py:717
 msgid "Paused"
 msgstr "In pausa"
 
-#: musicbox.py:537
+#: musicbox.py:544
 msgid "Loading songs, please wait..."
 msgstr "Caricamento brani, attendere..."
 
@@ -205,7 +192,7 @@ msgstr ""
 # MusicBox Italian Translation.
 # Copyright @ 2004 Free Software Foundation, Inc.
 # Current translator: Yuri Bongiorno http://yuri.webhop.org, 2004.
-#: musicbox.py:289
+#: musicbox.py:293
 msgid "Pause"
 msgstr "Pausa"
 
@@ -236,16 +223,16 @@ msgstr "Tutti i brani"
 msgid "Show/Hide the Toolbar"
 msgstr ""
 
-#: musicbox.py:539
+#: musicbox.py:546
 msgid " songs"
 msgstr " brani"
 
-#: musicbox.py:135 musicbox.py:289 musicbox.py:328 musicbox.py:342
+#: musicbox.py:135 musicbox.py:293 musicbox.py:334 musicbox.py:349
 #: playlistui.py:82
 msgid "Play"
 msgstr "Suona"
 
-#: musicbox.py:138 musicbox.py:302 musicbox.py:331 tips:28
+#: musicbox.py:138 musicbox.py:306 musicbox.py:337 tips:28
 msgid "Repeat"
 msgstr "Ripeti"
 
@@ -253,7 +240,7 @@ msgstr "Ripeti"
 msgid "Driver"
 msgstr "Driver"
 
-#: musicbox.py:141 musicbox.py:306 musicbox.py:334
+#: musicbox.py:141 musicbox.py:310 musicbox.py:341
 msgid "Options"
 msgstr "Opzioni"
 
@@ -261,7 +248,7 @@ msgstr "Opzioni"
 msgid "Text Color:"
 msgstr ""
 
-#: musicbox.py:539
+#: musicbox.py:546
 msgid "loaded "
 msgstr "caricati "
 
@@ -285,7 +272,7 @@ msgstr "alsa (old)"
 msgid "This Album"
 msgstr "Questo album"
 
-#: musicbox.py:712
+#: musicbox.py:719
 msgid "Stopped"
 msgstr "Fermato"
 
@@ -322,15 +309,15 @@ msgstr ""
 msgid "Show/Hide Album Cover display"
 msgstr ""
 
-#: musicbox.py:299 playlistui.py:94
+#: musicbox.py:303 playlistui.py:94
 msgid "Open location"
 msgstr ""
 
-#: musicbox.py:133 musicbox.py:326 playlistui.py:96
+#: musicbox.py:133 musicbox.py:332 playlistui.py:96
 msgid "Close"
 msgstr ""
 
-#: playlistui.py:46
+#: playlistui.py:47
 msgid "Album"
 msgstr "Album"
 
@@ -342,21 +329,17 @@ msgstr "Ordine di riproduzione casuale."
 msgid "Text color."
 msgstr ""
 
-#: musicbox.py:134 musicbox.py:327
+#: musicbox.py:134 musicbox.py:333
 msgid "Prev"
 msgstr "Precedente"
 
-#: playlistui.py:48
+#: playlistui.py:49
 msgid "Track"
 msgstr "Traccia"
 
-#: musicbox.py:136 musicbox.py:290 musicbox.py:329
+#: musicbox.py:136 musicbox.py:294 musicbox.py:335
 msgid "Stop"
 msgstr "Ferma"
-
-#: player.py:139
-msgid "You must have MAD support to play mp3 files (%s)."
-msgstr " necessario il supporto a MAD per riprodurre i file mp3 (%s)."
 
 #: tips:62
 msgid "Volume"
@@ -370,7 +353,7 @@ msgstr ""
 msgid "Base font:"
 msgstr ""
 
-#: playlistui.py:49
+#: playlistui.py:50
 msgid "Genre"
 msgstr "Genere"
 
@@ -386,11 +369,11 @@ msgstr ""
 msgid "alsa"
 msgstr "alsa"
 
-#: playlistui.py:45
+#: playlistui.py:46
 msgid "Artist"
 msgstr "Artista"
 
-#: musicbox.py:600
+#: musicbox.py:607
 msgid "Failed to start playing %s"
 msgstr "Riproduzione di %s fallita"
 
@@ -419,6 +402,16 @@ msgstr "Si deve fare prima una selezione."
 #: tips:15
 msgid "current Alsa driver"
 msgstr "Il driver Alsa attuale"
+
+#~ msgid "You must have OGG support to play ogg files (%s)."
+#~ msgstr " necessario il supporto a OGG per riprodurre i file ogg (%s)."
+
+#, fuzzy
+#~ msgid "You must have FLAC support to play flac files (%s)."
+#~ msgstr " necessario il supporto a MAD per riprodurre i file mp3 (%s)."
+
+#~ msgid "You must have MAD support to play mp3 files (%s)."
+#~ msgstr " necessario il supporto a MAD per riprodurre i file mp3 (%s)."
 
 #, fuzzy
 #~ msgid "Playist"
