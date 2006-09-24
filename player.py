@@ -45,9 +45,12 @@ except:
 
 if not HAVE_AO and not HAVE_OSS:
 	print 'No OSS and no AO support Falling back to linuxaudiodev which sucks!!'
-	import linuxaudiodev
 
-USING_DEV = None
+try:
+	import linuxaudiodev
+	HAVE_LINUX = True
+except:
+	HAVE_LINUX = False
 
 class Player:
 	"""A class to playback sound files to an audio device."""
@@ -58,8 +61,9 @@ class Player:
 	total_time = 0
 	seek_val = 0
 
-	def __init__(self, id='esd', buffersize=4096, device='/dev/dsp',):
+	def __init__(self, driver='ao', id='esd', buffersize=4096, device='/dev/dsp',):
 		"""Initialize the Player instance"""
+		self.driver = driver
 		self.id = id
 		self.buffersize = buffersize
 		self.dev = None
@@ -68,59 +72,51 @@ class Player:
 
 	def open(self, rate=44100, channels=2):
 		"""Open and configure the audio device driver"""
-		global USING_DEV
 		bits=16
 		#try 3 times to open the device, then give up.
 		for x in range(3):
-			try:
-				if HAVE_AO:
-					self.dev = ao.AudioDevice(self.id, bits, rate, channels)
-					USING_DEV = 'ao'
-				elif HAVE_ALSA and self.id in ('alsa09',):
-					self.dev = alsaaudio.PCM(cardname=self.device)
-					self.dev.setchannels(channels)
-					self.dev.setrate(rate)
-					if sys.byteorder == 'big':
-						format = alsaaudio.PCM_FORMAT_S16_BE
-					else:
-						format = alsaaudio.PCM_FORMAT_S16_LE
-					self.dev.setformat(format)
-					USING_DEV = 'alsa'
-				elif HAVE_OSS:
-					self.dev = ossaudiodev.open(self.device, 'w')
-					if sys.byteorder == 'big':
-						format = ossaudiodev.AFMT_S16_BE
-					else:
-						format = ossaudiodev.AFMT_S16_LE
-					self.dev.setparameters(format, channels, rate)
-					USING_DEV = 'oss'
+			if self.driver == 'alsa':
+				self.dev = alsaaudio.PCM(cardname=self.device)
+				self.dev.setchannels(channels)
+				self.dev.setrate(rate)
+				if sys.byteorder == 'big':
+					format = alsaaudio.PCM_FORMAT_S16_BE
 				else:
-					self.dev = linuxaudiodev.open('w')
-					if sys.byteorder == 'big':
-						format = linuxaudiodev.AFMT_S16_BE
-					else:
-						format = linuxaudiodev.AFMT_S16_LE
-					self.dev.setparameters(rate, bits, channels, format)
-					USING_DEV = 'other'
-				break
-			except:
-				time.sleep(1)
-				
+					format = alsaaudio.PCM_FORMAT_S16_LE
+				self.dev.setformat(format)
+			elif self.driver == 'ao':
+				self.dev = ao.AudioDevice(self.id, bits, rate, channels)
+			elif self.driver == 'oss':
+				self.dev = ossaudiodev.open(self.device, 'w')
+				if sys.byteorder == 'big':
+					format = ossaudiodev.AFMT_S16_BE
+				else:
+					format = ossaudiodev.AFMT_S16_LE
+				self.dev.setparameters(format, channels, rate)
+			elif self.driver == 'linux':
+				self.dev = linuxaudiodev.open('w')
+				if sys.byteorder == 'big':
+					format = linuxaudiodev.AFMT_S16_BE
+				else:
+					format = linuxaudiodev.AFMT_S16_LE
+				self.dev.setparameters(rate, bits, channels, format)
+			else:
+				raise 'Driver Error'				
 
 	def close(self):
 		"""Close the current device if open and delete it"""
 		if self.dev:
-			if USING_DEV in ('ao', 'alsa', 'other'):
+			if self.driver in ('ao', 'alsa', 'linux'):
 				self.dev = None
-			elif USING_DEV in ('oss',):
+			elif self.driver in ('oss',):
 				self.dev.close()
 
 
 	def write(self, buff, bytes):
 		"""Write data to the audio device"""
-		if USING_DEV in ('ao',):
+		if self.driver in ('ao',):
 			self.dev.play(buff, bytes)
-		elif USING_DEV in ('oss', 'alsa'):
+		elif self.driver in ('oss', 'alsa'):
 			self.dev.write(buff)
 		else:
 			while self.dev.obuffree() < bytes:
@@ -138,7 +134,10 @@ class Player:
 		while True:
 			(name, type) = self.queue.get()
 			if os.path.isfile(name):
-				self.decoder = plugins.get_decoder(name, type, self.buffersize)
+				try:
+					self.decoder = plugins.get_decoder(name, type, self.buffersize)
+				except:
+					continue #get the next song
 			else:
 				raise SyntaxError, 'play takes a filename.'
 			self.start()
@@ -198,12 +197,12 @@ class Player:
 		"""Jump to a specific point in the song by percent"""
 		self.seek_val = percent
 
-	def set_volume(self, volume, device=None):
+	def set_volume(self, volume, device=None, channel='PCM'):
 		"""Set the PCM volume to a new value"""
 		vol = int(volume)
 		if HAVE_ALSA:
 			try:
-				mixer = alsaaudio.Mixer('PCM', 0, device)
+				mixer = alsaaudio.Mixer(channel, 0, device)
 				mixer.setvolume(vol)				
 			except:
 				print >>sys.stderr, "Failed to open mixer device %s" % device
@@ -217,15 +216,15 @@ class Player:
 		else:
 			pass
 
-	def get_volume(self, device=None):
+	def get_volume(self, device=None, channel='PCM'):
 		"""Return the current volume setting"""
 		if HAVE_ALSA:
 			try:
-				mixer = alsaaudio.Mixer('PCM', 0, device)
+				mixer = alsaaudio.Mixer(channel, 0, device)
 				vol = mixer.getvolume()
 				return float(max(vol[0], vol[1]))
 			except:
-				print >>sys.stderr, "Failed to open mixer device %s" % device
+				print >>sys.stderr, "Failed to open mixer device %s, channel %s" % (device, channel)
 				return 0
 				
 		elif HAVE_OSS:

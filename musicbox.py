@@ -56,10 +56,11 @@ BTN_OPTIONS = 8
 #Bitmaps (potentially) used in this application
 factory = gtk.IconFactory()
 for name in [
-	'gtk-media-stop', 'gtk-media-pause', 'gtk-media-play', 
-	'gtk-media-next', 'gtk-media-previous', 'gtk-media-forward', 'gtk-media-rewind', 
-	'gtk-media-eject', 'gtk-media-repeat', 'gtk-media-shuffle',
-#	'gtk-media_track', 'gtk-media-record', 'stock_playlist',
+# uncomment these two lines to use the icons in 'images' directory instead of GTK theme
+#	'gtk-media-stop', 'gtk-media-pause', 'gtk-media-play', 'gtk-media-record'
+#	'gtk-media-next', 'gtk-media-previous', 'gtk-media-forward', 'gtk-media-rewind', 
+	'media-eject', 'media-repeat', 'media-shuffle',
+#	'media_track', 'stock_playlist',
 #	'stock_volume-max', 'stock_volume-med', 'stock_volume-min',
 #	'stock_volume-mute', 'stock_volume-0'
 	]:
@@ -85,9 +86,14 @@ LIBRARY = Option('library', os.path.expanduser('~')+'/Music')
 #how to parse each library leaf to get artist, album, title...
 LIBRARY_RE = Option('library_re', '^.*/(?P<artist>.*)/(?P<album>.*)/(?P<title>.*)')
 
-#the ao driver type you want to use (esd, oss, alsa, alsa09, ...)
-DRIVER_ID = Option('driver_id', 'esd')
-MIXER_DEVICE = Option('mixer_device', '/dev/mixer')
+#the native driver type you want to use ('ao', 'alsa', 'oss', 'linux')
+DRIVER_TYPE = Option('driver_type', 'alsa')
+#the ao driver type you want to use ('esd', 'oss', 'alsa', 'alsa09')
+DRIVER_ID = Option('driver_id', 'alsa')
+SOUND_DEVICE = Option('sound_device', 'default') # '/dev/mixer' or 'default'
+
+MIXER_DEVICE = Option('mixer_device', 'default') # '/dev/mixer' or 'default'
+MIXER_CHANNEL = Option('mixer_channel', 'PCM')
 
 SHUFFLE = Option('shuffle', 0)
 REPEAT = Option('repeat', 0)
@@ -137,8 +143,8 @@ def build_tool_options(box, node, label, option):
 		(type1, _("Play"), gtk.STOCK_MEDIA_PLAY, item_changed),
 		(type1, _("Stop"), gtk.STOCK_MEDIA_STOP, item_changed),
 		(type1, _("Next"), gtk.STOCK_MEDIA_NEXT, item_changed),
-		(type1, _("Repeat"), 'gtk-media-repeat', item_changed),
-		(type1, _("Shuffle"), 'gtk-media-shuffle', item_changed),
+		(type1, _("Repeat"), 'media-repeat', item_changed),
+		(type1, _("Shuffle"), 'media-shuffle', item_changed),
 		(type1, _("Playlist"), gtk.STOCK_INDEX, item_changed),
 		(type1, _("Options"), gtk.STOCK_PREFERENCES, item_changed),
 	]
@@ -250,11 +256,11 @@ class MusicBox(rox.Window, loading.XDSLoader):
 		self.server()
 
 		self.playlist = playlist.Playlist(SHUFFLE_CACHE_SIZE.int_value, LIBRARY_RE.value)
-		self.player = player.Player(DRIVER_ID.value, AUDIO_BUFFER_SIZE.int_value, MIXER_DEVICE.value)
+		self.player = player.Player(DRIVER_TYPE.value, DRIVER_ID.value, AUDIO_BUFFER_SIZE.int_value, SOUND_DEVICE.value)
 		self.foo = Thread(name='player', target=self.player.run)
 		self.foo.setDaemon(True)
 		self.foo.start()
-		self.volume.set_value(self.player.get_volume(MIXER_DEVICE.value))
+		self.volume.set_value(self.player.get_volume(MIXER_DEVICE.value, MIXER_CHANNEL.value))
 
 		if len(sys.argv) > 1:
 			self.load_args(sys.argv[1:], True)
@@ -336,8 +342,8 @@ class MusicBox(rox.Window, loading.XDSLoader):
 			(type1, _("Play"), gtk.STOCK_MEDIA_PLAY, self.play_pause),
 			(type1, _("Stop"), gtk.STOCK_MEDIA_STOP, self.stop),
 			(type1, _("Next"), gtk.STOCK_MEDIA_NEXT, self.next),
-			(type2, _("Repeat"), 'gtk-media-repeat', lambda b: self.set_repeat(b.get_active())),
-			(type2, _("Shuffle"), 'gtk-media-shuffle', lambda b: self.set_shuffle(b.get_active())),
+			(type2, _("Repeat"), 'media-repeat', lambda b: self.set_repeat(b.get_active())),
+			(type2, _("Shuffle"), 'media-shuffle', lambda b: self.set_shuffle(b.get_active())),
 			(type1, _("Playlist"), gtk.STOCK_INDEX, self.show_playlist),
 			(type1, _("Options"), gtk.STOCK_PREFERENCES, self.show_options),
 		]
@@ -562,7 +568,7 @@ class MusicBox(rox.Window, loading.XDSLoader):
 		"""Save the current list"""
 #		box = saving.SaveBox(self.playlist, rox.choices.save(APP_NAME, 'Library.xml'), 'text/xml')
 		file = 'MyMusic.music'
-		path = os.path.join(rox.basedir.save_config_path(APP_NAME, APP_DOMAIN), file)
+		path = os.path.join(rox.basedir.save_config_path(APP_DOMAIN, APP_NAME), file)
 		box = saving.SaveBox(self.playlist, path, 'application/x-music-playlist')
 		box.show()
 
@@ -600,7 +606,7 @@ class MusicBox(rox.Window, loading.XDSLoader):
 			self.display_artist.set_text(self.current_song.artist)
 			self.display_album.set_text(self.current_song.album)
 
-			tooltips.set_tip(self.buttons[BTN_PLAY], 'Play ['+self.current_song.title+']', tip_private=None)
+			tooltips.set_tip(self.buttons[BTN_PLAY], _('Play')+' ['+self.current_song.title+']', tip_private=None)
 
 		except TypeError, detail:
 			rox.alert(str(detail))
@@ -729,7 +735,7 @@ class MusicBox(rox.Window, loading.XDSLoader):
 
 
 		#update the volume control if something other than us changed it
-		self.volume.set_value(self.player.get_volume(MIXER_DEVICE.value))
+		self.volume.set_value(self.player.get_volume(MIXER_DEVICE.value, MIXER_CHANNEL.value))
 
 		return True #keep running
 
@@ -845,7 +851,7 @@ class MusicBox(rox.Window, loading.XDSLoader):
 
 	def adjust_volume(self, vol):
 		"""Set the playback volume"""
-		self.player.set_volume(vol.get_value(), MIXER_DEVICE.value)
+		self.player.set_volume(vol.get_value(), MIXER_DEVICE.value, MIXER_CHANNEL.value)
 
 
 	def xds_drag_motion(self, widget, context, x, y, timestamp):
