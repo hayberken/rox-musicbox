@@ -157,8 +157,6 @@ class Playlist(saving.Saveable, gobject.GObject):
 
 	def set_index(self, index):
 		self.curr_index = index
-		#iter = self.song_list.get_iter((self.curr_index,))
-		#self.model.set(iter, COL_ICON, 'media-track')
 
 	def get_index(self):
 		if self.curr_index == -1:
@@ -451,8 +449,7 @@ class Playlist(saving.Saveable, gobject.GObject):
 				filename = line.strip()
 				if filename and not filename.startswith('#'):
 					if filename[0] != '/':
-						filename = os.path.join(dir,
-						    filename)
+						filename = os.path.join(dir, filename)
 					self.add_song(filename)
 
 	def process_dir(self, directory):
