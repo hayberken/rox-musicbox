@@ -185,7 +185,7 @@ class PlaylistUI(rox.Window, loading.XDSLoader):
 #		box = saving.SaveBox(self.playlist, rox.choices.save(APP_NAME, 'Library.xml'), 'text/xml')
 #		box = saving.SaveBox(self.playlist, rox.choices.save(APP_NAME, 'MyMusic.music'), 'application/x-music-playlist')
 		file = 'MyMusic.music'
-		path = os.path.join(rox.basedir.save_config_path(APP_NAME, APP_DOMAIN), file)
+		path = os.path.join(rox.basedir.save_config_path(APP_DOMAIN, APP_NAME), file)
 		box = saving.SaveBox(self.playlist, path, 'application/x-music-playlist')
 		box.show()
 
@@ -220,7 +220,10 @@ class PlaylistUI(rox.Window, loading.XDSLoader):
 	def set_selection(self, selection):
 		"""Tell the playlist what we currently have selected"""
 		(cursor, thing) = self.view.get_cursor()
-		self.curr_index = cursor[0]
+		if cursor == None:
+			self.curr_index = 0
+		else:
+			self.curr_index = cursor[0]
 
 	def show_dir(self, *dummy):
 		''' Pops up a filer window. '''
