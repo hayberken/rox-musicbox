@@ -1,6 +1,10 @@
 ﻿MusicBox - an MP3/OGG Player for the ROX Desktop
 by Ken Hayber
 
+027
+30-July-2006
+- Allow GTK theme to set the toolbar icons (edit musicbox.py if you want to use my icons)
+
 026
 4-Dec-2005
 - Add native(?) alsa support via pyalsaaudio module
