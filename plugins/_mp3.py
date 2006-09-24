@@ -29,42 +29,53 @@ except:
 	from ID3 import *
 	HAVE_ID3V2 = False
 	print 'No id3v2 support'
-		
+import re
+import genres
+ID3V2_GENRE_RE = re.compile('\((?P<genre>\d+)\)')
+
+def to_unicode(s, fallback_encoding='iso-8859-1'):
+    try:
+	return s.decode('utf-8')
+    except UnicodeDecodeError:
+	return s.decode(fallback_encoding, 'ignore')
+
 def get_info(song):
-	if (HAVE_ID3V2):
-		try: tag_info = tag(song.filename)
-		except: pass
-		try: song.title = tag_info.title
-		except: pass
-		try: song.track = int(tag_info.track[0]) #it is a tuple (x of y)
-		except: pass
-		try: song.album = tag_info.album
-		except: pass
-		try: song.artist = tag_info.artist
-		except: pass
-		try:
-			#ID3v2 genres are either a string/tuple index e.g. '(17)'
-			#or the actual genre string.
-			x = re.match('\(([0-9]+)\)', tag_info.contenttype)
-			if x:
-				genre = genres.genre_list[int(x.group(1))]
-			else:
-				genre = tag_info.contenttype
-			song.genre = genre
-		except: pass
-		try: song.length = tag_info.songlen
-		except: pass
+	if HAVE_ID3V2:
+		tag_info = tag(song.filename)
 	else: #ID3V1
 		try:
 			tag_info = ID3(song.filename)
-		except: pass
-		if tag_info.has_key('TITLE'): song.title = tag_info['TITLE']
-		if tag_info.has_key('TRACKNUMBER'): song.track = int(tag_info['TRACKNUMBER'])
-		if tag_info.has_key('ALBUM'): song.album = tag_info['ALBUM']
-		if tag_info.has_key('ARTIST'): song.artist = tag_info['ARTIST']
-		if tag_info.has_key('GENRE'): song.genre = tag_info['GENRE']
-		song.length = 0
-		
+		except:
+			return
+	val = None
+	for key in ('title', 'track', 'album', 'artist', 'contenttype', 'genre'):
+		try:
+			if key == 'track':
+				# it is a tuple (x of y)
+				if HAVE_ID3V2:
+					val = int(tag_info.track[0])
+				else:
+					val = tag_info.track
+			elif key == 'genre':
+				val = tag_info.genre
+			else:
+				val = to_unicode(getattr(tag_info, key))
+			if key == 'contenttype':
+				key = 'genre'
+				# ID3v2 genres are either a string/tuple index
+				# e.g. '(17)' or the actual genre string.
+				x = ID3V2_GENRE_RE.match(val)
+				if x:
+					val = int(x.group('genre'))
+			if key == 'genre' and isinstance(val, int):
+				val = genres.genre_list[val]
+			if val != '':
+				setattr(song, key, val)
+		except (AttributeError, IndexError):
+			pass
+	# don't trust any length specs from a tag
+	song.length = 0
+
 
 class MP3Decoder:
 	def __init__(self, filename, buffersize):
