@@ -1,8 +1,8 @@
 #!/usr/bin/env python
-try:
-	import findrox; findrox.version(2, 0, 0)
-	import os, rox, sys
+import findrox; findrox.version(2, 0, 0)
+import os, rox, sys
 
+try:
 	__builtins__._ = rox.i18n.translation(os.path.join(rox.app_dir, 'Messages'))
 
 	from optparse import OptionParser
