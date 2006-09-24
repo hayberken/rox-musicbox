@@ -25,3 +25,5 @@ clean:
 	rm -f sw_metadata_wrap.c _sw_metadata.so sw_metadata.py
 	rm -f decoder_wrap.c _decoder.so decoder.py
 	rm -f encoder_wrap.c _encoder.so encoder.py
+	rm -f *.pyc
+
