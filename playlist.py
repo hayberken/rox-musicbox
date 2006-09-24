@@ -24,7 +24,6 @@ import rox, os, sys, re, time, string, gtk, gobject
 from rox import saving
 from urllib import quote, unquote
 
-import genres
 from random import Random
 from xml.dom.minidom import parse, parseString, Document
 
@@ -55,6 +54,7 @@ COL_LENGTH = 6
 COL_TYPE = 7
 COL_ICON = 8
 
+FILENAME_RE = re.compile('^.*/(?P<artist>.*)/(?P<album>.*)/(?P<title>.*)')
 
 class Song:
 	def __init__(self, filename=None, title=None, track=None, album=None, artist=None,
@@ -157,8 +157,8 @@ class Playlist(saving.Saveable, gobject.GObject):
 
 	def set_index(self, index):
 		self.curr_index = index
-		iter = self.song_list.get_iter((self.curr_index,))
-		self.model.set(iter, COL_ICON, 'media-track')
+		#iter = self.song_list.get_iter((self.curr_index,))
+		#self.model.set(iter, COL_ICON, 'media-track')
 
 	def get_index(self):
 		if self.curr_index == -1:
@@ -279,8 +279,11 @@ class Playlist(saving.Saveable, gobject.GObject):
 		"""Get the tag info from specified filename"""
 		song.type = str(rox.mime.get_type(song.filename))
 		
-		if not self.get_xattr_info(song):
-			plugins.get_info(song)
+		try:
+			if not self.get_xattr_info(song):
+				plugins.get_info(song)
+		except:
+			rox.info('Unsupported format: %s' % song.filename)
 
 		try:
 			song.title = song.title.encode('utf8')
@@ -410,7 +413,7 @@ class Playlist(saving.Saveable, gobject.GObject):
 	def guess(self, filename, type):
 		"""Guess some info about the file based on path/filename"""
 		try:	m = re.match(self.guess_re, os.path.abspath(filename))
-		except:	m = re.match('^.*/(?P<artist>.*)/(?P<album>.*)/(?P<title>.*)', filename)
+		except:	m = DEFAULT_FILENAME_RE.match(filename)
 		try:	title = m.group('title')
 		except:	title = filename
 		try:	album = m.group('album')
@@ -446,17 +449,17 @@ class Playlist(saving.Saveable, gobject.GObject):
 		if m3u:
 			for line in m3u.xreadlines():
 				filename = line.strip()
-				if filename:
-					if filename[0] == '/':
-						self.add_song(filename)
-					else:
-						self.add_song('/'.join((dir,
-								       filename)))
+				if filename and not filename.startswith('#'):
+					if filename[0] != '/':
+						filename = os.path.join(dir,
+						    filename)
+					self.add_song(filename)
 
 	def process_dir(self, directory):
 		"""Walk a directory adding all files found"""
 		# (Note: add_song filters the list by mime_type)
 		def visit(self, dirname, names):
+			names.sort()
 			for filename in names:
 				self.add_song(dirname+'/'+filename)
 
