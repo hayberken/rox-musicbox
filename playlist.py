@@ -283,18 +283,14 @@ class Playlist(saving.Saveable, gobject.GObject):
 		except:
 			rox.info('Unsupported format: %s' % song.filename)
 
-		try:
-			song.title = song.title.encode('utf8')
-		except: rox.report_exception()
-		try:
-			song.artist = song.artist.encode('utf8')
-		except: rox.report_exception()
-		try:
-			song.album = song.album.encode('utf8')
-		except: rox.report_exception()
-		try:
-			song.genre = song.genre.encode('utf8')
-		except: rox.report_exception()
+		try: song.title = song.title.encode('utf8')
+		except: pass
+		try: song.artist = song.artist.encode('utf8')
+		except: pass
+		try: song.album = song.album.encode('utf8')
+		except: pass
+		try: song.genre = song.genre.encode('utf8')
+		except: pass
 
 		song.title = strip_padding(song.title)
 		song.artist = strip_padding(song.artist)

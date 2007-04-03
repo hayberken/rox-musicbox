@@ -57,9 +57,10 @@ BTN_OPTIONS = 8
 factory = gtk.IconFactory()
 for name in [
 # uncomment these two lines to use the icons in 'images' directory instead of GTK theme
-#	'gtk-media-stop', 'gtk-media-pause', 'gtk-media-play', 'gtk-media-record'
+#	'gtk-media-stop', 'gtk-media-pause', 'gtk-media-play', 'gtk-media-record',
 #	'gtk-media-next', 'gtk-media-previous', 'gtk-media-forward', 'gtk-media-rewind', 
-	'media-eject', 'media-repeat', 'media-shuffle',
+#	'media-eject', 
+	'media-repeat', 'media-shuffle',
 #	'media_track', 'stock_playlist',
 #	'stock_volume-max', 'stock_volume-med', 'stock_volume-min',
 #	'stock_volume-mute', 'stock_volume-0'
