@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="Rox-musicbox : A simple music player for the ROX Desktop">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Rox-musicbox</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/khayber/rox-musicbox">View on GitHub</a>
+
+          <h1 id="project_title">Rox-musicbox</h1>
+          <h2 id="project_tagline">A simple music player for the ROX Desktop</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/khayber/rox-musicbox/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/khayber/rox-musicbox/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a id="features" class="anchor" href="#features" aria-hidden="true"><span class="octicon octicon-link"></span></a>Features</h1>
+
+<ul>
+<li>MP3, OGG, Flac, WAV support.</li>
+<li>ESD, Alsa, OSS support.</li>
+<li>Album Art display</li>
+<li>Drag and Drop adding of Songs, Directories of songs, and Playlists (m3u, pls and xml)</li>
+<li>Shuffle play (with cache so you don't replay songs too frequently).</li>
+<li>Seek control bar to zip to specific parts of any song.</li>
+<li>Volume Control</li>
+<li>Playlist filtering</li>
+<li>Translations: fr, it, es, pt_BR</li>
+</ul>
+
+<p><img src="http://rox-musicbox.googlecode.com/files/musicbox.png" alt="http://rox-musicbox.googlecode.com/files/musicbox.png"></p>
+
+<h1>
+<a id="instructions" class="anchor" href="#instructions" aria-hidden="true"><span class="octicon octicon-link"></span></a>Instructions</h1>
+
+<p>Extract the MusicBox appdir and copy it to wherever you normally put ROX apps. Then launch it! Initially it assumes that you put all your mp3 and/or ogg files in ~/Music. If this is not correct you must edit the Options to suit your setup. For library changes just hit the refresh menu item, unless you used Drag and Drop in which case the display will update automatically. If you have a lot of files it will take considerable time to read them all - see below on how to speed things up. However, don't let that stop you from hitting the play button! We got threads!</p>
+
+<p>In place of the ~/Music default library location you may enter</p>
+
+<ul>
+<li>one or more directories separated by ':' like a path</li>
+<li>one or more .pls or .m3u files</li>
+<li>one or more .xml files (saved from MusicBox)</li>
+<li>any combination of the above.</li>
+</ul>
+
+<p>You can also leave it blank and just load files dynamically. This can be done in the following ways</p>
+
+<ul>
+<li>Drag and Drop files or folders on the MusicBox main or Playlist windows</li>
+<li>Pass files or folders or playlists on the MusicBox command line.</li>
+<li>Use rpc (see below)</li>
+</ul>
+
+<p>MusicBox currently exports the following commands via rpc</p>
+
+<ul>
+<li>load_songs #replace existing and start playing</li>
+<li>add_songs #append to existing</li>
+<li>play</li>
+<li>pause</li>
+<li>next</li>
+<li>prev</li>
+<li>stop</li>
+</ul>
+
+<p>Here is how to call these functions in python. Also, see the Extras directory for useful examples of this. We also support a similar set of command line options. (try: rox MusicBox -h)</p>
+
+<h1>
+<a id="tag-info-and-filenames" class="anchor" href="#tag-info-and-filenames" aria-hidden="true"><span class="octicon octicon-link"></span></a>Tag Info and Filenames</h1>
+
+<p>MusicBox will try to read tag info from your files, but this can take a long time and many files do not contain this information. Therefore, it will first attempt to 'guess' the artist, album and title from the filename and path of each song. However this loading process is a background task. You can start playing songs or even quit MusicBox while this is happening.</p>
+
+<p>The default assumption is artist/album/title.ext, but you can change this if you need to. In the Options dialog there is a Pattern field that provides a place to edit the default pattern to be used. (Note: this is easy to get wrong and if you create a pattern that fails to match properly the default will be used) Currently MusicBox only supports artist, album, title and track.</p>
+
+<p>The default pattern looks like this</p>
+
+<pre><code>^.*/(?P&lt;artist&gt;.*)/(?P&lt;album&gt;.*)/(?P&lt;title&gt;.*)
+</code></pre>
+
+<p>This pattern throws away any leading path, and separates the rest as artist/album/title. The  option is also available if you have track numbers as part of your file naming scheme.</p>
+
+<p>MusicBox will also use Extended Attributes for tag info if available. These tags are my own creation and only are supported by my CD ripping application Ripper. Xattrs are not widely supported yet, but I believe these will be the future of metadata. Stay tuned.</p>
+
+<h1>
+<a id="libraries" class="anchor" href="#libraries" aria-hidden="true"><span class="octicon octicon-link"></span></a>Libraries</h1>
+
+<p>After loading a large list of songs, you can save these in a Library to speed up reloading the next time. To do this, right click on either the Main or Playlist windows and select Save. A ROX savebox will appear with Library.xml showing in the Choices (Options) folder for MusicBox. You may drag this file anywhere you want to save it and rename it if you wish. Be sure not to change the .xml extension or MusicBox will not know how to reload it. This file may now be dragged into either MusicBox window to reload those songs. MusicBox will not need to examine each file again to get the tag info - that was saved in the xml file. Loading times are much quicker this way. You can also use these files in the Options dialog as your default library instead of the path to the actual song files. You may create as many of library xml files as you wish.</p>
+
+<h1>
+<a id="dependencies-and-options" class="anchor" href="#dependencies-and-options" aria-hidden="true"><span class="octicon octicon-link"></span></a>Dependencies and Options</h1>
+
+<p>MusicBox depends on the following external modules/libraries for various features. Current versions that I am developing with as of this writing are:
+Basics</p>
+
+<ul>
+<li>ROX-Lib2 2.0.0</li>
+<li>GTK+ 2.6.7 (req &gt;= 2.4)</li>
+<li>GLib 2.6.3</li>
+<li>!PyGtk 2.6.1 (req &gt;= 2.4)</li>
+</ul>
+
+<p>Audio output (optional if your python supports ossaudiodev or linuxaudiodev, but highly recommended)</p>
+
+<ul>
+<li>libao 0.8.5</li>
+<li>pyao 0.82 (<a href="http://www.vorbis.com">http://www.vorbis.com</a>)</li>
+<li>pyalsaaudio 0.2 (<a href="http://www.wilstrup.net/pyalsaaudio">http://www.wilstrup.net/pyalsaaudio</a>)</li>
+</ul>
+
+<p>MP3 (optional, but you need at least one format supported)</p>
+
+<ul>
+<li>pymad 0.4.1 (<a href="http://spacepants.org/src/pymad/">http://spacepants.org/src/pymad/</a>)</li>
+<li>libmad 0.15.1 (<a href="http://www.underbit.com/products/mad/">http://www.underbit.com/products/mad/</a>)</li>
+</ul>
+
+<p>ID3 tag support (Optional)</p>
+
+<ul>
+<li>pyid3lib 0.5.1,</li>
+<li>id3lib 3.8.3 (<a href="http://pyid3lib.sourceforge.net">http://pyid3lib.sourceforge.net</a>)</li>
+</ul>
+
+<p>OGG (Optional)</p>
+
+<ul>
+<li>pyogg 1.3,</li>
+<li>pyvorbis 1.3,</li>
+<li>libvorbis 1.1.0,</li>
+<li>libogg 1.1.2 (<a href="http://www.vorbis.com">http://www.vorbis.com</a>)</li>
+</ul>
+
+<p>FLAC (Optional)</p>
+
+<ul>
+<li>libflac 1.1.2 (<a href="http://flac.sourceforge.net">http://flac.sourceforge.net</a>)</li>
+<li>pyflac 0.0.1 (included, but must be built, or you can get it from most debian sites)</li>
+</ul>
+
+<p>WAV (Standard)</p>
+
+<ul>
+<li>python's built in wave module</li>
+</ul>
+
+<p>Hopefully your distro will provide packages for these, otherwise you will have to download and build them from sources.</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Rox-musicbox maintained by <a href="https://github.com/khayber">khayber</a></p>
+        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
